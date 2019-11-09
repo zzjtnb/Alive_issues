@@ -11,27 +11,31 @@
 		<div class="bgimg">
 			<div class="container">
 				<div class="chang_b">
-					<div class="xiahua" id="m2" v-show="xianhua">
+					<div class="xianhua" id="m2" v-show="switchName[xianhua]">
 						<img src="/images/Heroes/picture/pic1.png" width="525" height="148" />
 					</div>
 					<div class="gongan">
-						<div class="lazu" id="m3" v-show="lazhu">
+						<div class="lazu" id="m3" v-show="switchName[lazhu]">
 							<img id="m3_img" src="/images/Heroes/picture/lazhu.png" width="155" height="123" />
 							<div id="m3_swf_container"></div>
 						</div>
-						<div class="jinjiu" id="m4" v-show="jinjiu">
+						<div class="jinjiu" id="m4" v-show="switchName[jinjiu]">
 							<img src="/images/Heroes/picture/pic8.png" width="155" height="123" />
 						</div>
 					</div>
-					<div class="jinli" id="m5" v-show="jinli">
+					<div class="jinli" id="m5" v-show="switchName[jinli]">
 						<img id="m5_img" src="/images/Heroes/picture/jingli.gif" width="102" height="155" />
 						<div id="m5_swf_container"></div>
 					</div>
-					<div class="jugong" id="m6" v-show="jugong">
+					<div class="jugong" id="m6" v-show="switchName[jugong]">
 						<img id="m6_img" src="/images/Heroes/picture/jugong.gif" width="102" height="155" />
 						<div id="m6_swf_container"></div>
 					</div>
-					<div class="coi_p" id="jidian_op_tips_container" v-show="tips"></div>
+					<transition name="fade">
+						<div class="coi_p" id="jidian_op_tips_container" v-if="tips">
+							<div class="coi" id="jidian_op_tips_jingjiu">{{tipsText}}</div>
+						</div>
+					</transition>
 				</div>
 				<div id="musicbox" class="yin">
 					<audio id="audio" loop="loop">
@@ -39,7 +43,6 @@
 					</audio>
 					<span id="MusicCtl" :class="{ muted : isMuted }" @click="playMusic"></span>
 				</div>
-
 				<div class="nav_l">
 					<ul>
 						<li>
@@ -75,25 +78,31 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      isMuted: true,
-      xianhua: true,
-      lazhu: true,
-      jinjiu: true,
-      jinli: true,
-      jugong: true,
-      tips: true,
+      switchName: [{
+        cut: false
+      },
+      {
+        cut: true
+      },
+      {
+        cut: false
+      },
+      {
+        cut: true
+      },
+      {
+        cut: false
+      }],
+      switchValue: false,
       initRecord: {},
       recodeSha: null,
+      isMuted: true,
+      tips: false,
+      tipsText: '',
     }
   },
   computed: {
-    ...mapGetters([
-      'xianhua_num',
-      'dianzhu_num',
-      'jingjiu_num',
-      'jingli_num',
-      'jugong_num',
-    ])
+    ...mapGetters(['xianhua_num', 'dianzhu_num', 'jingjiu_num', 'jingli_num', 'jugong_num',])
   },
   created () {
     this.getHeroesRecode()
@@ -102,9 +111,22 @@ export default {
     // console.log(this.isMuted)
   },
   methods: {
-    show (value) {
-      this.recordUre[value] += 1
-      this.editHeroesRecode()
+    show (value, index) {
+      console.log(index)
+      if (sessionStorage.getItem(value)) {
+        this.tipsText = sessionStorage.getItem(value)
+        this.tips = true
+        let times = setTimeout(() => {
+          this.tips = false
+          clearInterval(times)
+        }, 1000);
+      } else {
+        this.recordUre[value] += 1
+        let msg = { "xianhua_num": '献花', "dianzhu_num": '点烛', "jingjiu_num": '敬酒', "jingli_num": '敬礼', "jugong_num": '鞠躬' }
+        let show = { "xianhua_num": true, "dianzhu_num": true, "jingjiu_num": true, "jingli_num": true }
+        sessionStorage.setItem(value, `你已经${msg[value]}了`); // 存储数据
+        this.editHeroesRecode()
+      }
     },
     getHeroesRecode () {
       getRecode().then(response => {
@@ -133,7 +155,6 @@ export default {
     },
     playMusic () {
       this.isMuted = !this.isMuted
-      console.log(this.isMuted)
       var audio = document.getElementById("audio");
       if (this.isMuted != false) {
         //停止
@@ -153,7 +174,12 @@ export default {
 </script>
 
 <style scoped>
-@import "/css/global.css"; /*引入公共样式*/
+* {
+	box-sizing: content-box;
+	margin: 0;
+	padding: 0;
+	word-break: break-all;
+}
 .box {
 	width: 100%;
 	height: auto;
@@ -162,7 +188,7 @@ export default {
 	overflow: hidden;
 }
 .ly {
-	width: 1000px;
+	max-width: 1000px;
 	height: 77px;
 	margin: 0 auto;
 	text-align: right;
@@ -179,7 +205,7 @@ export default {
 	z-index: 0;
 }
 .container {
-	width: 682px;
+	max-width: 682px;
 	height: auto;
 	position: absolute;
 	bottom: 1%;
@@ -191,7 +217,7 @@ export default {
 	height: 242px;
 	position: relative;
 }
-.xiahua {
+.xianhua {
 	width: 525px;
 	height: 128px;
 	top: 0;
@@ -256,12 +282,25 @@ img {
 	margin-left: -76px;
 	top: 190px;
 }
+.coi {
+	width: 153px;
+	height: 31px;
+	margin: 0 auto;
+	background: url("/images/Heroes//bg7.png") no-repeat;
+	line-height: 31px;
+	text-align: center;
+	color: #fff;
+	font-size: 14px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
 .yin {
 	position: absolute;
 	right: 0;
 	bottom: 22%;
 	float: right;
-	width: 69px;
+	max-width: 69px;
 	height: 69px;
 }
 #MusicCtl {
@@ -276,10 +315,22 @@ img {
 	background: url("/images/Heroes/player.png") -60px 0;
 }
 .nav_l {
-	width: 679px;
+	max-width: 679px;
 	height: 69px;
 	margin-top: 40px;
 	background: url("/images/Heroes/bg1.png") no-repeat;
+}
+.nav_l ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-flow: row wrap;
+	justify-content: space-around;
 }
 .nav_l li {
 	float: left;
@@ -291,58 +342,28 @@ img {
 	line-height: 22px;
 	color: #c70000;
 	font-size: 13px;
-	list-style: none;
 }
 .nav_l li a {
 	font-family: "Microsoft yahei";
 	color: #010101;
 	font-size: 16px;
 	display: block;
-	width: 68px;
 	cursor: pointer;
 }
 .nav_l li.io {
-	float: left;
-	width: 68px;
-	height: 56px;
 	border-right: 1px solid #555557;
 	background: url("/images/Heroes/bg3.png") no-repeat 22px 9px;
-	padding: 10px 0 0 66px;
-	line-height: 22px;
-	color: #c70000;
-	font-size: 13px;
 }
 .nav_l li.io1 {
-	float: left;
-	width: 68px;
-	height: 56px;
 	border-right: 1px solid #555557;
 	background: url("/images/Heroes//bg41.png") no-repeat 22px 20px;
-	padding: 10px 0 0 66px;
-	line-height: 22px;
-	color: #c70000;
-	font-size: 13px;
 }
 .nav_l li.io2 {
-	float: left;
-	width: 68px;
-	height: 56px;
 	border-right: 1px solid #555557;
 	background: url("/images/Heroes//bg5.png") no-repeat 34px 8px;
-	padding: 10px 0 0 66px;
-	line-height: 22px;
-	color: #c70000;
-	font-size: 13px;
 }
 .nav_l li.io3 {
-	float: left;
-	width: 68px;
-	height: 56px;
 	border-right: none;
 	background: url("/images/Heroes//bg6.png") no-repeat 27px 7px;
-	padding: 10px 0 0 66px;
-	line-height: 22px;
-	color: #c70000;
-	font-size: 13px;
 }
 </style>

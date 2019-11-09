@@ -8,8 +8,8 @@
 						<img class="logo regular tap-logo" src="/images/header/logo-light.png" />
 					</a>
 				</div>
-				<div class="sep" :class="{ hidden: android }"></div>
-				<nav :class="{ hidden: android }">
+				<div class="sep" v-if="!android"></div>
+				<nav v-if="!android">
 					<ul id="menu" class="nav-list u-plain-list">
 						<li class="menu-item" v-for="menu in $router.options.routes" v-if="menu.children">
 							<router-link :to="menu.path">
@@ -24,29 +24,6 @@
 						</li>
 					</ul>
 				</nav>
-				<!-- <nav :class="{ hidden: android }">
-					<ul id="menu" class="nav-list u-plain-list">
-						<li class="menu-item">
-							<a href>首页 {{android}}</a>
-						</li>
-						<li class="menu-item menu-item-has-children">
-							<a href="/">
-								精品源码
-								<vs-icon icon="keyboard_arrow_down" class="nav-icon"></vs-icon>
-							</a>
-
-							<ul class="sub-menu">
-								<li class="menu-item">
-									<a href="#">PHP源码</a>
-								</li>
-								<li class="menu-item">
-									<a href="#">ASP源码</a>
-								</li>
-							</ul>
-						</li>
-					</ul>
-				</nav>-->
-
 				<div class="main-search">
 					<form method="get" class="search-form inline" action="https://www.microeco.net/">
 						<input type="search" class="search-field inline-field" placeholder="输入关键词，回车..." autocomplete="off" value name="s" required="required" />

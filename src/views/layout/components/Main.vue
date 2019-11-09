@@ -3,7 +3,9 @@
 	<div class="site-content">
 		<main class="site-main">
 			<div class="section bgcolor-fff lazyloaded">
-				<router-view></router-view>
+				<transition name="fade">
+					<router-view></router-view>
+				</transition>
 			</div>
 		</main>
 	</div>

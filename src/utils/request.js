@@ -107,7 +107,7 @@ service.interceptors.response.use(response => {
     store.commit('NOT_NETWORK', false);
     router.replace({
       path: '/notnetwork',
-      query: { redirect: router.currentRoute.fullPath }//登录成功后跳入浏览的当前页面
+      // query: { redirect: router.currentRoute.fullPath }//登录成功后跳入浏览的当前页面
     })
   } else {
     return Promise.reject(error);
