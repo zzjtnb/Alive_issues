@@ -120,7 +120,7 @@ export default {
     editHeroesRecode () {
       let content = JSON.stringify(this.recordUre)
       let data = {
-        message: 'a',
+        message: 'Update HeroesRecord',
         content: require('js-base64').Base64.encode(content),
         sha: this.recodeSha
       }
