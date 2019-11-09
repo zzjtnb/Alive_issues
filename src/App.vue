@@ -1,0 +1,53 @@
+<template>
+	<div id="app">
+		<router-view />
+	</div>
+</template>
+<script>
+import { mapGetters } from 'vuex'
+export default {
+  name: "home",
+  data () {
+    return {
+      api: process.env.NODE_ENV
+    };
+  },
+  computed: {
+    ...mapGetters([
+      'android',
+    ]),
+    hidden () {
+
+      return this.android
+    }
+  },
+  mounted () {
+    // js代码中使用环境变量
+    // console.log("VUE_APP_API", this.api)
+    // console.log(process.env.IS_ANALYZE)
+    let windowSize = this.$util.getWindowSize()
+    console.log(windowSize)
+    if (windowSize.height > windowSize.width * 1.2) {
+      // console.log("anzhuo ")
+      this.$store.dispatch("Android", true);
+      // this.$router.push("/mobile/user/blog")
+    } else {
+      this.$store.dispatch("Android", false);
+    }
+  },
+  created () {
+    // 处理断网的情况
+    // eg:请求超时或断网时，更新state的network状态
+    // network状态在app.vue中控制着一个全局的断网提示组件的显示隐藏
+    // 关于断网组件中的刷新重新获取数据，会在断网组件中说明
+    if (!window.navigator.onLine) {
+      this.$store.dispatch("ChangeNetwork", false);
+      this.$router.push("/notnetwork")
+    }
+    this.$store.dispatch("Init");
+  }
+};
+</script>
+<style>
+@import "/css/global.css"; /*引入公共样式*/
+</style>
