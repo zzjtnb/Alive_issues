@@ -77,19 +77,18 @@ service.interceptors.response.use(response => {
   */
   //loading结束
   loadingInstance.close()
-  console.log(router)
   // 响应结果里的status: ok是我与后台的约定，大家可以根据实际情况去做对应的判断
   console.log(response.status)
   if (response.status == '200') {
-    Message({
-      message: "登陆成功",
-      type: 'success'
-    })
-    router.replace({
-      path: '/',
-      query: { redirect: router.currentRoute.fullPath }//登录成功后跳入浏览的当前页面
-    })
-    return Promise.resolve(response.data)
+    // Message({
+    //   message: "登陆成功",
+    //   type: 'success'
+    // })
+    // router.replace({
+    //   path: '/',
+    //   query: { redirect: router.currentRoute.fullPath }//登录成功后跳入浏览的当前页面
+    // })
+    return Promise.resolve(response)
   } else {
     Message({
       message: response.data.message,
@@ -168,6 +167,26 @@ export const post = (url, data, config = {}) => {
   return new Promise((resolve, reject) => {
     service({
       method: 'post',
+      url,
+      data,
+      ...config
+    }).then(response => {
+      resolve(response)
+    }).catch(error => {
+      reject(error)
+    })
+  })
+}
+/**
+ * 统一封装put请求
+ * @param {String} url [请求的url地址]
+ * @param {Object} params [请求时携带的参数]
+ * @param {Object} config [请求时配置]
+ */
+export const put = (url, data, config = {}) => {
+  return new Promise((resolve, reject) => {
+    service({
+      method: 'put',
       url,
       data,
       ...config

@@ -4,6 +4,11 @@ const common = {
   state: {
     networkSuccess: true,
     android: true,
+    xianhua_num: 0,
+    dianzhu_num: 0,
+    jingjiu_num: 0,
+    jingli_num: 0,
+    jugong_num: 0
   },
   // 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
   mutations: {
@@ -12,6 +17,13 @@ const common = {
     },
     IS_ANDROID: (state, value) => {
       state.android = value
+    },
+    SET_HEROESRECORD: (state, heroseRecord) => {
+      state.xianhua_num = heroseRecord.xianhua_num,
+        state.dianzhu_num = heroseRecord.dianzhu_num,
+        state.jingjiu_num = heroseRecord.jingjiu_num,
+        state.jingli_num = heroseRecord.jingli_num,
+        state.jugong_num = heroseRecord.jugong_num
     }
   },
 
@@ -22,6 +34,9 @@ const common = {
    */
   // dispactch方法调用action,mapAactions方法调用action
   actions: {
+    LocalReload ({ commit }, heroseRecord) {
+      commit('SET_HEROESRECORD', heroseRecord)
+    },
     ChangeNetwork ({ commit }, value) {
       commit('NOT_NETWORK', value)
     },

@@ -41,26 +41,26 @@
 				</div>
 
 				<div class="nav_l">
-					<ul v-for="item in dataNUm">
+					<ul>
 						<li>
-							<a @click="show('m2',1)">献 花</a>
-							<span id="xianhua_num">{{item.xianhua_num}}</span>
+							<a @click="show('xianhua_num')">献 花</a>
+							<span id="xianhua_num">{{xianhua_num}}</span>
 						</li>
 						<li class="io">
-							<a @click="show('m3',1)">点 烛</a>
-							<span id="dianzhu_num">{{item.dianzhu_num}}</span>
+							<a @click="show('dianzhu_num')">点 烛</a>
+							<span id="dianzhu_num">{{dianzhu_num}}</span>
 						</li>
 						<li class="io1">
-							<a @click="show('m4',1)">敬 酒</a>
-							<span id="jingjiu_num">{{item.jingjiu_num}}</span>
+							<a @click="show('jingjiu_num')">敬 酒</a>
+							<span id="jingjiu_num">{{jingjiu_num}}</span>
 						</li>
 						<li class="io2">
-							<a @click="show('m5',1)">敬 礼</a>
-							<span id="jingli_num">{{item.jingli_num}}</span>
+							<a @click="show('jingli_num')">敬 礼</a>
+							<span id="jingli_num">{{jingli_num}}</span>
 						</li>
 						<li class="io3">
-							<a @click="show('m6',1)">鞠 躬</a>
-							<span id="jugong_num">{{item.jugong_num}}</span>
+							<a @click="show('jugong_num')">鞠 躬</a>
+							<span id="jugong_num">{{jugong_num}}</span>
 						</li>
 					</ul>
 				</div>
@@ -71,6 +71,7 @@
 
 <script>
 import { getRecode, editRecode } from '@/api/common'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -81,19 +82,57 @@ export default {
       jinli: true,
       jugong: true,
       tips: true,
-      dataNUm: []
+      initRecord: {},
+      recodeSha: null,
     }
   },
+  computed: {
+    ...mapGetters([
+      'xianhua_num',
+      'dianzhu_num',
+      'jingjiu_num',
+      'jingli_num',
+      'jugong_num',
+    ])
+  },
   created () {
-
+    this.getHeroesRecode()
   },
   mounted () {
-    console.log(this.isMuted)
+    // console.log(this.isMuted)
   },
   methods: {
+    show (value) {
+      this.recordUre[value] += 1
+      this.editHeroesRecode()
+    },
+    getHeroesRecode () {
+      getRecode().then(response => {
+        let result = response.data
+        let base64 = require('js-base64').Base64
+        let text = base64.decode(result.content)
+        this.recordUre = JSON.parse(text)
+        this.initRecord = JSON.parse(JSON.stringify(this.recordUre))
+        this.recodeSha = result.sha
+        this.$store.dispatch("LocalReload", this.recordUre)
+      })
+    },
+    editHeroesRecode () {
+      let content = JSON.stringify(this.recordUre)
+      let data = {
+        message: 'a',
+        content: require('js-base64').Base64.encode(content),
+        sha: this.recodeSha
+      }
+      editRecode(data).then(response => {
+        let result = response.data
+        this.recodeSha = result.content.sha
+        this.initRecord = JSON.parse(JSON.stringify(this.recordUre))
+        this.$store.dispatch("LocalReload", this.recordUre)
+      })
+    },
     playMusic () {
       this.isMuted = !this.isMuted
-
       console.log(this.isMuted)
       var audio = document.getElementById("audio");
       if (this.isMuted != false) {
@@ -260,6 +299,7 @@ img {
 	font-size: 16px;
 	display: block;
 	width: 68px;
+	cursor: pointer;
 }
 .nav_l li.io {
 	float: left;

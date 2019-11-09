@@ -2,6 +2,9 @@ const getters = {
     networkSuccess: state => state.common.networkSuccess,
     android: state => state.common.android,
     token: state => state.token.token,
+    /**
+     * github
+     */
     githubUsername: state => state.configuration.githubUsername,
     blogTitle: state => state.configuration.blogTitle,
     blogDescribe: state => state.configuration.blogDescribe,
@@ -20,5 +23,13 @@ const getters = {
     blog: state => state.user.blog,
     followersTotal: state => state.user.followers,
     followingTotal: state => state.user.following,
+    /**
+     * Record
+     */
+    xianhua_num: state => state.common.xianhua_num,
+    dianzhu_num: state => state.common.dianzhu_num,
+    jingjiu_num: state => state.common.jingjiu_num,
+    jingli_num: state => state.common.jingli_num,
+    jugong_num: state => state.common.jugong_num,
 }
 export default getters
