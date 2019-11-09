@@ -41,26 +41,26 @@
 				</div>
 
 				<div class="nav_l">
-					<ul>
+					<ul v-for="item in dataNUm">
 						<li>
 							<a @click="show('m2',1)">献 花</a>
-							<span id="xianhua_num">72332</span>
+							<span id="xianhua_num">{{item.xianhua_num}}</span>
 						</li>
 						<li class="io">
 							<a @click="show('m3',1)">点 烛</a>
-							<span id="dianzhu_num">61673</span>
+							<span id="dianzhu_num">{{item.dianzhu_num}}</span>
 						</li>
 						<li class="io1">
 							<a @click="show('m4',1)">敬 酒</a>
-							<span id="jingjiu_num">61977</span>
+							<span id="jingjiu_num">{{item.jingjiu_num}}</span>
 						</li>
 						<li class="io2">
 							<a @click="show('m5',1)">敬 礼</a>
-							<span id="jingli_num">83298</span>
+							<span id="jingli_num">{{item.jingli_num}}</span>
 						</li>
 						<li class="io3">
-							<a href="javascript:void(0)" @click="show('m6',1)">鞠 躬</a>
-							<span id="jugong_num">69924</span>
+							<a @click="show('m6',1)">鞠 躬</a>
+							<span id="jugong_num">{{item.jugong_num}}</span>
 						</li>
 					</ul>
 				</div>
@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import { getRecode, editRecode } from '@/api/common'
 export default {
   data () {
     return {
@@ -80,6 +81,7 @@ export default {
       jinli: true,
       jugong: true,
       tips: true,
+      dataNUm: []
     }
   },
   created () {
