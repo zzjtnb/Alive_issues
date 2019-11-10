@@ -37,11 +37,11 @@ let httpCode = {
  */
 service.interceptors.request.use(config => {
   //loading开始
-  loadingInstance = Loading.service({
-    target: 'body',
-    spinner: 'el-icon-loading',
-    text: '拼命加载中...'
-  })
+  // loadingInstance = Loading.service({
+  //   target: 'body',
+  //   spinner: 'el-icon-loading',
+  //   text: '拼命加载中...'
+  // })
   // 在发送请求之前做些什么，比如传token
   let token = store.state.token.token
   if (token) {
@@ -62,7 +62,7 @@ service.interceptors.request.use(config => {
   return config
 }, error => {
   //出错，也要loading结束
-  loadingInstance.close();
+  // loadingInstance.close();
   // 对请求错误做些什么
   console.log(error) // for debug
   return Promise.reject(error);
@@ -76,7 +76,7 @@ service.interceptors.response.use(response => {
    let responseJson = response.data
   */
   //loading结束
-  loadingInstance.close()
+  // loadingInstance.close()
   // 响应结果里的status: ok是我与后台的约定，大家可以根据实际情况去做对应的判断
   console.log(response.status)
   if (response.status == '200') {
@@ -97,7 +97,7 @@ service.interceptors.response.use(response => {
     return Promise.reject(response.data.message)
   }
 }, error => {
-  loadingInstance.close()
+  // loadingInstance.close()
   // 处理断网的情况
   // eg:请求超时或断网时，更新state的network状态
   // network状态在app.vue中控制着一个全局的断网提示组件的显示隐藏
@@ -122,7 +122,7 @@ service.interceptors.response.use(response => {
     })
     // token或者登陆失效情况下跳转到登录页面，根据实际情况，在这里可以根据不同的响应错误结果，做对应的事。这里我以401判断为例
     if (error.response.status === 401) {
-      loadingInstance.close()
+      // loadingInstance.close()
       router.replace({
         path: '/login',
         query: { redirect: router.currentRoute.fullPath }//登录成功后跳入浏览的当前页面

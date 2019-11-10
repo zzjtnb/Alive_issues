@@ -30,28 +30,28 @@ export const routes = [
     },
     children: [
       {
-        path: 'main',
+        path: '/blog/main',
         component: () => import('../views/blog/Main.vue'),
         meta: {
           title: '博客列表',
         }
       },
       {
-        path: 'add',
+        path: '/blog/add',
         component: () => import('../views/blog/Add.vue'),
         meta: {
           title: '发表博客',
         }
       },
       {
-        path: 'edit/:id',
+        path: '/blog/edit/:id',
         component: () => import('../views/blog/Edit.vue'),
         meta: {
           title: '编辑博客',
         }
       },
       {
-        path: 'details/:id',
+        path: '/blog/details/:id',
         component: () => import('../views/blog/Details.vue'),
         meta: {
           title: '博客详情'
