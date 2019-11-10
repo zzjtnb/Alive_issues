@@ -61,14 +61,13 @@ export const routes = [
 
   {
     path: '/worshipheroes',
-    redirect: '/worshipheroes/main',
     component: Layout,
     meta: {
       title: '祭拜英烈',
     },
     children: [
       {
-        path: 'main',
+        path: '/worshipheroes',
         component: () => import('../views/WorshipHeroes.vue'),
       }
     ]
