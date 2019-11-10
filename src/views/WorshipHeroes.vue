@@ -11,26 +11,27 @@
 		<div class="bgimg">
 			<div class="container">
 				<div class="chang_b">
-					<div class="xianhua" id="m2" v-show="switchName[xianhua]">
+					<div class="xianhua" v-if="switchName.xianhua_num">
 						<img src="/images/Heroes/picture/pic1.png" width="525" height="148" />
 					</div>
 					<div class="gongan">
-						<div class="lazu" id="m3" v-show="switchName[lazhu]">
+						<div class="dianzhu" v-if="switchName.dianzhu_num">
 							<img id="m3_img" src="/images/Heroes/picture/lazhu.png" width="155" height="123" />
 							<div id="m3_swf_container"></div>
 						</div>
-						<div class="jinjiu" id="m4" v-show="switchName[jinjiu]">
+						<div class="jingjiu" v-if="switchName.jingjiu_num">
 							<img src="/images/Heroes/picture/pic8.png" width="155" height="123" />
 						</div>
 					</div>
-					<div class="jinli" id="m5" v-show="switchName[jinli]">
+					<div class="jingli" v-if="switchName.jingli_num">
 						<img id="m5_img" src="/images/Heroes/picture/jingli.gif" width="102" height="155" />
 						<div id="m5_swf_container"></div>
 					</div>
-					<div class="jugong" id="m6" v-show="switchName[jugong]">
+					<div class="jugong" v-if="switchName.jugong_num">
 						<img id="m6_img" src="/images/Heroes/picture/jugong.gif" width="102" height="155" />
 						<div id="m6_swf_container"></div>
 					</div>
+
 					<transition name="fade">
 						<div class="coi_p" id="jidian_op_tips_container" v-if="tips">
 							<div class="coi" id="jidian_op_tips_jingjiu">{{tipsText}}</div>
@@ -78,22 +79,7 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      switchName: [{
-        cut: false
-      },
-      {
-        cut: true
-      },
-      {
-        cut: false
-      },
-      {
-        cut: true
-      },
-      {
-        cut: false
-      }],
-      switchValue: false,
+      switchName: { "xianhua_num": false, "dianzhu_num": false, "jingjiu_num": false, "jingli_num": false, "jugong_num": false },
       initRecord: {},
       recodeSha: null,
       isMuted: true,
@@ -108,11 +94,10 @@ export default {
     this.getHeroesRecode()
   },
   mounted () {
-    // console.log(this.isMuted)
+
   },
   methods: {
-    show (value, index) {
-      console.log(index)
+    show (value) {
       if (sessionStorage.getItem(value)) {
         this.tipsText = sessionStorage.getItem(value)
         this.tips = true
@@ -122,10 +107,16 @@ export default {
         }, 1000);
       } else {
         this.recordUre[value] += 1
-        let msg = { "xianhua_num": '献花', "dianzhu_num": '点烛', "jingjiu_num": '敬酒', "jingli_num": '敬礼', "jugong_num": '鞠躬' }
-        let show = { "xianhua_num": true, "dianzhu_num": true, "jingjiu_num": true, "jingli_num": true }
-        sessionStorage.setItem(value, `你已经${msg[value]}了`); // 存储数据
         this.editHeroesRecode()
+        this.switchName[value] = true
+        if (value === "jingli_num") {
+          this.switchName.jugong_num = false
+        }
+        if (value === "jugong_num") {
+          this.switchName.jingli_num = false
+        }
+        let msg = { "xianhua_num": '献花', "dianzhu_num": '点烛', "jingjiu_num": '敬酒', "jingli_num": '敬礼', "jugong_num": '鞠躬' }
+        sessionStorage.setItem(value, `你已经${msg[value]}了`); // 存储数据
       }
     },
     getHeroesRecode () {
@@ -237,19 +228,19 @@ img {
 	margin: 0 auto;
 	padding: 0 8px 0 0;
 }
-.lazu {
+.dianzhu {
 	width: 155px;
 	height: 100px;
 	top: 60px;
 	position: absolute;
 }
-.jinjiu {
+.jingjiu {
 	width: 155px;
 	height: 57px;
 	position: absolute;
 	top: 60px;
 }
-.jinli {
+.jingli {
 	width: 99px;
 	height: 220px;
 	position: absolute;
@@ -314,12 +305,14 @@ img {
 #MusicCtl.muted {
 	background: url("/images/Heroes/player.png") -60px 0;
 }
+
 .nav_l {
 	max-width: 679px;
 	height: 69px;
 	margin-top: 40px;
 	background: url("/images/Heroes/bg1.png") no-repeat;
 }
+
 .nav_l ul {
 	padding: 0;
 	margin: 0;
@@ -351,19 +344,49 @@ img {
 	cursor: pointer;
 }
 .nav_l li.io {
-	border-right: 1px solid #555557;
 	background: url("/images/Heroes/bg3.png") no-repeat 22px 9px;
 }
 .nav_l li.io1 {
-	border-right: 1px solid #555557;
 	background: url("/images/Heroes//bg41.png") no-repeat 22px 20px;
 }
 .nav_l li.io2 {
-	border-right: 1px solid #555557;
 	background: url("/images/Heroes//bg5.png") no-repeat 34px 8px;
 }
 .nav_l li.io3 {
 	border-right: none;
 	background: url("/images/Heroes//bg6.png") no-repeat 27px 7px;
+}
+@media screen and (max-width: 600px) {
+	.yin {
+		right: 23%;
+	}
+	.xianhua {
+		width: 50%;
+	}
+	.nav_l ul {
+		justify-content: center;
+		align-content: center;
+	}
+	.nav_l {
+		width: 57%;
+		margin: 0 22%;
+	}
+	.nav_l li {
+		background: url(/images/Heroes/bg2.png) no-repeat 0 30%;
+		padding: 0 0 0 12%;
+	}
+	.nav_l li.io {
+		background: url(/images/Heroes/bg3.png) no-repeat 0 9px;
+	}
+	.nav_l li.io1 {
+		background: url(/images/Heroes//bg41.png) no-repeat 0 20px;
+	}
+	.nav_l li.io2 {
+		background: url(/images/Heroes//bg5.png) no-repeat 0 8px;
+	}
+	.nav_l li.io3 {
+		border-right: none;
+		background: url(/images/Heroes//bg6.png) no-repeat 0 7px;
+	}
 }
 </style>

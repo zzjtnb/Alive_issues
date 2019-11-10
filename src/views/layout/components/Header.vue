@@ -18,7 +18,7 @@
 							</router-link>
 							<ul class="sub-menu" v-if="menu.meta.submenu">
 								<li class="menu-item" v-for="(submenu,index) in menu.children">
-									<router-link :to="submenu.path" v-if="submenu.meta.show">{{submenu.meta.title}}</router-link>
+									<router-link :to="submenu.path">{{submenu.meta.title}}</router-link>
 								</li>
 							</ul>
 						</li>
