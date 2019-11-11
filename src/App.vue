@@ -11,31 +11,14 @@ export default {
   name: "home",
   data () {
     return {
-      api: process.env.NODE_ENV
+      api: process.env.NODE_ENV,
+      isMobile: false
     };
   },
   computed: {
     ...mapGetters([
-      'android',
+      'Mobile',
     ]),
-    hidden () {
-
-      return this.android
-    }
-  },
-  mounted () {
-    // js代码中使用环境变量
-    // console.log("VUE_APP_API", this.api)
-    // console.log(process.env.IS_ANALYZE)
-    let windowSize = this.$util.getWindowSize()
-    console.log(windowSize)
-    if (windowSize.height > windowSize.width * 1.2) {
-      // console.log("anzhuo ")
-      this.$store.dispatch("Android", true);
-      // this.$router.push("/mobile/user/blog")
-    } else {
-      this.$store.dispatch("Android", false);
-    }
   },
   created () {
     // 处理断网的情况
@@ -47,6 +30,36 @@ export default {
       this.$router.push("/notnetwork")
     }
     this.$store.dispatch("Init");
+  },
+  mounted () {
+    // js代码中使用环境变量
+    // console.log("VUE_APP_API", this.api)
+    // console.log(process.env.IS_ANALYZE)
+    /* 
+    let windowSize = this.$util.getWindowSize()
+    if (windowSize.height > windowSize.width * 1.2) {
+      console.log("anzhuo ")
+      this.$store.dispatch("Mobile", true);
+    } else {
+      console.log("PC ")
+      this.$store.dispatch("Mobile", false);
+    } 
+    */
+    this.isMobiles()
+  },
+  watch: {
+
+  },
+  methods: {
+    isMobiles () {
+      if (this.$util.isMobile()) {
+        this.$store.dispatch("Mobile", true);
+        console.log('安卓')
+      } else {
+        console.log('PC')
+        this.$store.dispatch("Mobile", false);
+      }
+    }
   }
 };
 </script>

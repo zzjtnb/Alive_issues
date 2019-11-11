@@ -47,7 +47,7 @@ module.exports = {
 
   // 配置pwa
   pwa: {
-    name: "股票",
+    name: "争逐",
     appleMobileWebAppCapable: "yes",
     appleMobileWebAppStatusBarStyle: "blue",
     themeColor: "#50E3C2",
@@ -74,5 +74,10 @@ module.exports = {
       });
   },
 
-  runtimeCompiler: true
+  runtimeCompiler: true,
+  productionSourceMap: false,
+
+  css: {
+    extract: false
+  }
 };

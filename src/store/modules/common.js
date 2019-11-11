@@ -3,7 +3,7 @@ const common = {
   // 通过 store.state 来获取状态对象，以及通过 store.commit 方法触发状态变更
   state: {
     networkSuccess: true,
-    android: true,
+    Mobile: true,
     xianhua_num: 0,
     dianzhu_num: 0,
     jingjiu_num: 0,
@@ -15,8 +15,8 @@ const common = {
     NOT_NETWORK: (state, value) => {//这里的state对应着上面这个state
       state.networkSuccess = value
     },
-    IS_ANDROID: (state, value) => {
-      state.android = value
+    IS_Mobile: (state, value) => {
+      state.Mobile = value
     },
     SET_HEROESRECORD: (state, heroseRecord) => {
       state.xianhua_num = heroseRecord.xianhua_num,
@@ -40,8 +40,8 @@ const common = {
     ChangeNetwork ({ commit }, value) {
       commit('NOT_NETWORK', value)
     },
-    Android ({ commit }, value) {
-      commit("IS_ANDROID", value)
+    Mobile ({ commit }, value) {
+      commit("IS_Mobile", value)
     },
   }
 }

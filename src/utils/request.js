@@ -1,12 +1,12 @@
 import axios from 'axios'
 import store from '../store/index'
 import router from '../router/index'//引入路由
-import QS from 'qs';
+import QS from 'qs'; // 引入qs模块，用来序列化post类型的数据，后面会提到
 import { Loading, Message } from 'element-ui'// 这里我是使用elementUI的组件来给提示
 import 'element-ui/lib/theme-chalk/index.css';
 
 // 加载全局的loading
-let loadingInstance = null
+// let loadingInstance = null
 // 创建一个axios的自定义的实例service，并且可以自定义其配置
 const service = axios.create({
   //接口请求地址
@@ -14,9 +14,10 @@ const service = axios.create({
   //`timeout`选项定义了请求发出的延迟毫秒数。如果请求花费的时间超过延迟的时间，那么请求会被终止
   timeout: 15000,
   // 设置post请求头
-  headers: {
-    'Content-Type': 'application/json;charset=UTF-8'
-  }
+  // headers: {
+  //   'Content-Type': 'application/json;charset=UTF-8',
+  //   // "Authorization": "token 7f0d015cce46adcf728386abcf3603ecc23934bf"
+  // }
 })
 /**
  * 一些常见的http状态码信息
@@ -183,7 +184,7 @@ export const post = (url, data, config = {}) => {
  * @param {Object} params [请求时携带的参数]
  * @param {Object} config [请求时配置]
  */
-export const put = (url, data, config = {}) => {
+export const put = (url, data, config) => {
   return new Promise((resolve, reject) => {
     service({
       method: 'put',
@@ -197,6 +198,38 @@ export const put = (url, data, config = {}) => {
     })
   })
 }
+/**
+ * 统一封装PATCH请求
+ * @param {String} url [请求的url地址]
+ * @param {Object} params [请求时携带的参数]
+ * @param {Object} config [请求时配置]
+ */
+export const patch = (url, data, headers) => {
+  return new Promise((resolve, reject) => {
+    service({
+      method: 'PATCH',
+      url,
+      data,
+      headers
+    }).then(response => {
+      resolve(response)
+    }).catch(error => {
+      reject(error)
+    })
+  })
+}
+// export const patch = (url, data, headers) => {
+//   return new Promise((resolve, reject) => {
+//     service.patch(url, QS.stringify(data), headers)
+//       .then(response => {
+//         resolve(response.data);
+//       })
+//       .catch(err => {
+//         reject(err.data)
+//       })
+//   })
+// }
+
 /* 或者写成下面这样： Promise.resolve() 和 Promise.reject()返回的是promise对象，二者都是语法糖  */
 // export const post = (url, data, config = {}) => {
 //   return service({

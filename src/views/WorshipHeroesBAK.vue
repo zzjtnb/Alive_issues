@@ -80,17 +80,11 @@ export default {
   data () {
     return {
       switchName: { "xianhua_num": false, "dianzhu_num": false, "jingjiu_num": false, "jingli_num": false, "jugong_num": false },
-      recordUre: {},
-      status: null,
+      initRecord: {},
+      recodeSha: null,
       isMuted: true,
       tips: false,
       tipsText: '',
-      form: {
-        id: "",
-        title: "",
-        description: "",
-        content: ""
-      },
     }
   },
   computed: {
@@ -113,7 +107,6 @@ export default {
         }, 1000);
       } else {
         this.recordUre[value] += 1
-        this.$store.dispatch("LocalReload", this.recordUre)
         this.editHeroesRecode()
         this.switchName[value] = true
         if (value === "jingli_num") {
@@ -129,35 +122,26 @@ export default {
     getHeroesRecode () {
       getRecode().then(response => {
         let result = response.data
-        this.form['id'] = result.id
-        this.form['title'] = result.files.record.filename
-        this.form['description'] = result.description
-        this.form['content'] = result.files.record.content
-        this.recordUre = JSON.parse(this.form['content'])
+        let base64 = require('js-base64').Base64
+        let text = base64.decode(result.content)
+        this.recordUre = JSON.parse(text)
+        this.initRecord = JSON.parse(JSON.stringify(this.recordUre))
+        this.recodeSha = result.sha
         this.$store.dispatch("LocalReload", this.recordUre)
       })
     },
     editHeroesRecode () {
-      this.form['content'] = JSON.stringify(this.recordUre)
-      let files = {}
-      files[this.form.title] = { content: this.form.content }
+      let content = JSON.stringify(this.recordUre)
       let data = {
-        'description': this.form.description,
-        'public': true,
-        'files': files
+        message: 'Update HeroesRecord',
+        content: require('js-base64').Base64.encode(content),
+        sha: this.recodeSha
       }
-      let headers = { "Authorization": "token 7f0d015cce46adcf728386abcf3603ecc23934bf" }
-      editRecode(data, headers).then(response => {
-        if (response.status == 200) {
-          this.status = 200
-          let result = response.data
-          this.form['id'] = result.id
-          this.form['title'] = result.files.record.filename
-          this.form['description'] = result.description
-          this.form['content'] = result.files.record.content
-          this.recordUre = JSON.parse(this.form['content'])
-          this.$store.dispatch("LocalReload", this.recordUre)
-        }
+      editRecode(data).then(response => {
+        let result = response.data
+        this.recodeSha = result.content.sha
+        this.initRecord = JSON.parse(JSON.stringify(this.recordUre))
+        this.$store.dispatch("LocalReload", this.recordUre)
       })
     },
     playMusic () {

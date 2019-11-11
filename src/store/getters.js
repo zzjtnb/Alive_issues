@@ -1,6 +1,6 @@
 const getters = {
     networkSuccess: state => state.common.networkSuccess,
-    android: state => state.common.android,
+    Mobile: state => state.common.Mobile,
     token: state => state.token.token,
     /**
      * github

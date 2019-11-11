@@ -8,8 +8,8 @@
 						<img class="logo regular tap-logo" src="/images/header/logo-light.png" />
 					</a>
 				</div>
-				<div class="sep" v-if="!android"></div>
-				<nav v-if="!android">
+				<div class="sep" v-if="!Mobile"></div>
+				<nav v-if="!Mobile">
 					<ul id="menu" class="nav-list u-plain-list">
 						<li class="menu-item" v-for="menu in $router.options.routes" v-if="menu.children">
 							<router-link :to="menu.path">
@@ -64,14 +64,14 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'android',
+      'Mobile',
       'token',
       'mini'
     ]),
 
   },
   created () {
-    // console.log(this.$store.getters.android)
+    // console.log(this.$store.getters.Mobile)
   },
   mounted () {
     // handleScroll为页面滚动的监听回调
