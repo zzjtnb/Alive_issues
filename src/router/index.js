@@ -73,12 +73,17 @@ export const routes = [
     ]
   },
 
+
   {
     path: '/login',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue'),
-    meta: {
-      title: '登录'
-    },
+    redirect: '/user',
+    component: Layout,
+    children: [
+      {
+        path: '/user',
+        component: () => import(/* webpackChunkName: "about" */ '../views/user/Index.vue'),
+      },
+    ]
   },
   {
     path: '/notnetwork',

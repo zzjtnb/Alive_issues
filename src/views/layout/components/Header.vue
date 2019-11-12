@@ -1,7 +1,7 @@
 <!-- 头部 -->
 <template>
 	<div>
-		<header :class="{ slide_now : headerShow }" class="site_header" ref="siteHeader">
+		<header :class="{ slide_now: headerShow }" class="site_header" ref="siteHeader">
 			<div class="container">
 				<div class="navbar">
 					<div class="logo-wrapper" v-if="!searchShow">
@@ -10,33 +10,26 @@
 						</a>
 					</div>
 					<div class="sep" v-if="!Mobile"></div>
-					<nav v-if="!Mobile">
+					<!-- 导航栏 -->
+					<nav v-if="!Mobile" v-show="!searchShow">
 						<ul id="menu" class="nav-list u-plain-list">
-							<li class="menu-item" v-for="menu in $router.options.routes" v-if="menu.children">
+							<li class="menu-item" v-for="menu in $router.options.routes" v-if="menu.children && menu.path !== '/login'">
 								<router-link :to="menu.path">
-									{{ menu.meta.title}}
+									{{ menu.meta.title }}
 									<vs-icon icon="keyboard_arrow_down" class="nav-icon" v-if="menu.meta.submenu"></vs-icon>
 								</router-link>
-								<ul class="sub-menu" v-if="menu.meta.submenu">
-									<li class="menu-item" v-for="(submenu,index) in menu.children">
-										<router-link :to="submenu.path">{{submenu.meta.title}}</router-link>
+								<ul class="sub-menu" v-if="menu.meta.submenu && menu.path !== '/login'">
+									<li class="menu-item" v-for="(submenu, index) in menu.children">
+										<router-link :to="submenu.path">{{submenu.meta.title }}</router-link>
 									</li>
 								</ul>
 							</li>
 						</ul>
 					</nav>
-					<div class="main-search" v-if="searchShow">
-						<form class="search-form inline">
-							<input type="search" class="search-field inline-field" placeholder="输入关键词，回车..." autocomplete="off" value name="s" required="required" />
-						</form>
-						<div class="search-close navbar-button" @click="showSearch(false)">
-							<vs-icon icon="close" size="small" round></vs-icon>
-						</div>
-					</div>
 					<div class="actions" v-if="!searchShow">
 						<div class="login-btn navbar-button">
 							<vs-icon icon="account_circle" size="20px" round></vs-icon>
-							<a href="#/login">登录</a>
+							<a href="#/user">登录</a>
 							<!-- <span>登录</span> -->
 						</div>
 						<div class="search-open navbar-button" @click="showSearch(true)">
@@ -44,6 +37,14 @@
 						</div>
 						<div class="burger navbar-button">
 							<vs-icon icon="menu" size="small" round></vs-icon>
+						</div>
+					</div>
+					<div class="main-search" v-if="searchShow">
+						<form class="search-form inline">
+							<input type="search" class="search-field inline-field" placeholder="输入关键词，回车..." autocomplete="off" value name="s" required="required" />
+						</form>
+						<div class="search-close navbar-button" @click="showSearch(false)">
+							<vs-icon icon="close" size="small" round></vs-icon>
 						</div>
 					</div>
 				</div>
@@ -54,41 +55,36 @@
 
 <script>
 // import { meanu } from '@/api/common'
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 export default {
   data () {
     return {
       list: [],
       headerShow: false,
-      searchShow: false,
-    }
+      searchShow: false
+    };
   },
   computed: {
-    ...mapGetters([
-      'Mobile',
-      'token',
-      'mini'
-    ]),
-
+    ...mapGetters(["Mobile", "token", "mini"])
   },
   created () {
     // console.log(this.$store.getters.Mobile)
   },
   mounted () {
     // handleScroll为页面滚动的监听回调
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
   },
   /**
    * 在destroyed回调中移除监听
    */
   destroyed () {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll);
   },
 
   methods: {
     showSearch (value) {
-      this.searchShow = value
-      this.$store.dispatch("Mobile", value);
+      this.searchShow = value;
+      // this.$store.dispatch("Mobile", value);
     },
     /**
      * 判断页面滚动距离：
@@ -101,13 +97,22 @@ export default {
         this.offsetTop = siteHeader.offsetTop;
         //和元素自身的高度
         this.offsetHeight = siteHeader.offsetHeight;
-        console.log("offsetTop:" + this.offsetTop + "," + "offsetHeight:" + this.offsetHeight);
+        console.log(
+          "offsetTop:" +
+          this.offsetTop +
+          "," +
+          "offsetHeight:" +
+          this.offsetHeight
+        );
       });
       // 得到页面滚动的距离
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      let scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop;
       // 判断页面滚动的距离是否大于吸顶元素的位置
       this.headerShow = scrollTop > this.offsetHeight;
-    },
+    }
 
     // getScroll () {      window.addEventListener('scroll', () => {
     //     this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop
@@ -122,10 +127,8 @@ export default {
     //     console.log(st);
     //   }, true)    },
   },
-  components: {
-
-  },
-}
+  components: {}
+};
 </script>
 
 <style scoped>
@@ -138,10 +141,8 @@ export default {
 	z-index: 99;
 	background-color: #fff;
 	box-shadow: 0 0 30px rgba(0, 0, 0, 0.07);
-	transition: background-color 0.5s cubic-bezier(0.77, 0, 0.175, 1), box-shadow 0.5s cubic-bezier(0.77, 0, 0.175, 1),
-		transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
-	transition: background-color 0.5s cubic-bezier(0.77, 0, 0.175, 1), box-shadow 0.5s cubic-bezier(0.77, 0, 0.175, 1),
-		transform 0.6s cubic-bezier(0.77, 0, 0.175, 1), -webkit-transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+	transition: background-color 0.5s cubic-bezier(0.77, 0, 0.175, 1), box-shadow 0.5s cubic-bezier(0.77, 0, 0.175, 1), transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+	transition: background-color 0.5s cubic-bezier(0.77, 0, 0.175, 1), box-shadow 0.5s cubic-bezier(0.77, 0, 0.175, 1), transform 0.6s cubic-bezier(0.77, 0, 0.175, 1), -webkit-transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
 	backface-visibility: hidden;
 }
 
@@ -154,13 +155,11 @@ export default {
 	margin: auto;
 	max-width: 90pc;
 }
-
 .navbar {
 	display: flex;
 	height: 5pc;
 	align-items: center;
 }
-
 .logo-wrapper,
 .navbar,
 .site-logo {
@@ -230,7 +229,7 @@ export default {
 	list-style-type: none;
 }
 
-.navbar .menu-item {
+.menu-item {
 	position: relative;
 	display: inline-block;
 }
@@ -239,21 +238,21 @@ export default {
 	font-size: 9pt;
 }
 
-.navbar .nav-list > .menu-item > a {
+.nav-list > .menu-item > a {
 	margin: 0 9pt;
 	font-size: 14px;
 	line-height: 81px;
 	transition: color 0.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
-.navbar .menu-item > a {
+.menu-item > a {
 	display: block;
 	text-transform: uppercase;
 	letter-spacing: 0.2px;
 	font-weight: 700;
 }
 
-.navbar .menu-item.menu-item-has-children > a:after {
+.menu-item.menu-item-has-children > a:after {
 	margin-left: 5px;
 	color: #aaa;
 	content: "";
@@ -263,13 +262,13 @@ export default {
 	transition: color 0.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
-.navbar .menu-item:hover > .sub-menu {
+.menu-item:hover > .sub-menu {
 	visibility: visible;
 	opacity: 1;
 	transform: translateY(0);
 }
 
-.navbar .sub-menu {
+.sub-menu {
 	position: absolute;
 	top: 100%;
 	z-index: 80;
@@ -285,11 +284,11 @@ export default {
 	transform: translateY(5px);
 }
 
-.navbar .sub-menu .menu-item {
+.sub-menu .menu-item {
 	display: block;
 }
 
-.navbar .sub-menu .menu-item > a {
+.sub-menu .menu-item > a {
 	display: flex;
 	padding: 9px 30px;
 	font-size: 11px;
@@ -299,18 +298,18 @@ export default {
 	align-items: center;
 }
 
-.navbar .sub-menu .menu-item > a:hover {
+.sub-menu .menu-item > a:hover {
 	opacity: 1;
 	transform: translateX(5px);
 }
 
-.navbar .actions {
+.actions {
 	display: flex;
 	flex-grow: 1;
 	justify-content: flex-end;
 }
 
-.navbar .navbar-button,
+.navbar-button,
 .off-canvas .canvas-close {
 	display: flex;
 	margin-right: 10px;
@@ -334,7 +333,7 @@ export default {
 	font-size: 15px;
 }
 
-.navbar .login-btn {
+.login-btn {
 	display: flex;
 	margin-right: 10px;
 	width: 5pc;
@@ -407,19 +406,18 @@ form.inline button[type="submit"] {
 	display: none;
 }
 
-.navbar .navbar-button {
+.navbar-button {
 	border: 1px solid #f7f7ff;
 	background-color: #f7f7ff;
 	background-image: none;
 	color: #1890ff;
-	-webkit-animation: none;
 }
 
-.navbar .user-pbtn:hover {
+.user-pbtn:hover {
 	color: #00f !important;
 }
 
-.navbar .user-pbtn:hover,
+.user-pbtn:hover,
 .navbar-button:hover {
 	box-shadow: 0 0 0 rgba(32, 160, 255, 0.3);
 	transform: scale(0.95);
@@ -452,7 +450,6 @@ form.inline button[type="submit"] {
 	background-image: -webkit-linear-gradient(45deg, #f35626, #feab3a);
 	color: #fff;
 	transition: background-color 0.5s cubic-bezier(0.77, 0, 0.175, 1), border-color 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-	-webkit-animation: hue 6s infinite linear;
 }
 
 .label-default {

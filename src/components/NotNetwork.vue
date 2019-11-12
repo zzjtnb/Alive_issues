@@ -16,12 +16,13 @@ export default {
   },
   created () {
     if (this.networkSuccess) {
-      //获取回跳的redirect地址
-      const redirect = this.$route.query.redirect
-      /**
-       * 如果redirect存在说明当前用户是进入某页面后未登陆自动跳转到登陆页面来的，所以登陆完成后得再次回跳到该地址.否则跳转到默认的页面，首页或者其他页面
-       */
-      this.$router.push(redirect ? redirect : '/')
+      // //获取回跳的redirect地址
+      // const redirect = this.$route.query.redirect
+      // /**
+      //  * 如果redirect存在说明当前用户是进入某页面后未登陆自动跳转到登陆页面来的，所以登陆完成后得再次回跳到该地址.否则跳转到默认的页面，首页或者其他页面
+      //  */
+      // this.$router.push(redirect ? redirect : '/')
+      window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
     }
   },
   methods: {
@@ -31,15 +32,16 @@ export default {
       //回退到原路由
       // console.log(this.networkSuccess)
       if (!window.navigator.onLine) {
-        //获取回跳的redirect地址
-        const redirect = this.$route.query.redirect
-        if (redirect) {
-          //如果redirect存在说明当前用户是进入某页面后未登陆自动跳转到登陆页面来的，所以登陆完成后得再次回跳到该地址
-          this.$router.push(redirect)
-        } else {
-          //否则跳转到默认的页面，首页或者其他页面
-          this.$router.push('/')
-        }
+        // //获取回跳的redirect地址
+        // const redirect = this.$route.query.redirect
+        // if (redirect) {
+        //   //如果redirect存在说明当前用户是进入某页面后未登陆自动跳转到登陆页面来的，所以登陆完成后得再次回跳到该地址
+        //   this.$router.push(redirect)
+        // } else {
+        //   //否则跳转到默认的页面，首页或者其他页面
+        //   this.$router.push('/')
+        // }
+        window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
       }
     }
   }

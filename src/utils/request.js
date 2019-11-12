@@ -126,7 +126,7 @@ service.interceptors.response.use(response => {
       // loadingInstance.close()
       router.replace({
         path: '/login',
-        query: { redirect: router.currentRoute.fullPath }//登录成功后跳入浏览的当前页面
+        // query: { redirect: router.currentRoute.fullPath }//登录成功后跳入浏览的当前页面
       })
     }
     return Promise.reject(error)
