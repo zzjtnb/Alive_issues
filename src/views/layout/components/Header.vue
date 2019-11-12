@@ -35,7 +35,7 @@
 						<div class="search-open navbar-button" @click="showSearch(true)">
 							<vs-icon icon="search" size="small" round></vs-icon>
 						</div>
-						<div class="burger navbar-button">
+						<div class="burger navbar-button" @click="showSideBar(true)">
 							<vs-icon icon="menu" size="small" round></vs-icon>
 						</div>
 					</div>
@@ -61,7 +61,7 @@ export default {
     return {
       list: [],
       headerShow: false,
-      searchShow: false
+      searchShow: false,
     };
   },
   computed: {
@@ -82,6 +82,9 @@ export default {
   },
 
   methods: {
+    showSideBar (value) {
+      this.$store.dispatch('ShowSide', value)
+    },
     showSearch (value) {
       this.searchShow = value;
       // this.$store.dispatch("Mobile", value);
@@ -97,13 +100,7 @@ export default {
         this.offsetTop = siteHeader.offsetTop;
         //和元素自身的高度
         this.offsetHeight = siteHeader.offsetHeight;
-        console.log(
-          "offsetTop:" +
-          this.offsetTop +
-          "," +
-          "offsetHeight:" +
-          this.offsetHeight
-        );
+        console.log("offsetTop:" + this.offsetTop + "," + "offsetHeight:" + this.offsetHeight);
       });
       // 得到页面滚动的距离
       let scrollTop =
@@ -170,6 +167,7 @@ export default {
 	float: left;
 	overflow: hidden;
 	max-height: 50px;
+	margin-left: 20%;
 }
 
 .site-logo:before {
@@ -204,8 +202,13 @@ export default {
 .logo {
 	margin-right: 9pt;
 	height: auto;
-	max-width: 90pt;
+	max-width: 50px;
 }
+/* .logo {
+	margin-right: 9pt;
+	height: auto;
+	max-width: 90pt;
+} */
 
 .sep {
 	display: flex;

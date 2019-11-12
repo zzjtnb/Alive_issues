@@ -1,6 +1,10 @@
 const getters = {
+    /**
+     * 显示隐藏
+     */
     networkSuccess: state => state.common.networkSuccess,
     Mobile: state => state.common.Mobile,
+    showSide: state => state.common.ShowSideBar,
     token: state => state.token.token,
     /**
      * github

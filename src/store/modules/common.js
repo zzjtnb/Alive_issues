@@ -4,6 +4,7 @@ const common = {
   state: {
     networkSuccess: true,
     Mobile: true,
+    ShowSideBar: false,
     xianhua_num: 0,
     dianzhu_num: 0,
     jingjiu_num: 0,
@@ -24,7 +25,11 @@ const common = {
         state.jingjiu_num = heroseRecord.jingjiu_num,
         state.jingli_num = heroseRecord.jingli_num,
         state.jugong_num = heroseRecord.jugong_num
+    },
+    IsSideBar: (state, value) => {
+      state.ShowSideBar = value
     }
+
   },
 
   /**
@@ -34,14 +39,17 @@ const common = {
    */
   // dispactch方法调用action,mapAactions方法调用action
   actions: {
-    LocalReload ({ commit }, heroseRecord) {
-      commit('SET_HEROESRECORD', heroseRecord)
-    },
     ChangeNetwork ({ commit }, value) {
       commit('NOT_NETWORK', value)
     },
     Mobile ({ commit }, value) {
       commit("IS_Mobile", value)
+    },
+    ShowSide ({ commit }, value) {
+      commit("IsSideBar", value)
+    },
+    LocalReload ({ commit }, heroseRecord) {
+      commit('SET_HEROESRECORD', heroseRecord)
     },
   }
 }
