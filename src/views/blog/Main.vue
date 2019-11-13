@@ -228,6 +228,7 @@ export default {
 	font-size: 12px;
 	display: inline-block;
 	max-width: 100%;
+	border-radius: 6px;
 }
 .entry-title {
 	clear: both;
