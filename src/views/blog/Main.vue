@@ -7,15 +7,15 @@
 				<h3 class="section-title">
 					<span>
 						<i class="fa fa-list-alt"></i>
-						<svg class="icon" aria-hidden="true">
+						<svg class="icon">
 							<use xlink:href="#zuixinwenzhang_huaban" />
 						</svg>
 						<span>最新文章</span>
 					</span>
 				</h3>
-				<vs-row vs-w="12" class="row posts-wrapper" style="width: auto;">
-					<vs-col vs-xs="12" vsvs-lg="6" v-for="(item,index) in list" :key="index">
-						<article id="post-9639" class="post post-list post-9639 type-post status-publish format-gallery hentry category-xch tag-small-program tag-we7-weizan tag-source-download tag-knowledge-payment post_format-post-format-gallery">
+				<vs-row vs-xs="12" class="row posts-wrapper" style="width: auto;">
+					<vs-col vs-xs="12" vs-lg="6" v-for="(item,index) in list" :key="index">
+						<article class="post post-list">
 							<div class="entry-media">
 								<div class="placeholder">
 									<a>
@@ -23,14 +23,14 @@
 									</a>
 								</div>
 								<div class="entry-star">
-									<a href="javascript:;" title="收藏文章" etap="star" data-postid="9639" class="ripro-star">
-										<svg class="icon" aria-hidden="true">
+									<a href="javascript:;" title="收藏文章" class="ripro-star">
+										<svg class="icon">
 											<use xlink:href="#xingxing" />
 										</svg>
 									</a>
 								</div>
 								<div class="entry-format">
-									<svg class="icon" aria-hidden="true">
+									<svg class="icon">
 										<use xlink:href="#tuku" />
 									</svg>
 								</div>
@@ -38,7 +38,7 @@
 							<div class="entry-wrapper">
 								<header class="entry-header">
 									<div class="entry-meta">
-										<svg class="icon" aria-hidden="true" v-if="item.labels">
+										<svg class="icon" v-if="item.labels">
 											<use xlink:href="#biaoqian" />
 										</svg>
 										<label v-for="(items,index) in item.labels" :style="{background:`#${items.color}`}" :key="index">{{items.name}}</label>
@@ -52,36 +52,36 @@
 									<p v-html="getMainDes[index]"></p>
 								</div>
 								<div class="entry-footer">
-									<a href="https://www.microeco.net/9639.html">
-										<svg class="icon" aria-hidden="true">
+									<a>
+										<svg class="icon">
 											<use xlink:href="#shijian" />
 										</svg>
 										{{getTime[index]}}
 									</a>
-									<a href="https://www.microeco.net/9639.html">
+									<a>
 										<span>
-											<svg class="icon" aria-hidden="true">
+											<svg class="icon">
 												<use xlink:href="#yanjing" />
 											</svg>
 											<span>032</span>
 										</span>
 									</a>
-									<a href="https://www.microeco.net/9639.html">
+									<a>
 										<span>
-											<svg class="icon" aria-hidden="true">
+											<svg class="icon">
 												<use xlink:href="#xiaoxi" />
 											</svg>
 											<span>032</span>
 										</span>
 									</a>
-									<a href="https://www.microeco.net/9639.html">
+									<!-- <a>
 										<span style="color: #fd721f">
-											<svg class="icon" aria-hidden="true">
+											<svg class="icon" >
 												<use xlink:href="#redu" />
 											</svg>
 											<span>032</span>
 										</span>
-									</a>
+									</a>-->
 								</div>
 							</div>
 						</article>
