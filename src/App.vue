@@ -77,4 +77,15 @@ export default {
 	transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
 	transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1), -webkit-transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
+/* 通用css代码 */
+.icon {
+	width: 1.5em;
+	height: 1.5em;
+	vertical-align: -0.15em;
+	fill: currentColor;
+	overflow: hidden;
+	transition: -webkit-transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+	transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+	transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1), -webkit-transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
 </style>

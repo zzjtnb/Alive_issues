@@ -143,16 +143,17 @@ export default {
 	padding: 0;
 }
 .off-canvas .logo {
-	display: flex;
-	justify-content: center;
 	padding: 0 20px;
-	max-width: 220px;
+	max-width: 140px;
 }
 .logo:not(.text) {
 	transition: opacity 0.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
 .logo-wrapper {
 	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 .off-canvas .canvas-close {
 	position: absolute;
