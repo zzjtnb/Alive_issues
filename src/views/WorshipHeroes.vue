@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-	<div>
+	<div style="margin-top: -39px;0">
 		<div class="box hidden-xs">
 			<div class="ly">
 				<a href="javascript:void(0)" onclick="_toggle('m1')">

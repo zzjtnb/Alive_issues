@@ -2,7 +2,7 @@
 <template>
 	<div class="site-content">
 		<main class="site-main">
-			<div class="bgcolor-fff lazyloaded" :class="{section:isSection}">
+			<div class="bgcolor-fff lazyloaded section">
 				<transition name="fade">
 					<router-view></router-view>
 				</transition>
@@ -24,10 +24,7 @@ export default {
 
   },
   created () {
-    if (this.$route.path == '/worshipheroes') {
-      this.isSection = false
-      console.log(this.$route.path)
-    }
+
   },
   methods: {
 
