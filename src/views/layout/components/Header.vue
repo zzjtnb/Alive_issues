@@ -326,6 +326,13 @@ export default {
 	cursor: pointer;
 	align-items: center;
 	justify-content: center;
+	transition: transform 0.4s ease-out;
+}
+.navbar-button,
+.off-canvas .canvas-close:hover {
+	box-shadow: 0 0 10px #fff;
+	transform: rotateZ(360deg);
+	-webkit-transform: rotateZ(360deg);
 }
 
 .main-search .search-close {
@@ -335,7 +342,11 @@ export default {
 	margin-top: -15px;
 	font-size: 15px;
 }
-
+.main-search .search-close:hover .icon-scale {
+	box-shadow: 0 0 10px #fff;
+	transform: rotateZ(360deg);
+	-webkit-transform: rotateZ(360deg);
+}
 .login-btn {
 	display: flex;
 	margin-right: 10px;

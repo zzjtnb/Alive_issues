@@ -99,7 +99,7 @@ export default {
 .menu-item > a {
 	align-items: center;
 	display: flex;
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: 700;
 	letter-spacing: 0.2px;
 	line-height: 1;
@@ -182,7 +182,15 @@ export default {
 	color: #1890ff;
 	background-image: none;
 	-webkit-animation: none;
+	transition: transform 0.4s ease-out;
 }
+.navbar .navbar-button,
+.off-canvas .canvas-close:hover {
+	box-shadow: 0 0 10px #fff;
+	transform: rotateZ(360deg);
+	-webkit-transform: rotateZ(360deg);
+}
+
 .off-canvas {
 	background-color: #fff;
 	height: 100vh;
