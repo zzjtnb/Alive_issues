@@ -14,10 +14,10 @@
 					</span>
 				</h3>
 				<vs-row vs-w="12" class="row posts-wrapper" style="width: auto;">
-					<vs-col vs-xs="12" vsvs-lg="6" v-for="(item,index) in list" :key="index">
+					<vs-col vs-lg="6" v-for="(item,index) in list" :key="index">
 						<article id="post-9639" class="post post-list post-9639 type-post status-publish format-gallery hentry category-xch tag-small-program tag-we7-weizan tag-source-download tag-knowledge-payment post_format-post-format-gallery">
 							<div class="entry-media">
-								<div class="placeholder">
+								<div class="placeholder" style="padding-bottom: 75%;">
 									<a>
 										<img class="lazyloaded" :src="getMainImage[index]" />
 									</a>
@@ -154,70 +154,9 @@ export default {
 </script>
 
 <style scoped>
-/* 全站文章特色图版封面缩放效果 */
-
-.entry-media a-img {
-	max-width: 100%;
-	-webkit-transition: all 444ms ease-in-out;
-	-moz-transition: all 444ms ease-in-out;
-	transition: all 444ms ease-in-out;
-	-ms-flex-negative: 0;
-	flex-shrink: 0;
-}
-
-.entry-media a:hover img,
-.entry-media a:hover .entry-media a-img {
-	-webkit-transform: scale(1.05);
-	-moz-transform: scale(1.05);
-	-ms-transform: scale(1.05);
-	transform: scale(1.05);
-}
-/* 显示收藏 */
-.post-grid:hover .entry-star,
-.post-list:hover .entry-star {
-	z-index: 99;
-	visibility: visible;
-	opacity: 1;
-	transition: all 0.2s;
-}
-/* Hover卡片上移黑色盒子阴影 */
-.post-list:hover,
-.category-box:hover,
-.vip-cell:hover {
-	-webkit-box-shadow: 0 34px 20px -24px rgba(136, 161, 206, 0.3);
-	box-shadow: 10px 6px 16px -5px rgba(0, 0, 0, 0.3);
-	-webkit-transform: translateY(-5px);
-	transform: translateY(-5px);
-	-ms-transform: translateY(-5px);
-}
-
-/**
-文章部分
- */
 .icos {
 	width: 0.7rem;
 	height: 1rem;
-}
-.container {
-	min-height: 1px;
-	padding-left: 15px;
-	padding-right: 15px;
-	position: relative;
-	width: 100%;
-}
-.entry-header .entry-meta {
-	align-items: center;
-	color: #aaa;
-	display: flex;
-	flex-wrap: wrap;
-	font-size: 11px;
-	letter-spacing: 0.2px;
-	margin-bottom: 5px;
-	text-transform: uppercase;
-	text-align: center;
-}
-.entry-meta svg {
-	float: left;
 }
 .entry-meta label {
 	float: left;
@@ -229,10 +168,6 @@ export default {
 	display: inline-block;
 	max-width: 100%;
 }
-.entry-title {
-	clear: both;
-}
-
 .site-content {
 	padding-top: 60px;
 	padding-bottom: 60px;
@@ -269,12 +204,9 @@ export default {
 	background: #fff;
 	border-radius: 4px;
 }
-.entry-header .entry-title {
-	/* font-weight: normal; */
-	margin-bottom: 0.65rem;
-	margin-top: 0.65rem;
-	font-size: 0.975rem;
-}
+/**
+文章部分
+ */
 .vs-row > .vs-col {
 	position: relative;
 	float: left;
@@ -316,7 +248,6 @@ export default {
 	background-color: #ffffff;
 	height: 0;
 	overflow: hidden;
-	padding-bottom: 75%;
 	/* border-radius: 4px 4px 0 0; */
 }
 .entry-media a::before {
@@ -347,15 +278,16 @@ img {
 	margin: 0 auto;
 	width: 100%;
 	overflow: hidden;
+}
+.entry-media a img,
+.entry-media a-img {
 	max-width: 100%;
-	height: 165px;
 	-webkit-transition: all 444ms ease-in-out;
 	-moz-transition: all 444ms ease-in-out;
 	transition: all 444ms ease-in-out;
 	-ms-flex-negative: 0;
 	flex-shrink: 0;
 }
-
 .entry-star {
 	display: block;
 	border-radius: 50%;
@@ -426,6 +358,7 @@ section {
 	margin-bottom: 10px;
 }
 .entry-footer {
+	white-space: nowrap;
 	display: flex;
 	font-size: 11px;
 	font-weight: 700;
@@ -442,77 +375,5 @@ section {
 	font-weight: 500;
 	background: rgb(246, 246, 246);
 	line-height: 1;
-}
-img {
-	display: block;
-	height: auto;
-	max-width: 100%;
-	vertical-align: middle;
-}
-/* button */
-.infinite-scroll-action {
-	display: flex;
-	justify-content: center;
-}
-
-.button,
-.navigation .nav-next a,
-.navigation .nav-previous a,
-button[type="submit"],
-input[type="submit"] {
-	display: inline-block;
-	padding: 9pt 20px;
-	outline: 0;
-	border: none;
-	border-radius: 4px;
-	background-color: #34495e;
-	color: #fff;
-	text-align: center;
-	text-transform: uppercase;
-	letter-spacing: 1px;
-	font-weight: 500;
-	font-size: 11px;
-	font-family: Lato, sans-serif;
-	line-height: 1;
-	cursor: pointer;
-}
-
-.infinite-scroll-button {
-	padding: 1pc;
-	min-width: 200px;
-	background: linear-gradient(-125deg, #2f49fd 0, #0295f9 100%);
-	box-shadow: 0 8px 10px rgba(32, 160, 255, 0.3);
-}
-
-.button:hover {
-	opacity: 0.8;
-	transition: all 0.3s ease-in-out;
-	transform: scale(0.95);
-}
-
-.post-grid {
-	margin-bottom: 30px;
-	border: 1px solid #eee;
-	border-radius: 4px;
-	background-color: #fff;
-	transition: box-shadow 0.3s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.3s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-box-shadow 0.3s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-transform 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
-	transform: translate(0, 0);
-}
-
-.post-grid:hover {
-	box-shadow: 0 34px 20px -24px rgba(136, 161, 206, 0.3);
-	transform: translateY(-5px);
-	-ms-transform: translateY(-5px);
-}
-@media (max-width: 767px) {
-	.post-list .entry-media {
-		width: 120px;
-	}
-	.entry-footer {
-		display: none;
-	}
-	.entry-media .placeholder {
-		padding-bottom: 100%;
-	}
 }
 </style>

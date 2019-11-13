@@ -45,12 +45,18 @@ service.interceptors.request.use(config => {
   // })
   // 在发送请求之前做些什么，比如传token
   let token = store.state.token.token
-  if (token) {
-    let sp = "?"
-    if (config.url.indexOf("?") >= 0) {
-      sp = "&"
-    }
-    config.url = config.url + sp + "access_token=" + token
+  // if (token) {
+  //   let sp = "?"
+  //   if (config.url.indexOf("?") >= 0) {
+  //     sp = "&"
+  //   }
+  //   config.url = config.url + sp + "access_token=" + token
+  // }
+  if (!token) {
+    config.url = config.url + "?client_id=6cc41e2646130e2f8a0a&client_secret=3bca6288d4d0b1d8c0f996d2933a66606c7eab0d"
+
+  } else {
+    config.url = config.url + "?client_id=6cc41e2646130e2f8a0a&client_secret=3bca6288d4d0b1d8c0f996d2933a66606c7eab0d&" + token
   }
   /* // 在这里：可以根据业务需求可以在发送请求之前做些什么:例如我这个是导出文件的接口，因为返回的是二进制流，所以需要设置请求响应类型为blob，就可以在此处设置。
   if (config.url.includes('pur/contract/export')) {

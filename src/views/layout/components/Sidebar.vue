@@ -99,8 +99,8 @@ export default {
 .menu-item > a {
 	align-items: center;
 	display: flex;
-	font-size: 11px;
-	font-weight: 500;
+	font-size: 16px;
+	font-weight: 700;
 	letter-spacing: 0.2px;
 	line-height: 1;
 	outline: none;
