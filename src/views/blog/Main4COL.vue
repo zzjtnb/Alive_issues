@@ -10,7 +10,7 @@
 						<div class="filter-item">
 							<ul class="filter-tag">
 								<span>
-									<svg class="icon" aria-hidden="true">
+									<svg class="icon">
 										<use xlink:href="#biaoqian1" />
 									</svg>
 									<span>标签</span>
@@ -29,31 +29,31 @@
 									<ul class="filter-tag">
 										<div class="right">
 											<li class="rightss">
-												<svg class="icon icos" aria-hidden="true">
+												<svg class="icon icos">
 													<use xlink:href="#xiajiantou" />
 												</svg>
 												<a href="/code?order=date" class="on">发布日期</a>
 											</li>
 											<li class="rightss">
-												<svg class="icon icos" aria-hidden="true">
+												<svg class="icon icos">
 													<use xlink:href="#xiajiantou" />
 												</svg>
 												<a href="/code?order=modified" class>修改时间</a>
 											</li>
 											<li class="rightss">
-												<svg class="icon icos" aria-hidden="true">
+												<svg class="icon icos">
 													<use xlink:href="#xiajiantou" />
 												</svg>
 												<a href="/code?order=comment_count" class>评论数量</a>
 											</li>
 											<li class="rightss">
-												<svg class="icon icos" aria-hidden="true">
+												<svg class="icon icos">
 													<use xlink:href="#xiajiantou" />
 												</svg>
 												<a href="/code?order=rand" class>随机</a>
 											</li>
 											<li class="rightss">
-												<svg class="icon icos" aria-hidden="true">
+												<svg class="icon icos">
 													<use xlink:href="#xiajiantou" />
 												</svg>
 												<a href="/code?order=hot" class>热度</a>
@@ -82,13 +82,13 @@
 								</div>
 								<div class="entry-star">
 									<a href="javascript:;" title="收藏文章" class="ripro-star">
-										<svg class="icon" aria-hidden="true">
+										<svg class="icon">
 											<use xlink:href="#xingxing" />
 										</svg>
 									</a>
 								</div>
 								<div class="entry-format">
-									<svg class="icon" aria-hidden="true">
+									<svg class="icon">
 										<use xlink:href="#tuku" />
 									</svg>
 								</div>
@@ -105,7 +105,7 @@
 												{{items.name}}
 											</a>
 										</span>-->
-										<svg class="icon" aria-hidden="true" v-if="item.labels">
+										<svg class="icon" v-if="item.labels">
 											<use xlink:href="#biaoqian" />
 										</svg>
 										<label v-for="(items,index) in item.labels" :style="{background:`#${items.color}`}" :key="index">{{items.name}}</label>
@@ -120,7 +120,7 @@
 								<div class="entry-footer">
 									<a>
 										<time datetime="2019-10-28T22:21:48+08:00">
-											<svg class="icon" aria-hidden="true">
+											<svg class="icon">
 												<use xlink:href="#shijian" />
 											</svg>
 											{{getTime[index]}}
@@ -128,7 +128,7 @@
 									</a>
 									<a>
 										<span>
-											<svg class="icon" aria-hidden="true">
+											<svg class="icon">
 												<use xlink:href="#yanjing" />
 											</svg>
 											<span>032</span>
@@ -136,7 +136,7 @@
 									</a>
 									<!-- <a>
 										<span>
-											<svg class="icon" aria-hidden="true">
+											<svg class="icon" >
 												<use xlink:href="#xiaoxi" />
 											</svg>
 											<span>032</span>
@@ -144,7 +144,7 @@
 									</a>-->
 									<a>
 										<span style="color: #fd721f">
-											<svg class="icon" aria-hidden="true">
+											<svg class="icon">
 												<use xlink:href="#redu" />
 											</svg>
 											<span>032</span>

@@ -3,17 +3,17 @@
 	<div>
 		<div class="open-oauth text-center">
 			<a href="https://www.microeco.net/oauth/qq" class="btn btn-qq">
-				<svg class="icon" aria-hidden="true">
+				<svg class="icon">
 					<use xlink:href="#qq" />
 				</svg>
 			</a>
 			<a href="https://www.microeco.net/oauth/qq" class="btn btn-qq">
-				<svg class="icon" aria-hidden="true">
+				<svg class="icon">
 					<use xlink:href="#weixin" />
 				</svg>
 			</a>
 			<a href="https://www.microeco.net/oauth/qq" class="btn btn-qq">
-				<svg class="icon" aria-hidden="true">
+				<svg class="icon">
 					<use xlink:href="#GitHub" />
 				</svg>
 			</a>

@@ -8,7 +8,7 @@
 				<div class="filter-item">
 					<ul class="filter-tag">
 						<span>
-							<svg class="icon" aria-hidden="true">
+							<svg class="icon">
 								<use xlink:href="#biaoqian1" />
 							</svg>
 							<span>标签</span>
@@ -27,31 +27,31 @@
 							<ul class="filter-tag">
 								<div class="right">
 									<li class="rightss">
-										<svg class="icon icos" aria-hidden="true">
+										<svg class="icon icos">
 											<use xlink:href="#xiajiantou" />
 										</svg>
 										<a href="/code?order=date" class="on">发布日期</a>
 									</li>
 									<li class="rightss">
-										<svg class="icon icos" aria-hidden="true">
+										<svg class="icon icos">
 											<use xlink:href="#xiajiantou" />
 										</svg>
 										<a href="/code?order=modified" class>修改时间</a>
 									</li>
 									<li class="rightss">
-										<svg class="icon icos" aria-hidden="true">
+										<svg class="icon icos">
 											<use xlink:href="#xiajiantou" />
 										</svg>
 										<a href="/code?order=comment_count" class>评论数量</a>
 									</li>
 									<li class="rightss">
-										<svg class="icon icos" aria-hidden="true">
+										<svg class="icon icos">
 											<use xlink:href="#xiajiantou" />
 										</svg>
 										<a href="/code?order=rand" class>随机</a>
 									</li>
 									<li class="rightss">
-										<svg class="icon icos" aria-hidden="true">
+										<svg class="icon icos">
 											<use xlink:href="#xiajiantou" />
 										</svg>
 										<a href="/code?order=hot" class>热度</a>

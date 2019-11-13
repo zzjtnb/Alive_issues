@@ -5,7 +5,7 @@
 			<vs-icon icon="close" size="small"></vs-icon>
 		</div>
 		<div class="logo-wrapper">
-			<a href="https://www.microeco.net/">
+			<a>
 				<img class="logo regular" src="/images/header/logo-light.png" alt="争逐" />
 			</a>
 		</div>
