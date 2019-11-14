@@ -5,7 +5,18 @@ import store from './store'
 import './registerServiceWorker'
 import util from './utils/util'
 import 'normalize.css'
-
+// 按需引入
+import {
+  Form,
+  FormItem, Card, Button, Input, Message, Loading
+} from 'element-ui'
+Vue.use(Form);
+Vue.use(FormItem);
+Vue.use(Card);
+Vue.use(Button);
+Vue.use(Input);
+Vue.use(Message);
+Vue.use(Loading.directive);
 /**
  * fastClick的300ms延迟
  */

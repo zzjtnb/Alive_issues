@@ -54,9 +54,7 @@ export default {
     isMobiles () {
       if (this.$util.isMobile()) {
         this.$store.dispatch("Mobile", true);
-        console.log('安卓')
       } else {
-        console.log('PC')
         this.$store.dispatch("Mobile", false);
       }
     }
