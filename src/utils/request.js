@@ -58,14 +58,26 @@ service.interceptors.request.use(config => {
   } else {
     config.url = config.url + "?client_id=6cc41e2646130e2f8a0a&client_secret=3bca6288d4d0b1d8c0f996d2933a66606c7eab0d&access_token=" + token
   }
-  /* // 在这里：可以根据业务需求可以在发送请求之前做些什么:例如我这个是导出文件的接口，因为返回的是二进制流，所以需要设置请求响应类型为blob，就可以在此处设置。
-  if (config.url.includes('pur/contract/export')) {
-    config.headers['responseType'] = 'blob'
-  }
-  // 我这里是文件上传，发送的是二进制流，所以需要设置请求头的'Content-Type'
-  if (config.url.includes('pur/contract/upload')) {
-    config.headers['Content-Type'] = 'multipart/form-data'
-  } */
+  /** 
+   * // 在这里：可以根据业务需求可以在发送请求之前做些什么:例如我这个是导出文件的接口，因为返回的是二进制流，所以需要设置请求响应类型为blob，就可以在此处设置。
+   * if (config.url.includes('pur/contract/export')) {
+   *  config.headers['responseType'] = 'blob'
+   *   }
+   * // 我这里是文件上传，发送的是二进制流，所以需要设置请求头的'Content-Type'
+   * if (config.url.includes('pur/contract/upload')) {
+   * config.headers['Content-Type'] = 'multipart/form-data'
+   * }
+   */
+  /**
+   * 传递token的另外一种方式，加在头部
+   * // 登录流程控制中，根据本地是否存在token判断用户的登录情况
+   * // 但是即使token存在，也有可能token是过期的，所以在每次的请求头中携带token
+   * // 后台根据携带的token判断用户的登录情况，并返回给我们对应的状态码
+   * // 而后我们可以在响应拦截器中，根据状态码进行一些统一的操作。
+   * const token = store.state.token;
+   * token && (config.headers.Authorization = token);
+   */
+
   return config
 }, error => {
   //出错，也要loading结束
