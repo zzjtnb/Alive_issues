@@ -58,6 +58,13 @@ service.interceptors.request.use(config => {
   } else {
     config.url = config.url + "?client_id=6cc41e2646130e2f8a0a&client_secret=3bca6288d4d0b1d8c0f996d2933a66606c7eab0d&access_token=" + token
   }
+  /*   config.headers = {
+      'Content-Type': 'application/json;charset=UTF-8', // 设置很关键
+      'tm': timestamp,
+      's': cookie.session,
+      't': getSign(config.method == 'post' ? {} : config.params, cookie.token, timestamp)
+    } 
+  */
   /** 
    * // 在这里：可以根据业务需求可以在发送请求之前做些什么:例如我这个是导出文件的接口，因为返回的是二进制流，所以需要设置请求响应类型为blob，就可以在此处设置。
    * if (config.url.includes('pur/contract/export')) {

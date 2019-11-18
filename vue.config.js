@@ -20,23 +20,37 @@ module.exports = {
     }
   },
 
-  // 配置 proxy 代理解决跨域问题
+  /** 配置 proxy 代理解决跨域问题
+   *  反向代理- 它支持webPack - dev - server的所有选项 
+   */
   devServer: {
-    overlay: { // 让浏览器 overlay 同时显示警告和错误
+    // 让浏览器 overlay 同时显示警告和错误
+    overlay: {
       warnings: true,
       errors: true
     },
-    // open: false, // 是否打开浏览器
+    // open: false, // 是否启动完毕自动在浏览器打开
     // host: "localhost",
     // port: "8080", // 代理断就
-    // https: false,
+    // https: false,// https:{type:Boolean}
     // hotOnly: false, // 热更新
+    /* proxy: 'http://localhost:4000' // 配置跨域处理,只有一个代理
+     * 下面是配置多个代理 
+    */
     proxy: {
       '/api': {
-        target:
-          'https://www.easy-mock.com/mock/5bc75b55dc36971c160cad1b/sheets', // 目标代理接口地址
+        target: 'https://api.zzjtnb.com', // 目标代理接口地址
         secure: false,
-        changeOrigin: true, // 开启代理，在本地创建一个虚拟服务端
+        changeOrigin: true, // 是否跨域 开启代理，在本地创建一个虚拟服务端
+        // ws: true, // 是否启用websockets
+        pathRewrite: {
+          '^/api': '/'
+        }
+      },
+      '/github': {
+        target: 'https://api.github.com', // 目标代理接口地址
+        secure: false,
+        changeOrigin: true, // 是否跨域 开启代理，在本地创建一个虚拟服务端
         // ws: true, // 是否启用websockets
         pathRewrite: {
           '^/api': '/'
@@ -78,6 +92,19 @@ module.exports = {
   productionSourceMap: false,
 
   css: {
+    // loaderOptions: {
+    //   postcss: {
+    //     plugins: [
+    //       require("postcss-pxtorem")({
+    //         // 把px单位换算成rem单位
+    //         rootValue: 75, // 换算的基数(设计图750的根字体为75,如果设计图为640:则rootValue=64) //基准值(计算公式：设计图宽度/10)，设计图尺寸为750X1134(iPhone6)，基准值为750/10=75
+    //         propList: ["*"],
+    //         //不参与转换的样式
+    //         selectorBlackList: ['van']
+    //       })
+    //     ]
+    //   }
+    // },
     extract: false
   }
 };

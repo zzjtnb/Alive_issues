@@ -91,6 +91,11 @@ export const routes = [
     component: () => import('../components/NotNetwork.vue'),
   },
   {
+    path: '/record',
+    name: '记录',
+    component: () => import('../components/Record.vue'),
+  },
+  {
     path: '/404',
     name: '404',
     component: () => import('../components/404.vue')

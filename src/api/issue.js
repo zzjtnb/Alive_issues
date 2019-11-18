@@ -9,6 +9,16 @@ export const meanu = (params) => get('/data/menu.json')
 
 // export const getRecode = (params) => get(`${base.github}/repos/${githubUsername}/Alive/contents/public/data/record.json`)
 // export const editRecode = (params) => put(`${base.github}/repos/${githubUsername}/Alive/contents/public/data/record.json`, params)
-export const getIssues = (params) => get(`${base.github}/repos/${githubUsername}/zzjtnb/issues`, params)
+export const getIssues = (params) => get(`${base.github}/repos/${githubUsername}/zzjtnb/issues`, {
+  //参数
+  params: params,
+  //请求头
+  headers: {
+    //'Content-Type': 'application/octet-stream',
+  },
+  // 重要
+  responseType: 'blob'
+})
+// export const getIssues = (params) => get(`${base.github}/repos/${githubUsername}/zzjtnb/issues`, params)
 export const getLabels = (params) => get(`${base.github}/repos/${githubUsername}/zzjtnb/labels`, params)
 export const create = (params) => post(`${base.github}/repos/${githubUsername}/zzjtnb/issues`, params)
