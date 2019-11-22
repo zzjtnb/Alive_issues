@@ -1,103 +1,107 @@
 <!--  -->
 <template>
-	<div class="site-content">
-		<div class="container">
-			<Labels />
-			<main class="site-main">
-				<h3 class="section-title">
-					<span>
-						<i class="fa fa-list-alt"></i>
-						<svg class="icon">
-							<use xlink:href="#zuixinwenzhang_huaban" />
-						</svg>
-						<span>最新文章</span>
-					</span>
-				</h3>
-				<vs-row vs-xs="12" class="row posts-wrapper" style="width: auto;">
-					<vs-col vs-xs="12" vs-lg="6" v-for="(item,index) in list" :key="index">
-						<article class="post post-list">
-							<div class="entry-media">
-								<div class="placeholder">
-									<a>
-										<img class="lazyloaded" :src="getMainImage[index]" />
-									</a>
-								</div>
-								<div class="entry-star">
-									<a href="javascript:;" title="收藏文章" class="ripro-star">
-										<svg class="icon">
-											<use xlink:href="#xingxing" />
-										</svg>
-									</a>
-								</div>
-								<div class="entry-format">
-									<svg class="icon">
-										<use xlink:href="#tuku" />
-									</svg>
-								</div>
-							</div>
-							<div class="entry-wrapper">
-								<header class="entry-header">
-									<div class="entry-meta">
-										<svg class="icon" v-if="item.labels">
-											<use xlink:href="#biaoqian" />
-										</svg>
-										<label v-for="(items,index) in item.labels" :style="{background:`#${items.color}`}" :key="index">{{items.name}}</label>
+	<main class="site-main">
+		<div class="bgcolor-fff lazyloaded section">
+			<div class="site-content">
+				<div class="container">
+					<Labels />
+					<main class="site-main">
+						<h3 class="section-title">
+							<span>
+								<i class="fa fa-list-alt"></i>
+								<svg class="icon">
+									<use xlink:href="#zuixinwenzhang_huaban" />
+								</svg>
+								<span>最新文章</span>
+							</span>
+						</h3>
+						<vs-row vs-xs="12" class="row posts-wrapper" style="width: auto;">
+							<vs-col vs-xs="12" vs-lg="6" v-for="(item,index) in list" :key="index">
+								<article class="post post-list" @click="goDetails(item.number)">
+									<div class="entry-media">
+										<div class="placeholder">
+											<a>
+												<img class="lazyloaded" :src="getMainImage[index]" />
+											</a>
+										</div>
+										<div class="entry-star">
+											<a href="javascript:;" title="收藏文章" class="ripro-star">
+												<svg class="icon">
+													<use xlink:href="#xingxing" />
+												</svg>
+											</a>
+										</div>
+										<div class="entry-format">
+											<svg class="icon">
+												<use xlink:href="#tuku" />
+											</svg>
+										</div>
 									</div>
+									<div class="entry-wrapper">
+										<header class="entry-header">
+											<div class="entry-meta">
+												<svg class="icon" v-if="item.labels">
+													<use xlink:href="#biaoqian" />
+												</svg>
+												<label v-for="(items,index) in item.labels" :style="{background:`#${items.color}`}" :key="index">{{items.name}}</label>
+											</div>
 
-									<h2 class="entry-title">
-										<a>{{item.title}}</a>
-									</h2>
-								</header>
-								<div class="entry-excerpt u-text-format">
-									<p v-html="getMainDes[index]"></p>
-								</div>
-								<div class="entry-footer">
-									<a>
-										<svg class="icon">
-											<use xlink:href="#shijian" />
-										</svg>
-										{{getTime[index]}}
-									</a>
-									<a>
-										<span>
-											<svg class="icon">
-												<use xlink:href="#yanjing" />
-											</svg>
-											<span>032</span>
-										</span>
-									</a>
-									<a>
-										<span>
-											<svg class="icon">
-												<use xlink:href="#xiaoxi" />
-											</svg>
-											<span>032</span>
-										</span>
-									</a>
-									<!-- <a>
+											<h2 class="entry-title">
+												<a>{{item.title}}</a>
+											</h2>
+										</header>
+										<div class="entry-excerpt u-text-format">
+											<p v-html="getMainDes[index]"></p>
+										</div>
+										<div class="entry-footer">
+											<a>
+												<svg class="icon">
+													<use xlink:href="#shijian" />
+												</svg>
+												{{getTime[index]}}
+											</a>
+											<a>
+												<span>
+													<svg class="icon">
+														<use xlink:href="#yanjing" />
+													</svg>
+													<span>032</span>
+												</span>
+											</a>
+											<a>
+												<span>
+													<svg class="icon">
+														<use xlink:href="#xiaoxi" />
+													</svg>
+													<span>032</span>
+												</span>
+											</a>
+											<!-- <a>
 										<span style="color: #fd721f">
 											<svg class="icon" >
 												<use xlink:href="#redu" />
 											</svg>
 											<span>032</span>
 										</span>
-									</a>-->
-								</div>
-							</div>
-						</article>
-					</vs-col>
-				</vs-row>
+											</a>-->
+										</div>
+									</div>
+								</article>
+							</vs-col>
+						</vs-row>
 
-				<div class="infinite-scroll-action">
-					<div class="infinite-scroll-button button">加载更多</div>
+						<div class="infinite-scroll-action">
+							<div class="infinite-scroll-button button">加载更多</div>
+						</div>
+					</main>
 				</div>
-			</main>
+			</div>
 		</div>
-	</div>
+	</main>
 </template>
 
 <script>
-import { getIssues } from '@/api/issue'
+import { getIssuesList } from '@/api/issue'
 import Labels from './Labels';
 export default {
   data () {
@@ -142,9 +146,12 @@ export default {
   },
   methods: {
     issueList () {
-      getIssues().then((response) => {
+      getIssuesList().then((response) => {
         this.list = response.data;
       })
+    },
+    goDetails (id) {
+      this.$router.push("/blog/details/" + id)
     },
   },
   components: {
@@ -504,6 +511,22 @@ input[type="submit"] {
 	box-shadow: 0 34px 20px -24px rgba(136, 161, 206, 0.3);
 	transform: translateY(-5px);
 	-ms-transform: translateY(-5px);
+}
+.site-main {
+	display: block;
+}
+
+.lazyloaded {
+	opacity: 1;
+	transition: opacity 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.section {
+	padding-bottom: 40px;
+	padding-top: 40px;
+	background: url("/images/main/bg-2.png");
+}
+.bgcolor-fff {
+	background-color: #fff;
 }
 @media (max-width: 767px) {
 	.post-list .entry-media {

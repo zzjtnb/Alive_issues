@@ -1,76 +1,80 @@
 <!--  -->
 <template>
-	<div style="margin-top: -39px;0">
-		<div class="box hidden-xs">
-			<div class="ly">
-				<a href="javascript:void(0)" onclick="_toggle('m1')">
-					<img src="/images/Heroes/picture/pic.jpg" width="71" height="77" />
-				</a>
-			</div>
-		</div>
-		<div class="bgimg">
-			<div class="container">
-				<div class="chang_b">
-					<div class="xianhua" v-if="switchName.xianhua_num">
-						<img src="/images/Heroes/picture/pic1.png" width="525" height="148" />
+	<main class="site-main">
+		<div class="bgcolor-fff lazyloaded section">
+			<div style="margin-top: -39px;0">
+				<div class="box hidden-xs">
+					<div class="ly">
+						<a href="javascript:void(0)" onclick="_toggle('m1')">
+							<img src="/images/Heroes/picture/pic.jpg" width="71" height="77" />
+						</a>
 					</div>
-					<div class="gongan">
-						<div class="dianzhu" v-if="switchName.dianzhu_num">
-							<img id="m3_img" src="/images/Heroes/picture/lazhu.png" width="155" height="123" />
-							<div id="m3_swf_container"></div>
-						</div>
-						<div class="jingjiu" v-if="switchName.jingjiu_num">
-							<img src="/images/Heroes/picture/pic8.png" width="155" height="123" />
-						</div>
-					</div>
-					<div class="jingli" v-if="switchName.jingli_num">
-						<img id="m5_img" src="/images/Heroes/picture/jingli.gif" width="102" height="155" />
-						<div id="m5_swf_container"></div>
-					</div>
-					<div class="jugong" v-if="switchName.jugong_num">
-						<img id="m6_img" src="/images/Heroes/picture/jugong.gif" width="102" height="155" />
-						<div id="m6_swf_container"></div>
-					</div>
+				</div>
+				<div class="bgimg">
+					<div class="container">
+						<div class="chang_b">
+							<div class="xianhua" v-if="switchName.xianhua_num">
+								<img src="/images/Heroes/picture/pic1.png" width="525" height="148" />
+							</div>
+							<div class="gongan">
+								<div class="dianzhu" v-if="switchName.dianzhu_num">
+									<img id="m3_img" src="/images/Heroes/picture/lazhu.png" width="155" height="123" />
+									<div id="m3_swf_container"></div>
+								</div>
+								<div class="jingjiu" v-if="switchName.jingjiu_num">
+									<img src="/images/Heroes/picture/pic8.png" width="155" height="123" />
+								</div>
+							</div>
+							<div class="jingli" v-if="switchName.jingli_num">
+								<img id="m5_img" src="/images/Heroes/picture/jingli.gif" width="102" height="155" />
+								<div id="m5_swf_container"></div>
+							</div>
+							<div class="jugong" v-if="switchName.jugong_num">
+								<img id="m6_img" src="/images/Heroes/picture/jugong.gif" width="102" height="155" />
+								<div id="m6_swf_container"></div>
+							</div>
 
-					<transition name="fade">
-						<div class="coi_p" id="jidian_op_tips_container" v-if="tips">
-							<div class="coi" id="jidian_op_tips_jingjiu">{{tipsText}}</div>
+							<transition name="fade">
+								<div class="coi_p" id="jidian_op_tips_container" v-if="tips">
+									<div class="coi" id="jidian_op_tips_jingjiu">{{tipsText}}</div>
+								</div>
+							</transition>
 						</div>
-					</transition>
-				</div>
-				<div id="musicbox" class="yin">
-					<audio id="audio" loop="loop">
-						<source src="/music/ylzg.mp3" type="audio/mp3" />
-					</audio>
-					<span id="MusicCtl" :class="{ muted : isMuted }" @click="playMusic"></span>
-				</div>
-				<div class="nav_l">
-					<ul>
-						<li>
-							<a @click="show('xianhua_num')">献 花</a>
-							<span id="xianhua_num">{{xianhua_num}}</span>
-						</li>
-						<li class="io">
-							<a @click="show('dianzhu_num')">点 烛</a>
-							<span id="dianzhu_num">{{dianzhu_num}}</span>
-						</li>
-						<li class="io1">
-							<a @click="show('jingjiu_num')">敬 酒</a>
-							<span id="jingjiu_num">{{jingjiu_num}}</span>
-						</li>
-						<li class="io2">
-							<a @click="show('jingli_num')">敬 礼</a>
-							<span id="jingli_num">{{jingli_num}}</span>
-						</li>
-						<li class="io3">
-							<a @click="show('jugong_num')">鞠 躬</a>
-							<span id="jugong_num">{{jugong_num}}</span>
-						</li>
-					</ul>
+						<div id="musicbox" class="yin">
+							<audio id="audio" loop="loop">
+								<source src="/music/ylzg.mp3" type="audio/mp3" />
+							</audio>
+							<span id="MusicCtl" :class="{ muted : isMuted }" @click="playMusic"></span>
+						</div>
+						<div class="nav_l">
+							<ul>
+								<li>
+									<a @click="show('xianhua_num')">献 花</a>
+									<span id="xianhua_num">{{xianhua_num}}</span>
+								</li>
+								<li class="io">
+									<a @click="show('dianzhu_num')">点 烛</a>
+									<span id="dianzhu_num">{{dianzhu_num}}</span>
+								</li>
+								<li class="io1">
+									<a @click="show('jingjiu_num')">敬 酒</a>
+									<span id="jingjiu_num">{{jingjiu_num}}</span>
+								</li>
+								<li class="io2">
+									<a @click="show('jingli_num')">敬 礼</a>
+									<span id="jingli_num">{{jingli_num}}</span>
+								</li>
+								<li class="io3">
+									<a @click="show('jugong_num')">鞠 躬</a>
+									<span id="jugong_num">{{jugong_num}}</span>
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	</main>
 </template>
 
 <script>
@@ -404,5 +408,21 @@ img {
 		border-right: none;
 		background: url(/images/Heroes//bg6.png) no-repeat 0 7px;
 	}
+}
+.site-main {
+	display: block;
+}
+
+.lazyloaded {
+	opacity: 1;
+	transition: opacity 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.section {
+	padding-bottom: 40px;
+	padding-top: 40px;
+	background: url("/images/main/bg-2.png");
+}
+.bgcolor-fff {
+	background-color: #fff;
 }
 </style>
