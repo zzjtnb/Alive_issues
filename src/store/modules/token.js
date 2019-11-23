@@ -35,15 +35,10 @@ const token = {
         let githubUsername = store.state.configuration.githubUsername
         if (githubUsername == result['login']) {
           commit('SET_TOKEN', accessToken)
-          Vue.prototype.$notify({
-            title: '成功',
+          Vue.prototype.$message({
             message: 'Token绑定成功',
             type: 'success'
           })
-          // Vue.prototype.$message({
-          //     message: 'Token绑定成功',
-          //     type: 'success'
-          // })
         } else {
           Vue.prototype.$message({
             message: 'Token用户不一致',
@@ -56,10 +51,9 @@ const token = {
     },
     Cancellation ({ commit }) {
       commit('REMOVE_TOKEN')
-      Vue.notify({
-        group: 'custom-style',
-        text: 'Token取消绑定',
-        type: 'info'
+      Vue.prototype.$message({
+        message: 'Token取消绑定',
+        type: 'error'
       })
     },
   }

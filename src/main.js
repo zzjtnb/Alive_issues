@@ -8,7 +8,7 @@ import 'normalize.css'
 // 按需引入
 import {
   Form,
-  FormItem, Card, Button, Input, Message, Loading
+  FormItem, Card, Button, Input, Message, Loading, Tag, Row, Col,
 } from 'element-ui'
 Vue.use(Form);
 Vue.use(FormItem);
@@ -17,6 +17,9 @@ Vue.use(Button);
 Vue.use(Input);
 Vue.use(Message);
 Vue.use(Loading.directive);
+Vue.use(Tag);
+Vue.use(Row);
+Vue.use(Col);
 /**
  * fastClick的300ms延迟
  */
@@ -31,6 +34,7 @@ import 'material-icons/iconfont/material-icons.css';
 
 Vue.use(Vuesax);
 Vue.prototype.$util = util;
+Vue.prototype.$message = Message;
 Vue.config.productionTip = false
 
 /**
@@ -49,6 +53,13 @@ Vue.prototype.$setTitle = function (title) {
     document.title = store.state.configuration.htmlTitle
   }
 }
+//为文章详情添加代码高亮
+Vue.directive('highlight', (el) => {
+  let blocks = el.querySelectorAll('pre code');
+  blocks.forEach((block) => {
+    hljs.highlightBlock(block)
+  })
+})
 // 注册一个全局自定义指令 `v-focus`
 Vue.directive('focus', {
   // 当被绑定的元素插入到 DOM 中时……

@@ -86,4 +86,11 @@ export default {
 	transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
 	transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1), -webkit-transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
+/**
+ *文章换行
+ */
+.markdown-body pre,
+.markdown-body pre code {
+	white-space: pre-wrap !important;
+}
 </style>

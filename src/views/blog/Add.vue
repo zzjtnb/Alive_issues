@@ -5,10 +5,12 @@
 				<el-form-item label="标题" prop="title">
 					<el-input v-model="form.title"></el-input>
 				</el-form-item>
-				<el-form-item label="简要说明" prop="description">
-					<!-- <el-input v-model="label" type="textarea"></el-input> -->
+				<el-form-item label="标签" prop="labels">
+					<el-tag :key="tag" v-for="tag in this.form.labels" closable :disable-transitions="false" @close="removeLabels(tag)" effect="dark">{{tag}}</el-tag>
+					<el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="addLabels" @blur="addLabels"></el-input>
+					<el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
 				</el-form-item>
-				<el-form-item label="博客正文" prop="content">
+				<el-form-item label="正文" prop="body">
 					<mavon-editor @imgAdd="imgAdd" style="max-height: 500px" ref="md" v-model="form.body" :subfield="false" :toolbars="mavonEditorToolbars" />
 				</el-form-item>
 				<el-form-item>
@@ -25,11 +27,13 @@ import { create } from '@/api/issue'
 export default {
   data () {
     return {
+      inputVisible: false,
+      inputValue: '',
+      label: '',
       form: {
         title: "",
-        // labels: [],
+        labels: [],
         body: "",
-
       },
       ruleValidate: {
         title: [
@@ -37,7 +41,7 @@ export default {
           { type: 'string', max: 32, message: '标题长度不大于32字符', trigger: 'change' }
         ],
         labels: [
-          { required: true, message: '请输入博客描述', trigger: 'blur' }
+          { required: true, message: '请输入博客标签', trigger: 'blur' }
         ],
         body: [
           { required: true, message: '请输博客入正文', trigger: 'blur' }
@@ -86,6 +90,25 @@ export default {
     ]),
   },
   methods: {
+    removeLabels (tag) {
+      this.form.labels.splice(this.form.labels.indexOf(tag), 1);
+    },
+
+    showInput () {
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+
+    addLabels () {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.form.labels.push(inputValue);
+      }
+      this.inputVisible = false;
+      this.inputValue = '';
+    },
     imgAdd (pos, file) {
       this.$refs.md.$img2Url(pos, file.miniurl)
     },
@@ -99,14 +122,17 @@ export default {
         if (valid) {
           this.submitButton.loading = true
           this.submitButton.disabled = true
-          create(this.form).then((response) => {
-            let result = response.data
+          create(this.form).then((res) => {
+            let result = res.data
+            console.log(res);
             // console.log(JSON.stringify(result))
-            this.$message({
-              message: '发表成功',
-              type: 'success'
-            })
-            // this.$router.push("/user/blog/details/" + result.id)
+            if (res.status == '201') {
+              this.$message({
+                message: '发表成功',
+                type: 'success'
+              })
+            }
+            this.$router.push("/blog/details/" + result.number)
           }).then(() => {
             this.submitButton.loading = false
             this.submitButton.disabled = false
@@ -118,5 +144,20 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.el-tag + .el-tag {
+	margin-left: 10px;
+}
+.button-new-tag {
+	margin-left: 10px;
+	height: 32px;
+	line-height: 30px;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+.input-new-tag {
+	width: 90px;
+	margin-left: 10px;
+	vertical-align: bottom;
+}
 </style>

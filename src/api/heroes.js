@@ -31,7 +31,6 @@ export default {
       data: {
         message: 'a',
         content: require('js-base64').Base64.encode(content),
-
         sha: sha
       }
     })
