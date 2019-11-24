@@ -25,10 +25,10 @@ module.exports = {
    */
   devServer: {
     // 让浏览器 overlay 同时显示警告和错误
-    overlay: {
-      warnings: true,
-      errors: true
-    },
+    // overlay: {
+    //   warnings: true,
+    //   errors: true
+    // },
     // open: false, // 是否启动完毕自动在浏览器打开
     // host: "localhost",
     // port: "8080", // 代理断就

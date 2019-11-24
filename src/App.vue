@@ -70,11 +70,7 @@ export default {
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
 	opacity: 0;
 }
-.vs-icon-bg.bg-small {
-	transition: -webkit-transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-	transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-	transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1), -webkit-transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-}
+
 /* 通用css代码 */
 .icon {
 	width: 1.5em;

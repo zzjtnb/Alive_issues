@@ -1,71 +1,73 @@
 <!--  -->
 <template>
 	<div class="filter_content">
-		<form class="mb-0" method="get" action="https://www.microeco.net">
-			<input type="hidden" name="s" />
-			<div class="form-box search-properties mb-0">
-				<!-- 相关标签 -->
-				<div class="filter-item">
-					<ul class="filter-tag">
-						<span>
-							<svg class="icon">
-								<use xlink:href="#biaoqian1" />
-							</svg>
-							<span>标签</span>
-						</span>
-						<li v-for="(item,index) in labeles">
-							<a :href="item.url" target="_blank" :style="{background:`#${item.color}`}">{{item.name}}</a>
-						</li>
-					</ul>
-				</div>
-				<!-- 自定义筛选 -->
-				<div class="filter-tab">
-					<vs-row style="display: block;overflow: inherit;">
-						<div class="col-12 col-sm-6"></div>
-						<vs-col vs-w="12">
-							<!-- 排序 -->
-							<ul class="filter-tag">
-								<div class="right">
-									<li class="rightss">
-										<svg class="icon icos">
-											<use xlink:href="#xiajiantou" />
-										</svg>
-										<a href="/code?order=date" class="on">发布日期</a>
-									</li>
-									<li class="rightss">
-										<svg class="icon icos">
-											<use xlink:href="#xiajiantou" />
-										</svg>
-										<a href="/code?order=modified" class>修改时间</a>
-									</li>
-									<li class="rightss">
-										<svg class="icon icos">
-											<use xlink:href="#xiajiantou" />
-										</svg>
-										<a href="/code?order=comment_count" class>评论数量</a>
-									</li>
-									<li class="rightss">
-										<svg class="icon icos">
-											<use xlink:href="#xiajiantou" />
-										</svg>
-										<a href="/code?order=rand" class>随机</a>
-									</li>
-									<li class="rightss">
-										<svg class="icon icos">
-											<use xlink:href="#xiajiantou" />
-										</svg>
-										<a href="/code?order=hot" class>热度</a>
-									</li>
-								</div>
-							</ul>
-						</vs-col>
-					</vs-row>
-				</div>
-
-				<!-- .row end -->
+		<div class="form-box search-properties">
+			<!-- 相关标签 -->
+			<div class="filter-item">
+				<ul class="filter-tag">
+					<span>
+						<svg class="icon">
+							<use xlink:href="#biaoqian1" />
+						</svg>
+						<span>标签</span>
+					</span>
+					<li v-for="(item,index) in labeles">
+						<a :href="item.url" target="_blank" :style="{background:`#${item.color}`}">{{item.name}}</a>
+					</li>
+				</ul>
 			</div>
-			<!-- .form-box end -->
-		</form>
+			<!-- <el-row :gutter="24">
+				<el-col :xs="20" :lg="24">
+				
+				</el-col>
+			</el-row>-->
+
+			<!-- 自定义筛选 -->
+			<div class="filter-tab">
+				<el-row :gutter="24">
+					<el-col :xs="24" :lg="12">
+						<!-- 排序 -->
+						<ul class="filter-tag">
+							<div class="right">
+								<li class="rightss">
+									<svg class="icon icos">
+										<use xlink:href="#xiajiantou" />
+									</svg>
+									<a href="/code?order=date" class="on">发布日期</a>
+								</li>
+								<li class="rightss">
+									<svg class="icon icos">
+										<use xlink:href="#xiajiantou" />
+									</svg>
+									<a href="/code?order=modified" class>修改时间</a>
+								</li>
+								<li class="rightss">
+									<svg class="icon icos">
+										<use xlink:href="#xiajiantou" />
+									</svg>
+									<a href="/code?order=comment_count" class>评论数量</a>
+								</li>
+								<li class="rightss">
+									<svg class="icon icos">
+										<use xlink:href="#xiajiantou" />
+									</svg>
+									<a href="/code?order=rand" class>随机</a>
+								</li>
+								<li class="rightss">
+									<svg class="icon icos">
+										<use xlink:href="#xiajiantou" />
+									</svg>
+									<a href="/code?order=hot" class>热度</a>
+								</li>
+							</div>
+						</ul>
+					</el-col>
+				</el-row>
+			</div>
+
+			<!-- .row end -->
+		</div>
+		<!-- .form-box end -->
 	</div>
 </template>
 
@@ -124,7 +126,6 @@ export default {
 	margin-top: -90px;
 	margin-bottom: 30px;
 	padding: 20px;
-	width: 100%;
 	border: 1px solid #f3f3f3;
 	border-radius: 4px;
 	background-color: #fff;
@@ -213,7 +214,7 @@ export default {
 @media (max-width: 767px) {
 	.filter_content {
 		display: block;
-		margin-top: -10px;
+
 		padding: 10px;
 	}
 
@@ -237,7 +238,7 @@ export default {
 	.filter_content .filter-item span,
 	.filter_content .filter-tab span {
 		display: flex;
-		/* margin-bottom: 10px; */
+		padding: 0;
 		width: 100%;
 	}
 }

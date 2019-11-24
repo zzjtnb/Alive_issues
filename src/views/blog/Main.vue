@@ -207,7 +207,6 @@ export default {
 	padding-left: 15px;
 	padding-right: 15px;
 	position: relative;
-	width: 100%;
 }
 .entry-header .entry-meta {
 	align-items: center;
@@ -280,12 +279,10 @@ export default {
 	margin-top: 0.65rem;
 	font-size: 0.975rem;
 }
-.vs-row > .vs-col {
-	position: relative;
-	float: left;
-	padding-right: 15px;
-	padding-left: 15px;
-}
+/**
+文章部分
+ */
+
 .posts-wrapper,
 .navbar .menu-item-mega > .sub-menu {
 	display: flex;

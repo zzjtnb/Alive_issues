@@ -5,6 +5,7 @@ import store from './store'
 import './registerServiceWorker'
 import util from './utils/util'
 import 'normalize.css'
+import 'material-design-icons/iconfont/material-icons.css'
 // 按需引入
 import {
   Form,
@@ -15,7 +16,11 @@ Vue.use(FormItem);
 Vue.use(Card);
 Vue.use(Button);
 Vue.use(Input);
-Vue.use(Message);
+/**
+ * Message不要用使用use引入,这样会在页面加载后没有进行任何操作，但是会自动弹出一次空的通知框
+ * Vue.use(Message);
+ */
+Vue.prototype.$message = Message;
 Vue.use(Loading.directive);
 Vue.use(Tag);
 Vue.use(Row);
@@ -25,20 +30,12 @@ Vue.use(Col);
  */
 import FastClick from 'fastclick'; // 引入插件
 FastClick.attach(document.body); // 使用 fastclick
-/**
- * Vuesax UI
- */
-import Vuesax from 'vuesax'
-import 'vuesax/dist/vuesax.css'
-import 'material-icons/iconfont/material-icons.css';
 
-Vue.use(Vuesax);
 Vue.prototype.$util = util;
-Vue.prototype.$message = Message;
 Vue.config.productionTip = false
 
 /**
- * 
+ * mavonEditor
  */
 import mavonEditor from 'mavon-editor';
 import 'mavon-editor/dist/css/index.css';

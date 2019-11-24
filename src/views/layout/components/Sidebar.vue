@@ -2,7 +2,7 @@
 <template>
 	<div class="off-canvas" :class="{'canvas-opened':showSide}">
 		<div class="canvas-close" @click="closeSide(false)">
-			<vs-icon icon="close" size="small"></vs-icon>
+			<i class="material-icons">close</i>
 		</div>
 		<div class="logo-wrapper">
 			<a>
@@ -18,7 +18,7 @@
 					<li class="menu-item slicknav_parent" v-if="menu.children && menu.path !== '/login'&&menu.meta.submenu" @click="showSubmenu(true)">
 						<a>
 							{{ menu.meta.title }}
-							<vs-icon icon="keyboard_arrow_down" size="14px"></vs-icon>
+							<i class="material-icons">keyboard_arrow_down</i>
 						</a>
 						<ul class="sub-menu" v-if="isShow&&menu.meta.submenu && menu.path !== '/login'">
 							<li class="menu-item sub-menu-item" v-for="(submenu, index) in menu.children" @click="closeSide(false)">
@@ -26,17 +26,6 @@
 							</li>
 						</ul>
 					</li>
-					<!-- <li class="menu-item slicknav_parent" @click="showSubmenu(true)" v-if="menu.children && menu.path !== '/login'">
-						<router-link :to="menu.path">
-							{{ menu.meta.title }}
-							<vs-icon icon="keyboard_arrow_down" size="14px" v-if="menu.meta.submenu"></vs-icon>
-						</router-link>
-						<ul class="sub-menu" v-if="isShow&&menu.meta.submenu && menu.path !== '/login'">
-							<li class="menu-item sub-menu-item" v-for="(submenu, index) in menu.children" @click="closeSide(false)">
-								<router-link :to="submenu.path">{{submenu.meta.title }}</router-link>
-							</li>
-						</ul>
-					</li>-->
 				</ul>
 			</div>
 		</div>
