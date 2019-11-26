@@ -8,9 +8,7 @@ import 'normalize.css'
 import 'material-design-icons/iconfont/material-icons.css'
 // 按需引入
 import {
-  Form,
-  FormItem, Card, Button, Input, Message, Loading, Tag, Row, Col, Breadcrumb,
-  BreadcrumbItem,
+  Form, FormItem, Card, Button, Input, Message, Loading, Tag, Row, Col, Breadcrumb, BreadcrumbItem, Upload, Dialog
 } from 'element-ui'
 Vue.use(Form);
 Vue.use(FormItem);
@@ -19,6 +17,8 @@ Vue.use(Button);
 Vue.use(Input);
 Vue.use(Breadcrumb);
 Vue.use(BreadcrumbItem);
+Vue.use(Upload);
+Vue.use(Dialog);
 /**
  * Message不要用使用use引入,这样会在页面加载后没有进行任何操作，但是会自动弹出一次空的通知框
  * Vue.use(Message);

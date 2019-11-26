@@ -148,6 +148,9 @@ export const put = (url, data, config) => {
       method: 'put',
       url,
       data,
+      headers: {
+        Accept: 'application/vnd.github.VERSION.base64'
+      },
       ...config
     }).then(response => {
       resolve(response)

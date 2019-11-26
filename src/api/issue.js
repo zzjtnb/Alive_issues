@@ -22,3 +22,6 @@ export const getIssuesList = (params) => get(`${base.github}/repos/${githubUsern
 export const getIssues = (params) => get(`${base.github}/repos/${githubUsername}/zzjtnb/issues/${params}`)
 export const getLabels = (params) => get(`${base.github}/repos/${githubUsername}/zzjtnb/labels`, params)
 export const create = (params) => post(`${base.github}/repos/${githubUsername}/zzjtnb/issues`, params)
+// https://api.github.com/repos/zzjtnb/images/git/blobs/
+export const UploadImageApi = (params, name) => put(`${base.github}/repos/${githubUsername}/images/contents/test/${name}`, params)
+
