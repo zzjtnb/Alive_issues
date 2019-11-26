@@ -125,7 +125,7 @@ html [type="button"],
 	letter-spacing: 1px;
 	line-height: 36px;
 	outline: none;
-	padding: 0 18px;
+	/* padding: 0 18px; */
 	text-align: center;
 	text-transform: uppercase;
 	position: relative;

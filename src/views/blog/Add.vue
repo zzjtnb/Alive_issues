@@ -38,7 +38,7 @@ export default {
       ruleValidate: {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' },
-          { type: 'string', max: 32, message: '标题长度不大于32字符', trigger: 'change' }
+          { type: 'string', max: 64, message: '标题长度不大于64字符', trigger: 'change' }
         ],
         labels: [
           { required: true, message: '请输入博客标签', trigger: 'blur' }

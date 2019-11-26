@@ -135,7 +135,6 @@ export default {
     getTime () {
       let arr = [];
       for (let item of this.list) {
-        console.log(item.updated_at)
         arr.push(this.$util.utcToLocalTime(item.updated_at));
       }
       return arr;

@@ -9,13 +9,16 @@ import 'material-design-icons/iconfont/material-icons.css'
 // 按需引入
 import {
   Form,
-  FormItem, Card, Button, Input, Message, Loading, Tag, Row, Col,
+  FormItem, Card, Button, Input, Message, Loading, Tag, Row, Col, Breadcrumb,
+  BreadcrumbItem,
 } from 'element-ui'
 Vue.use(Form);
 Vue.use(FormItem);
 Vue.use(Card);
 Vue.use(Button);
 Vue.use(Input);
+Vue.use(Breadcrumb);
+Vue.use(BreadcrumbItem);
 /**
  * Message不要用使用use引入,这样会在页面加载后没有进行任何操作，但是会自动弹出一次空的通知框
  * Vue.use(Message);

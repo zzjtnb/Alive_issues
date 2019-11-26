@@ -1,15 +1,7 @@
 <!--  -->
 <template>
 	<div class="container">
-		<div class="breadcrumbs">
-			当前位置：
-			<a href="https://www.microeco.net">百码云</a>
-			<small>&gt;</small>
-			<a href="https://www.microeco.net/module">微信应用</a>
-			<small>&gt;</small>
-			<a href="https://www.microeco.net/module/xch">小程序源码</a>
-			<small>&gt;</small> 志汇叮咚同城微圈小程序 V11.3.8 开源+前端
-		</div>
+		<Breadcrumb></Breadcrumb>
 		<article class="article-content">
 			<!-- <div v-html="getMainDes"></div> -->
 			<!-- <mavon-editor :ishljs="true" codeStyle="monokai-sublime" v-html="blog.content"></mavon-editor> -->
@@ -20,6 +12,7 @@
 
 <script>
 import { getIssues } from '@/api/issue'
+import Breadcrumb from '../../components/Breadcrumb';
 export default {
   data () {
     return {
@@ -59,7 +52,7 @@ export default {
     // }
   },
   components: {
-
+    Breadcrumb
   },
 }
 </script>
@@ -71,20 +64,7 @@ export default {
 	height: auto !important;
 	padding-top: 60px;
 }
-.breadcrumbs {
-	font-size: 13px;
-	text-align: left;
-	margin-bottom: 30px;
-	margin-top: -30px;
-	color: #999;
-	padding: 0;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-.breadcrumbs a {
-	color: #999;
-}
+
 .article-content {
 	border-radius: 4px;
 	background-color: #fff;
