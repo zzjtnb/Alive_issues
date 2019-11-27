@@ -119,6 +119,7 @@ export default {
       for (let item of this.list) {
         if (this.$markdown(item.body).match(/\bsrc\b\s*=\s*[\'\"]?([^\'\"]*)[\'\"]?/)) {
           arr.push(this.$markdown(item.body).match(/\bsrc\b\s*=\s*[\'\"]?([^\'\"]*)[\'\"]?/)[1]);
+          console.log(arr)
         } else {
           arr.push('http://via.placeholder.com/200x200');
         }

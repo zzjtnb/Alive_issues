@@ -5,8 +5,8 @@
 				<el-form-item label="标题" prop="title">
 					<el-input v-model="form.title"></el-input>
 				</el-form-item>
-				<el-form-item label="缩略图">
-					<el-upload list-type="picture-card" action ref="upload" :on-preview="handlePictureCardPreview" :http-request="UploadImage" :auto-upload="true" :file-list="fileList" multiple>
+				<el-form-item label="文章缩略图">
+					<el-upload action ref="upload" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :http-request="UploadImage" :auto-upload="false" :file-list="fileList" :on-change="handleChange">
 						<i class="el-icon-plus"></i>
 					</el-upload>
 					<el-dialog :visible.sync="dialogVisible">
@@ -20,7 +20,7 @@
 					<el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
 				</el-form-item>
 				<el-form-item label="正文" prop="body">
-					<mavon-editor @imgAdd="imgAdd" style="max-height: 500px" ref="md" v-model="form.body" :subfield="false" :toolbars="mavonEditorToolbars" :ishljs="true" :codeStyle="true" codeStyle="agate"/>
+					<mavon-editor @imgAdd="imgAdd" style="max-height: 500px" ref="md" v-model="form.body" :subfield="false" :toolbars="mavonEditorToolbars" />
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="onSubmit" :loading="submitButton.loading" :disabled="submitButton.disabled">发表</el-button>
@@ -36,8 +36,6 @@ import { create, UploadImageApi } from '@/api/issue'
 export default {
   data () {
     return {
-      fileList: [],
-      imgsrc: '',
       imageName: '',
       addImage: {
         committer: {
@@ -47,6 +45,7 @@ export default {
         message: 'Add File',
         content: ''
       },
+      fileList: [],
       dialogImageUrl: '',
       dialogVisible: false,
       inputVisible: false,
@@ -106,30 +105,33 @@ export default {
       },
     }
   },
-  watch: {
-    'form.body' (newVal, oldVal) {
-      // console.log(`new:${newVal}, old:${oldVal}`);
-      console.log('new: %s, old: %s', newVal, oldVal)
-      console.log(newVal.length);
-    },
-    'imgsrc' (newVal, oldVal) {
-      if (newVal.length != 0) {
-        // console.log(`new:${newVal}, old:${oldVal}`);
-        console.log('new: %s, old: %s', newVal, oldVal)
-      }
-    },
-
-  },
   computed: {
     ...mapGetters([
       'token',
     ]),
   },
   methods: {
-    // submitUpload () {
-    //   this.$refs.upload.submit();
-    // },
-    UploadImage (param) {
+    handleChange (file, fileList) {
+      // this.fileList = fileList.slice(-3);
+      // console.log(file.raw)
+      // // console.log(fileList)
+      // let upFile = file.raw
+      // this.imageName = upFile.name
+      // // 通过DOM取文件数据
+      // let reader = new FileReader()
+      // let f = upFile
+      // reader.readAsDataURL(f)
+      // let that = this
+      // reader.onload = function (e) {
+      //   let binary = e.target.result
+      //   //上传文件
+      //   let data = binary.match(/^data.*base64,(.*)/)[1]
+      //   that.addImage.content = data
+      //   console.log(data)
+      //   console.log(that.addImage.content)
+      // }
+    },
+    UploadImage () {
       let file = this.$refs.upload.uploadFiles[0].raw
       this.imageName = file.name
       // 通过DOM取文件数据
@@ -142,15 +144,11 @@ export default {
         //上传文件
         let data = binary.match(/^data.*base64,(.*)/)[1]
         that.addImage.content = data
-        // console.log(data)
-        // console.log(binary)
-        // console.log(that.addImage.content)
+        console.log(data)
+        console.log(binary)
+        console.log(that.addImage.content)
         UploadImageApi(that.addImage, that.imageName).then(response => {
           console.log('上传图片成功')
-          console.log(response)
-          that.imgsrc = response.data.content.download_url
-          that.form.body = `![](${that.imgsrc})`
-          param.onSuccess()  // 上传成功的图片会显示绿色的对勾
           // 但是我们上传成功了图片， fileList 里面的值却没有改变，还好有on-change指令可以使用
         }).catch(response => {
           console.log('图片上传失败')
@@ -159,6 +157,9 @@ export default {
       }
     },
 
+    handleRemove (file, fileList) {
+      // console.log(file, fileList);
+    },
     handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
@@ -185,11 +186,6 @@ export default {
     imgAdd (pos, file) {
       this.$refs.md.$img2Url(pos, file.miniurl)
     },
-    onSubmit () {
-      if (this.token) {
-        this.publish()
-      }
-    },
     publish () {
       this.$refs['form'].validate((valid) => {
         if (valid) {
@@ -212,7 +208,16 @@ export default {
           })
         }
       })
-    }
+    },
+    submitUpload () {
+      this.$refs.upload.submit();
+    },
+    onSubmit () {
+      if (this.token) {
+        this.$refs.upload.submit();
+        this.publish()
+      }
+    },
   }
 }
 </script>

@@ -71,4 +71,7 @@ export default {
 	word-wrap: break-word;
 	/* padding: 20px; */
 }
+.v-note-wrapper{
+  z-index: 0;
+}
 </style>
