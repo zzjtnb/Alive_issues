@@ -12,13 +12,31 @@
 					<el-dialog :visible.sync="dialogVisible">
 						<img width="100%" :src="dialogImageUrl" alt />
 					</el-dialog>
-					<!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
 				</el-form-item>
-				<el-form-item label="标签" prop="labels">
-					<el-tag :key="tag.name" v-for="tag in this.form.labels" closable :disable-transitions="false" @close="removeLabels(tag.name)" effect="dark" :color="color">{{tag.name}}</el-tag>
-					<el-color-picker v-model="color" show-alpha :predefine="predefineColors"></el-color-picker>
-					<el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="addLabels" @blur="addLabels"></el-input>
-					<el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+				<el-form-item label="标签" prop="labels" class="lables">
+					<!--列表-->
+					<el-table :data="form.labels" ref="tb" highlight-current-row @selection-change="selsChange" style="width: 100%;">
+						<el-table-column type="selection" width="55"></el-table-column>
+						<el-table-column prop="name" label="标签名">
+							<template slot-scope="scope">
+								<el-tag size="medium" :color="scope.row.color" effect="dark">{{scope.row.name}}</el-tag>
+							</template>
+						</el-table-column>
+						<el-table-column prop="color" label="颜色"></el-table-column>
+						<el-table-column label="操作">
+							<template slot-scope="scope">
+								<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+								<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<!--工具条-->
+					<el-col :span="24" class="toolbar">
+						<el-button type="primary" round size="mini" @click="handleAllSelect">全选</el-button>
+						<el-button type="danger" round size="mini" @click="batDel" :disabled="this.sels.length===0">批量删除</el-button>
+						<el-button type="primary" round size="mini" @click="handleAdd">新增</el-button>
+						<!-- <el-pagination layout="total, sizes, prev, pager, next" @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" :total="total" style="float:right;"></el-pagination> -->
+					</el-col>
 				</el-form-item>
 				<el-form-item label="正文" prop="body">
 					<mavon-editor @imgAdd="imgAdd" style="max-height: 500px" ref="md" v-model="form.body" :subfield="false" :toolbars="mavonEditorToolbars" :ishljs="true" :codeStyle="true" codeStyle="agate" />
@@ -29,15 +47,58 @@
 				</el-form-item>
 			</el-form>
 		</el-card>
+		<!--新增界面-->
+		<el-dialog title="编辑" :visible.sync="addFormVisible" :close-on-click-modal="false">
+			<el-form :model="addForm" label-width="80px" ref="addForm">
+				<el-form-item label="标签名" prop="name">
+					<el-input v-model="addForm.name"></el-input>
+				</el-form-item>
+				<el-form-item label="颜色" prop="color">
+					<el-input v-model="addForm.color"></el-input>
+					<el-color-picker v-model="addForm.color" show-alpha :predefine="predefineColors"></el-color-picker>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="addFormVisible = false">取消</el-button>
+				<el-button type="primary" @click.native="addFormVisible = false">提交</el-button>
+			</div>
+		</el-dialog>
+		<!--编辑界面-->
+		<el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
+			<el-form :model="editForm" label-width="80px" ref="editForm">
+				<el-form-item label="标签名" prop="name">
+					<el-input v-model="editForm.name"></el-input>
+				</el-form-item>
+				<el-form-item label="颜色" prop="color">
+					<el-input v-model="editForm.color"></el-input>
+					<el-color-picker v-model="editForm.color" show-alpha :predefine="predefineColors"></el-color-picker>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="editFormVisible = false">取消</el-button>
+				<el-button type="primary" @click.native="editFormVisible = false">提交</el-button>
+			</div>
+		</el-dialog>
 	</div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { getIssues, UploadImageApi } from '@/api/issue'
+import { getIssues, editIssue, UploadImageApi } from '@/api/issue'
 export default {
   data () {
     return {
-      color: 'red',
+      //列表选中列
+      sels: [],
+      //新增界面是否显示
+      addFormVisible: false,
+      //新增界面数据
+      addForm: {
+      },
+      //编辑界面是否显示
+      editFormVisible: false,
+      //编辑界面数据
+      editForm: {
+      },
       predefineColors: [
         '#007bff',
         '#6610f2',
@@ -54,7 +115,7 @@ export default {
         'hsla(209, 100%, 56%, 0.73)',
         '#c7158577'
       ],
-      fileList: [{}],
+      fileList: [],
       imgsrc: '',
       imageName: '',
       addImage: {
@@ -127,14 +188,14 @@ export default {
   watch: {
     'form.body' (newVal, oldVal) {
       // console.log(`new:${newVal}, old:${oldVal}`);
-      console.log('new: %s, old: %s', newVal, oldVal)
-      console.log(newVal.length);
+      // console.log('new: %s, old: %s', newVal, oldVal)
+      // console.log(newVal.length);
     },
     'imgsrc' (newVal, oldVal) {
-      if (newVal.length != 0) {
-        // console.log(`new:${newVal}, old:${oldVal}`);
-        console.log('new: %s, old: %s', newVal, oldVal)
-      }
+      // if (newVal.length != 0) {
+      //   // console.log(`new:${newVal}, old:${oldVal}`);
+      //   // console.log('new: %s, old: %s', newVal, oldVal)
+      // }
     },
 
   },
@@ -146,42 +207,122 @@ export default {
   mounted () {
     let number = this.$route.params.id
     getIssues(number).then((res) => {
-      this.content = res.data
-      console.log(res)
-      this.form.body = this.$markdown(res.data.body)
+      this.form.title = res.data.title
       this.form.labels = res.data.labels
+      this.form.body = this.$markdown(res.data.body)
     })
   },
   methods: {
+    //选中变化
+    selsChange: function (sels) {
+      this.sels = sels;
+    },
+    //全选
+    handleAllSelect: function () {
+      if (this.form.labels) {
+        this.form.labels.forEach(row => {
+          this.$refs.tb.toggleRowSelection(row);
+        });
+      }
+    },
+    //删除
+    handleDelete: function (index, row) {
+      // console.log(row.name)
+      let msg = "确认删除该记录吗?";
+      let status = 0;
+      this.$confirm(msg, '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.form.labels.splice(index, 1);
+      }).catch(() => {
+      });
+    },
+    //批量删除
+    batDel: function () {
+      // var ids = this.sels.map(item => item.id).toString();
+      // var ids = this.sels.map(item => item.id).join()//获取所有选中行的id组成的字符串，以逗号分隔
+      this.$confirm('确认删除选中记录吗？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.sels.forEach((item) => {
+          this.form.labels.forEach((element, index) => {
+            if (item.name == element.name) {
+              console.log(index);
+              this.form.labels.splice(index, 1);
+            }
+          })
+        })
+      }).catch(() => {
+      });
+    },
+    //显示新增界面
+    handleAdd: function () {
+      this.addFormVisible = true;
+      this.addForm = {
+        name: '',
+        color: '',
+      }
+      this.form.labels.push(this.addForm)
+    },
+    //提交新增
+    editLabels: function () {
+      this.$refs.addForm.validate((valid) => {
+        if (valid) {
+          let para = Object.assign({}, this.addForm);
+          this.addFormVisible = false;
+          this.$refs['addForm'].resetFields();
+        }
+      });
+    },
+    //显示编辑界面
+    handleEdit: function (index, row) {
+      this.editFormVisible = true;
+      this.editForm = {
+        name: row.name,
+        color: row.color,
+      }
+      this.form.labels[index] = this.editForm
+    },
+    //提交编辑
+    editLabels: function () {
+      this.$refs.editForm.validate((valid) => {
+        if (valid) {
+          let para = Object.assign({}, this.editForm);
+          this.editFormVisible = false;
+          this.$refs['editForm'].resetFields();
+        }
+      });
+    },
     UploadImage (param) {
       let file = this.$refs.upload.uploadFiles[0].raw
-      this.imageName = file.name
-      // 通过DOM取文件数据
-      let reader = new FileReader()
-      let f = file
-      reader.readAsDataURL(f)
-      let that = this
-      reader.onload = function (e) {
-        let binary = e.target.result
-        //上传文件
-        let data = binary.match(/^data.*base64,(.*)/)[1]
-        that.addImage.content = data
-        let config = {
-          "headers": {
-            Accept: 'application/vnd.github.VERSION.base64'
-          },
+      if (file) {
+        this.imageName = file.name
+        // 通过DOM取文件数据
+        let reader = new FileReader()
+        let f = file
+        reader.readAsDataURL(f)
+        let that = this
+        reader.onload = function (e) {
+          let binary = e.target.result
+          //上传文件
+          let data = binary.match(/^data.*base64,(.*)/)[1]
+          that.addImage.content = data
+          let config = {
+            "headers": {
+              Accept: 'application/vnd.github.VERSION.base64'
+            },
+          }
+          UploadImageApi(that.addImage, that.imageName, config).then(response => {
+            console.log('上传图片成功')
+            that.imgsrc = response.data.content.download_url
+            that.form.body = `![](${that.imgsrc})`
+            param.onSuccess()  // 上传成功的图片会显示绿色的对勾
+            // 但是我们上传成功了图片， fileList 里面的值却没有改变，还好有on-change指令可以使用
+          }).catch(response => {
+            console.log('图片上传失败')
+            param.onError()
+          })
         }
-        UploadImageApi(that.addImage, that.imageName, config).then(response => {
-          console.log('上传图片成功')
-          console.log(response)
-          that.imgsrc = response.data.content.download_url
-          that.form.body = `![](${that.imgsrc})`
-          param.onSuccess()  // 上传成功的图片会显示绿色的对勾
-          // 但是我们上传成功了图片， fileList 里面的值却没有改变，还好有on-change指令可以使用
-        }).catch(response => {
-          console.log('图片上传失败')
-          param.onError()
-        })
       }
     },
     handlePictureCardPreview (file) {
@@ -198,11 +339,12 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus();
       });
     },
-
     addLabels () {
-      let inputValue = this.inputValue;
-      if (inputValue) {
-        this.form.labels.push(inputValue);
+      let data = {}
+      this.colorChange
+      data.name = this.inputValue;
+      if (data) {
+        this.form.labels.push(data);
       }
       this.inputVisible = false;
       this.inputValue = '';
@@ -217,13 +359,13 @@ export default {
     },
     publish () {
       this.$refs['form'].validate((valid) => {
+        console.log(valid)
         if (valid) {
           this.submitButton.loading = true
           this.submitButton.disabled = true
-          createIssue(this.form).then((res) => {
+          let number = this.$route.params.id
+          editIssue(this.form, number).then((res) => {
             let result = res.data
-            console.log(res);
-            // console.log(JSON.stringify(result))
             if (res.status == '201') {
               this.$message({
                 message: '发表成功',
@@ -258,4 +400,9 @@ export default {
 	margin-left: 10px;
 	vertical-align: bottom;
 }
+/* .el-form-item + .lables > .el-form-item__content {
+	margin-left: 80px;
+	display: flex;
+	align-items: center;
+} */
 </style>

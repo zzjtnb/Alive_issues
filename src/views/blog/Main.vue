@@ -3,7 +3,7 @@
 	<div class="bgcolor-fff lazyloaded section">
 		<div class="site-content">
 			<div class="container">
-				<Labels />
+				<Labels :fatherMethod="issueList" @callFather="issueList" />
 				<main class="site-main">
 					<h3 class="section-title">
 						<span>
@@ -93,7 +93,7 @@
 						</el-col>
 					</el-row>
 					<div style="text-align: center">
-						<el-pagination @size-change="handleSizeChange" @current-change="issueList" :current-page.sync="query.page" :page-sizes="[5, 20, 30, 40]" :page-size="query.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" v-if="query.pageNumber*query.pageSize!=0"></el-pagination>
+						<el-pagination @size-change="handleSizeChange" @current-change="issueList" :current-page.sync="query.page" :page-sizes="[6, 20, 30, 40]" :page-size="query.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" v-if="query.pageNumber*query.pageSize!=0"></el-pagination>
 					</div>
 					<div class="infinite-scroll-action">
 						<div class="infinite-scroll-button button">加载更多</div>
@@ -113,7 +113,7 @@ export default {
     return {
       query: {
         page: 1,
-        pageSize: 5,
+        pageSize: 6,
         pageNumber: 1
       },
       total: 0,
@@ -124,7 +124,7 @@ export default {
   },
   created () {
     this.query.page = this.getContextData("page") || 1
-    this.query.pageSize = this.getContextData("pageSize") || 5
+    this.query.pageSize = this.getContextData("pageSize") || 6
     this.total = this.getContextData("total")
     if (!this.getContextData("BlogData")) {
       this.issueList();
@@ -184,7 +184,13 @@ export default {
           "locked": true,
           "active_lock_reason": "resolved"
         }
-        deleteIssue(data, number).then((result) => {
+        let config = {
+          "headers": {
+            Accept: 'application/vnd.github.sailor-v-preview+json'
+          },
+        }
+        deleteIssue(data, number, config).then((result) => {
+          console.log(result)
           this.$message({
             message: '删除成功',
             type: 'success'
@@ -217,10 +223,10 @@ export default {
       this.query.pageSize = val
       this.issueList()
     },
-    issueList () {
+    issueList (data) {
       this.setContextData("page", this.query.page)
       this.setContextData("pageSize", this.query.pageSize)
-      getIssuesList(this.query).then((response) => {
+      getIssuesList(this.query, data).then((response) => {
         this.issuesList = response.data;
         this.pageNumber = this.$util.parseHeaders(response.headers)
         if (this.pageNumber && this.pageNumber != 0) {

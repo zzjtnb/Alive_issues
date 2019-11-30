@@ -14,6 +14,12 @@ export default {
   mounted () {
     getIssues().then((res) => {
       /**
+      //可以将json字符串转换成json对象
+      JSON.parse(jsonstr);
+      //可以将json对象转换成json对符串
+      JSON.stringify(jsonobj);
+       */
+      /**
        * Object.assign方法用于对象的合并，将源对象（ source ）的所有可枚举属性，复制到目标对象（ target ）
        */
       // let para = Object.assign({}, res);
@@ -30,6 +36,7 @@ export default {
       // var source2 = { c: 3 };
       // Object.assign(target, source1, source2);
       // target // {a:1, b:2, c:3}
+
       console.log(res)
     });
   },

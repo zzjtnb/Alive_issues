@@ -4,8 +4,8 @@ import base from './base';
 export default {
   verifyToken: function (token) {
     return request({
-      // url: `${base.github}/user?access_token=` + token
-      url: `${base.github}/user`
+      url: `${base.github}/user?access_token=` + token
+      // url: `${base.github}/user`
     })
   },
   getInfo: function () {

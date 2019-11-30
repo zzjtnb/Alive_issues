@@ -8,7 +8,7 @@ import 'normalize.css'
 import 'material-design-icons/iconfont/material-icons.css'
 // 按需引入
 import {
-  Form, FormItem, Card, Button, Input, MessageBox, Message, Loading, Tag, Row, Col, Breadcrumb, BreadcrumbItem, Upload, Dialog, Pagination, ColorPicker
+  Form, FormItem, Card, Button, Input, MessageBox, Message, Loading, Tag, Row, Col, Breadcrumb, BreadcrumbItem, Upload, Dialog, Pagination, ColorPicker, Table, TableColumn, Popover
 } from 'element-ui'
 Vue.use(Form);
 Vue.use(FormItem);
@@ -31,6 +31,9 @@ Vue.use(Row);
 Vue.use(Col);
 Vue.use(Pagination);
 Vue.use(ColorPicker);
+Vue.use(Table);
+Vue.use(TableColumn);
+Vue.use(Popover);
 /**
  * fastClick的300ms延迟
  */

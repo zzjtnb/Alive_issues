@@ -151,7 +151,6 @@ export const post = (url, data, config = {}) => {
  */
 export const put = (url, data, config) => {
   return new Promise((resolve, reject) => {
-    console.log(config);
     service({
       method: 'put',
       url,
@@ -170,13 +169,13 @@ export const put = (url, data, config) => {
  * @param {Object} params [请求时携带的参数]
  * @param {Object} config [请求时配置]
  */
-export const patch = (url, data, headers) => {
+export const patch = (url, data, config) => {
   return new Promise((resolve, reject) => {
     service({
       method: 'PATCH',
       url,
       data,
-      headers
+      config
     }).then(response => {
       resolve(response)
     }).catch(error => {

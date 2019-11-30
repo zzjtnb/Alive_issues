@@ -33,19 +33,19 @@
 									<svg class="icon icos">
 										<use xlink:href="#xiajiantou" />
 									</svg>
-									<a href="/code?order=date" class="on">发布日期</a>
+									<a @click="createdTime($event)" class="on">发布日期</a>
 								</li>
 								<li class="rightss">
 									<svg class="icon icos">
 										<use xlink:href="#xiajiantou" />
 									</svg>
-									<a href="/code?order=modified" class>修改时间</a>
+									<a @click="updatedTime" class>修改时间</a>
 								</li>
 								<li class="rightss">
 									<svg class="icon icos">
 										<use xlink:href="#xiajiantou" />
 									</svg>
-									<a href="/code?order=comment_count" class>评论数量</a>
+									<a @click="commentsAmount" class>评论数量</a>
 								</li>
 								<li class="rightss">
 									<svg class="icon icos">
@@ -74,6 +74,12 @@
 <script>
 import { getLabels } from '@/api/issue'
 export default {
+  props: {
+    fatherMethod: {
+      type: Function,
+      default: null
+    }
+  },
   data () {
     return {
       labeles: [],
@@ -90,7 +96,26 @@ export default {
 
   },
   methods: {
-
+    createdTime (event) {
+      let data = {
+        sort: 'created'
+      }
+      this.$parent.issueList(data)
+      event.target.classList.remove("on");
+      console.log(event.target);
+    },
+    updatedTime () {
+      let data = {
+        sort: 'updated'
+      }
+      this.fatherMethod(data);
+    },
+    commentsAmount () {
+      let data = {
+        sort: 'comments'
+      }
+      this.$emit("callFather", data)
+    },
     labelesList () {
       getLabels().then((response) => {
         this.labeles = response.data;

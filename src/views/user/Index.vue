@@ -303,7 +303,7 @@ textarea.form-control {
 .swal2-container {
 	display: flex;
 	position: fixed;
-	z-index: 100000;
+	z-index: 4;
 	top: 0;
 	right: 0;
 	bottom: 0;

@@ -12,12 +12,31 @@
 					<el-dialog :visible.sync="dialogVisible">
 						<img width="100%" :src="dialogImageUrl" alt />
 					</el-dialog>
-					<!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
 				</el-form-item>
-				<el-form-item label="标签" prop="labels">
-					<el-tag :key="tag" v-for="tag in this.form.labels" closable :disable-transitions="false" @close="removeLabels(tag)" effect="dark">{{tag}}</el-tag>
-					<el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="addLabels" @blur="addLabels"></el-input>
-					<el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+				<el-form-item label="标签" prop="labels" class="lables">
+					<!--列表-->
+					<el-table :data="form.labels" ref="tb" highlight-current-row @selection-change="selsChange" style="width: 100%;">
+						<el-table-column type="selection" width="55"></el-table-column>
+						<el-table-column prop="name" label="标签名">
+							<template slot-scope="scope">
+								<el-tag size="medium" :color="scope.row.color" effect="dark">{{scope.row.name}}</el-tag>
+							</template>
+						</el-table-column>
+						<el-table-column prop="color" label="颜色"></el-table-column>
+						<el-table-column label="操作">
+							<template slot-scope="scope">
+								<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+								<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<!--工具条-->
+					<el-col :span="24" class="toolbar">
+						<el-button type="primary" round size="mini" @click="handleAllSelect">全选</el-button>
+						<el-button type="danger" round size="mini" @click="batDel" :disabled="this.sels.length===0">批量删除</el-button>
+						<el-button type="primary" round size="mini" @click="handleAdd">新增</el-button>
+						<!-- <el-pagination layout="total, sizes, prev, pager, next" @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" :total="total" style="float:right;"></el-pagination> -->
+					</el-col>
 				</el-form-item>
 				<el-form-item label="正文" prop="body">
 					<mavon-editor @imgAdd="imgAdd" style="max-height: 500px" ref="md" v-model="form.body" :subfield="false" :toolbars="mavonEditorToolbars" :ishljs="true" :codeStyle="true" codeStyle="agate" />
@@ -28,6 +47,38 @@
 				</el-form-item>
 			</el-form>
 		</el-card>
+		<!--新增界面-->
+		<el-dialog title="编辑" :visible.sync="addFormVisible" :close-on-click-modal="false">
+			<el-form :model="addForm" label-width="80px" ref="addForm">
+				<el-form-item label="标签名" prop="name">
+					<el-input v-model="addForm.name"></el-input>
+				</el-form-item>
+				<el-form-item label="颜色" prop="color">
+					<el-input v-model="addForm.color"></el-input>
+					<el-color-picker v-model="addForm.color" show-alpha :predefine="predefineColors"></el-color-picker>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="addFormVisible = false">取消</el-button>
+				<el-button type="primary" @click.native="addFormVisible = false">提交</el-button>
+			</div>
+		</el-dialog>
+		<!--编辑界面-->
+		<el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
+			<el-form :model="editForm" label-width="80px" ref="editForm">
+				<el-form-item label="标签名" prop="name">
+					<el-input v-model="editForm.name"></el-input>
+				</el-form-item>
+				<el-form-item label="颜色" prop="color">
+					<el-input v-model="editForm.color"></el-input>
+					<el-color-picker v-model="editForm.color" show-alpha :predefine="predefineColors"></el-color-picker>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="editFormVisible = false">取消</el-button>
+				<el-button type="primary" @click.native="editFormVisible = false">提交</el-button>
+			</div>
+		</el-dialog>
 	</div>
 </template>
 <script>
@@ -36,6 +87,34 @@ import { createIssue, UploadImageApi } from '@/api/issue'
 export default {
   data () {
     return {
+      //列表选中列
+      sels: [],
+      //新增界面是否显示
+      addFormVisible: false,
+      //新增界面数据
+      addForm: {
+      },
+      //编辑界面是否显示
+      editFormVisible: false,
+      //编辑界面数据
+      editForm: {
+      },
+      predefineColors: [
+        '#007bff',
+        '#6610f2',
+        '#6f42c1',
+        '#90ee90',
+        '#00ced1',
+        '#1e90ff',
+        '#c71585',
+        'rgba(255, 69, 0, 0.68)',
+        'rgb(255, 120, 0)',
+        'hsv(51, 100, 98)',
+        'hsva(120, 40, 94, 0.5)',
+        'hsl(181, 100%, 37%)',
+        'hsla(209, 100%, 56%, 0.73)',
+        '#c7158577'
+      ],
       fileList: [],
       imgsrc: '',
       imageName: '',
@@ -126,6 +205,86 @@ export default {
     ]),
   },
   methods: {
+    //选中变化
+    selsChange: function (sels) {
+      this.sels = sels;
+    },
+    //全选
+    handleAllSelect: function () {
+      if (this.form.labels) {
+        this.form.labels.forEach(row => {
+          this.$refs.tb.toggleRowSelection(row);
+        });
+      }
+    },
+    //删除
+    handleDelete: function (index, row) {
+      // console.log(row.name)
+      let msg = "确认删除该记录吗?";
+      let status = 0;
+      this.$confirm(msg, '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.form.labels.splice(index, 1);
+      }).catch(() => {
+      });
+    },
+    //批量删除
+    batDel: function () {
+      // var ids = this.sels.map(item => item.id).toString();
+      // var ids = this.sels.map(item => item.id).join()//获取所有选中行的id组成的字符串，以逗号分隔
+      this.$confirm('确认删除选中记录吗？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.sels.forEach((item) => {
+          this.form.labels.forEach((element, index) => {
+            if (item.name == element.name) {
+              console.log(index);
+              this.form.labels.splice(index, 1);
+            }
+          })
+        })
+      }).catch(() => {
+      });
+    },
+    //显示新增界面
+    handleAdd: function () {
+      this.addFormVisible = true;
+      this.addForm = {
+        name: '',
+        color: '',
+      }
+      this.form.labels.push(this.addForm)
+    },
+    //提交新增
+    editLabels: function () {
+      this.$refs.addForm.validate((valid) => {
+        if (valid) {
+          let para = Object.assign({}, this.addForm);
+          this.addFormVisible = false;
+          this.$refs['addForm'].resetFields();
+        }
+      });
+    },
+    //显示编辑界面
+    handleEdit: function (index, row) {
+      this.editFormVisible = true;
+      this.editForm = {
+        name: row.name,
+        color: row.color,
+      }
+      this.form.labels[index] = this.editForm
+    },
+    //提交编辑
+    editLabels: function () {
+      this.$refs.editForm.validate((valid) => {
+        if (valid) {
+          let para = Object.assign({}, this.editForm);
+          this.editFormVisible = false;
+          this.$refs['editForm'].resetFields();
+        }
+      });
+    },
     // submitUpload () {
     //   this.$refs.upload.submit();
     // },

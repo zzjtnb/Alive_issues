@@ -37,10 +37,10 @@ export const routes = [
         }
       },
       {
-        path: '/blog/add',
-        component: () => import('../views/blog/Add.vue'),
+        path: '/blog/details/:id',
+        component: () => import('../views/blog/Details.vue'),
         meta: {
-          title: '发表博客',
+          title: '博客详情',
         }
       },
       {
@@ -48,15 +48,18 @@ export const routes = [
         component: () => import('../views/blog/Edit.vue'),
         meta: {
           title: '编辑博客',
+          LoginRequired: true,
         }
       },
       {
-        path: '/blog/details/:id',
-        component: () => import('../views/blog/Details.vue'),
+        path: '/blog/add',
+        component: () => import('../views/blog/Add.vue'),
         meta: {
-          title: '博客详情'
+          title: '发表博客',
+          LoginRequired: true,
         }
-      }]
+      },
+    ]
   },
 
   {

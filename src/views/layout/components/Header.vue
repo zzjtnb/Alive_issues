@@ -19,7 +19,7 @@
 									<i class="material-icons nav-icon" v-if="menu.meta.submenu">keyboard_arrow_down</i>
 								</router-link>
 								<ul class="sub-menu" v-if="menu.meta.submenu && menu.path !== '/login'">
-									<li class="menu-item" v-for="(submenu, index) in menu.children">
+									<li class="menu-item" v-for="(submenu, index) in menu.children" v-if="submenu.meta.LoginRequired==true">
 										<router-link :to="submenu.path">{{submenu.meta.title }}</router-link>
 									</li>
 								</ul>
@@ -134,7 +134,7 @@ export default {
 	top: 0;
 	right: 0;
 	left: 0;
-	z-index: 99;
+	z-index: 2;
 	background-color: #fff;
 	box-shadow: 0 0 30px rgba(0, 0, 0, 0.07);
 	transition: background-color 0.5s cubic-bezier(0.77, 0, 0.175, 1), box-shadow 0.5s cubic-bezier(0.77, 0, 0.175, 1), transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
@@ -250,7 +250,7 @@ export default {
 .sub-menu {
 	position: absolute;
 	top: 100%;
-	z-index: 80;
+	z-index: 2;
 	visibility: hidden;
 	margin: -1px 0 0 -18px;
 	padding: 20px 0;
