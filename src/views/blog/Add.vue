@@ -20,7 +20,7 @@
 					<el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
 				</el-form-item>
 				<el-form-item label="正文" prop="body">
-					<mavon-editor @imgAdd="imgAdd" style="max-height: 500px" ref="md" v-model="form.body" :subfield="false" :toolbars="mavonEditorToolbars" :ishljs="true" :codeStyle="true" codeStyle="agate"/>
+					<mavon-editor @imgAdd="imgAdd" style="max-height: 500px" ref="md" v-model="form.body" :subfield="false" :toolbars="mavonEditorToolbars" :ishljs="true" :codeStyle="true" codeStyle="agate" />
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="onSubmit" :loading="submitButton.loading" :disabled="submitButton.disabled">发表</el-button>
@@ -32,7 +32,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { create, UploadImageApi } from '@/api/issue'
+import { createIssue, UploadImageApi } from '@/api/issue'
 export default {
   data () {
     return {
@@ -142,10 +142,12 @@ export default {
         //上传文件
         let data = binary.match(/^data.*base64,(.*)/)[1]
         that.addImage.content = data
-        // console.log(data)
-        // console.log(binary)
-        // console.log(that.addImage.content)
-        UploadImageApi(that.addImage, that.imageName).then(response => {
+        let config = {
+          "headers": {
+            Accept: 'application/vnd.github.VERSION.base64'
+          },
+        }
+        UploadImageApi(that.addImage, that.imageName, config).then(response => {
           console.log('上传图片成功')
           console.log(response)
           that.imgsrc = response.data.content.download_url
@@ -195,7 +197,7 @@ export default {
         if (valid) {
           this.submitButton.loading = true
           this.submitButton.disabled = true
-          create(this.form).then((res) => {
+          createIssue(this.form).then((res) => {
             let result = res.data
             console.log(res);
             // console.log(JSON.stringify(result))

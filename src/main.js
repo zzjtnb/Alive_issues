@@ -8,7 +8,7 @@ import 'normalize.css'
 import 'material-design-icons/iconfont/material-icons.css'
 // 按需引入
 import {
-  Form, FormItem, Card, Button, Input, Message, Loading, Tag, Row, Col, Breadcrumb, BreadcrumbItem, Upload, Dialog
+  Form, FormItem, Card, Button, Input, MessageBox, Message, Loading, Tag, Row, Col, Breadcrumb, BreadcrumbItem, Upload, Dialog, Pagination, ColorPicker
 } from 'element-ui'
 Vue.use(Form);
 Vue.use(FormItem);
@@ -24,10 +24,13 @@ Vue.use(Dialog);
  * Vue.use(Message);
  */
 Vue.prototype.$message = Message;
+Vue.prototype.$confirm = MessageBox.confirm;
 Vue.use(Loading.directive);
 Vue.use(Tag);
 Vue.use(Row);
 Vue.use(Col);
+Vue.use(Pagination);
+Vue.use(ColorPicker);
 /**
  * fastClick的300ms延迟
  */
@@ -46,11 +49,38 @@ Vue.use(mavonEditor);
 Vue.prototype.$markdown = function (value) {
   return mavonEditor.markdownIt.render(value)
 }
+/**
+ * 设置title
+ */
 Vue.prototype.$setTitle = function (title) {
   if (title) {
     document.title = store.state.configuration.htmlTitle + ' - ' + title
   } else {
     document.title = store.state.configuration.htmlTitle
+  }
+}
+/**
+ * 分享文章
+ */
+Vue.prototype.$share = function (message) {
+  if (!message) {
+    message = window.location
+  } else {
+    let arr = (window.location + '').split('#')
+    message = arr[0] + '#' + message
+  }
+  if (util.copy(message)) {
+    Vue.prototype.$confirm('链接已复制,去分享给好友吧!!', '分享', {
+      showCancelButton: false,
+      showClose: false,
+      type: 'success'
+    })
+  } else {
+    Vue.prototype.$confirm('链接复制失败,可能因为浏览器不兼容', '分享', {
+      showCancelButton: false,
+      showClose: false,
+      type: 'warning'
+    })
   }
 }
 //为文章详情添加代码高亮

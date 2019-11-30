@@ -54,7 +54,6 @@
 </template>
 
 <script>
-// import { meanu } from '@/api/common'
 import { mapGetters } from "vuex";
 export default {
   data () {
@@ -100,7 +99,7 @@ export default {
         this.offsetTop = siteHeader.offsetTop;
         //和元素自身的高度
         this.offsetHeight = siteHeader.offsetHeight;
-        console.log("offsetTop:" + this.offsetTop + "," + "offsetHeight:" + this.offsetHeight);
+        // console.log("offsetTop:" + this.offsetTop + "," + "offsetHeight:" + this.offsetHeight);
       });
       // 得到页面滚动的距离
       let scrollTop =

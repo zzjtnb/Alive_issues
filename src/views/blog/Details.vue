@@ -27,7 +27,6 @@ export default {
     }
   },
   created () {
-    console.log(this.id);
     getIssues(this.id).then((res) => {
       this.content = res.data
       this.blog['content'] = this.$markdown(res.data.body)
@@ -71,7 +70,7 @@ export default {
 	word-wrap: break-word;
 	/* padding: 20px; */
 }
-.v-note-wrapper{
-  z-index: 0;
+.v-note-wrapper {
+	z-index: 0;
 }
 </style>

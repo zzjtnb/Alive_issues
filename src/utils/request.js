@@ -36,11 +36,18 @@ let httpCode = {
 service.interceptors.request.use(config => {
   // 在发送请求之前做些什么，比如传token
   let token = store.state.token.token
-  if (!token) {
-    config.url = config.url + "?client_id=6cc41e2646130e2f8a0a&client_secret=3bca6288d4d0b1d8c0f996d2933a66606c7eab0d"
+  // if (!token) {
+  //   config.url = config.url + "?client_id=6cc41e2646130e2f8a0a&client_secret=3bca6288d4d0b1d8c0f996d2933a66606c7eab0d"
 
-  } else {
-    config.url = config.url + "?client_id=6cc41e2646130e2f8a0a&client_secret=3bca6288d4d0b1d8c0f996d2933a66606c7eab0d&access_token=" + token
+  // } else {
+  //   config.url = config.url + "?client_id=6cc41e2646130e2f8a0a&client_secret=3bca6288d4d0b1d8c0f996d2933a66606c7eab0d&access_token=" + token
+  // }
+  if (token) {
+    let sp = '?'
+    if (config.url.indexOf('?') >= 0) {
+      sp = '&'
+    }
+    config.url = config.url + sp + 'access_token=' + token
   }
 
   return config
@@ -144,14 +151,12 @@ export const post = (url, data, config = {}) => {
  */
 export const put = (url, data, config) => {
   return new Promise((resolve, reject) => {
+    console.log(config);
     service({
       method: 'put',
       url,
       data,
-      headers: {
-        Accept: 'application/vnd.github.VERSION.base64'
-      },
-      ...config
+      config
     }).then(response => {
       resolve(response)
     }).catch(error => {

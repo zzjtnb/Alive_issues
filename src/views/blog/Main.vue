@@ -15,8 +15,8 @@
 						</span>
 					</h3>
 					<el-row :gutter="24" class="row posts-wrapper" style="width: auto;">
-						<el-col :xs="24" :lg="12" v-for="(item,index) in list" :key="index">
-							<article class="post post-list" @click="goDetails(item.number)">
+						<el-col :xs="24" :lg="12" v-for="(item,index) in issuesList" :key="index">
+							<article class="post post-list">
 								<div class="entry-media">
 									<div class="placeholder">
 										<a>
@@ -38,16 +38,20 @@
 								</div>
 								<div class="entry-wrapper">
 									<header class="entry-header">
+										<h2 class="entry-title" @click="goDetails(item.number)">
+											<a>{{item.title}}</a>
+										</h2>
+										<div style="text-align: right;">
+											<el-button @click="$share('/blog/details/'+item.number)" style="padding: 3px 0" type="text" icon="el-icon-share"></el-button>
+											<el-button @click="editBlog(item.number)" style="padding: 3px 0" type="text" icon="el-icon-edit" v-if="token"></el-button>
+											<el-button @click="deleteIssue(item.number)" style="padding: 3px 0" type="text" icon="el-icon-delete" v-if="token"></el-button>
+										</div>
 										<div class="entry-meta">
 											<svg class="icon" v-if="item.labels">
 												<use xlink:href="#biaoqian" />
 											</svg>
 											<label v-for="(items,index) in item.labels" :style="{background:`#${items.color}`}" :key="index">{{items.name}}</label>
 										</div>
-
-										<h2 class="entry-title">
-											<a>{{item.title}}</a>
-										</h2>
 									</header>
 									<div class="entry-excerpt u-text-format">
 										<p v-html="getMainDes[index]"></p>
@@ -88,6 +92,9 @@
 							</article>
 						</el-col>
 					</el-row>
+					<div style="text-align: center">
+						<el-pagination @size-change="handleSizeChange" @current-change="issueList" :current-page.sync="query.page" :page-sizes="[5, 20, 30, 40]" :page-size="query.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" v-if="query.pageNumber*query.pageSize!=0"></el-pagination>
+					</div>
 					<div class="infinite-scroll-action">
 						<div class="infinite-scroll-button button">加载更多</div>
 					</div>
@@ -98,28 +105,43 @@
 </template>
 
 <script>
-import { getIssuesList } from '@/api/issue'
+import { mapGetters } from 'vuex'
+import { deleteIssue, getIssuesList } from '@/api/issue'
 import Labels from './Labels';
 export default {
   data () {
     return {
-      list: [],
+      query: {
+        page: 1,
+        pageSize: 5,
+        pageNumber: 1
+      },
+      total: 0,
+      pageNumber: 0,
+      issuesList: [],
       labeles: [],
     }
   },
   created () {
-    this.issueList();
+    this.query.page = this.getContextData("page") || 1
+    this.query.pageSize = this.getContextData("pageSize") || 5
+    this.total = this.getContextData("total")
+    if (!this.getContextData("BlogData")) {
+      this.issueList();
+    }
   },
   mounted () {
 
   },
   computed: {
+    ...mapGetters([
+      'token',
+    ]),
     getMainImage () {
       let arr = [];
-      for (let item of this.list) {
+      for (let item of this.issuesList) {
         if (this.$markdown(item.body).match(/\bsrc\b\s*=\s*[\'\"]?([^\'\"]*)[\'\"]?/)) {
           arr.push(this.$markdown(item.body).match(/\bsrc\b\s*=\s*[\'\"]?([^\'\"]*)[\'\"]?/)[1]);
-          console.log(arr)
         } else {
           arr.push('http://via.placeholder.com/200x200');
         }
@@ -128,23 +150,84 @@ export default {
     },
     getMainDes () {
       let arr = [];
-      for (let item of this.list) {
+      for (let item of this.issuesList) {
         arr.push(this.$markdown(item.body).replace(/<[^>]+>/g, "").substring(0, 200));
       }
       return arr;
     },
     getTime () {
       let arr = [];
-      for (let item of this.list) {
+      for (let item of this.issuesList) {
         arr.push(this.$util.utcToLocalTime(item.updated_at));
       }
       return arr;
     }
   },
   methods: {
+    editBlog (number) {
+      if (!this.token) {
+        this.$message({
+          message: '请绑定有效的Token',
+          type: 'warning'
+        })
+        return
+      }
+      this.$router.push('/blog/edit/' + number)
+    },
+    deleteIssue (number) {
+      this.$confirm('是否永久删除该博客?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let data = {
+          "locked": true,
+          "active_lock_reason": "resolved"
+        }
+        deleteIssue(data, number).then((result) => {
+          this.$message({
+            message: '删除成功',
+            type: 'success'
+          })
+        })
+      })
+    },
+    //给sessionStorage存值
+    setContextData: function (key, value) {
+      if (typeof value == "string") {
+        sessionStorage.setItem(key, value);
+      } else {
+        sessionStorage.setItem(key, JSON.stringify(value));
+      }
+    },
+    // 从sessionStorage取值
+    getContextData: function (key) {
+      const str = sessionStorage.getItem(key);
+      if (typeof str == "string") {
+        try {
+          return JSON.parse(str);
+        } catch (e) {
+          return str;
+        }
+      }
+      return;
+    },
+    handleSizeChange (val) {
+      this.query.page = 1
+      this.query.pageSize = val
+      this.issueList()
+    },
     issueList () {
-      getIssuesList().then((response) => {
-        this.list = response.data;
+      this.setContextData("page", this.query.page)
+      this.setContextData("pageSize", this.query.pageSize)
+      getIssuesList(this.query).then((response) => {
+        this.issuesList = response.data;
+        this.pageNumber = this.$util.parseHeaders(response.headers)
+        if (this.pageNumber && this.pageNumber != 0) {
+          this.query.pageNumber = this.pageNumber
+          this.total = this.query.pageNumber * this.query.pageSize
+          this.setContextData("total", this.total)
+        }
       })
     },
     goDetails (id) {
