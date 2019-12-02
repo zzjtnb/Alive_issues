@@ -72,11 +72,13 @@ export default {
   created () {
     // console.log(this.token);
     // console.log(this.$store.getters.Mobile)
+    if (this.Mobile) {
+      this.showNav = false
+    } else {
+      this.showNav = true
+    }
   },
   watch: {
-    showNav (newVal, oldVal) {
-      console.log(`new:${newVal}, old:${oldVal}`);
-    },
     screenWidth (val) {
       // 一旦监听到的screenWidth值改变，就将其重新赋给data里的screenWidth
       this.screenWidth = val
@@ -98,51 +100,44 @@ export default {
       })
     }
   },
-	/**
-	 * 在beforeDestroy()生命周期内清除定时器
-	 */
-  beforeDestroy () {
-    clearInterval(this.timer);
-    this.timer = null;
-  },
-  /**
-   * 在destroyed回调中移除监听
-   */
-  destroyed () {
-    window.removeEventListener("scroll", this.handleScroll);
-  },
   mounted () {
     /**
 		 *  handleScroll为页面滚动的监听回调
 		 */
     window.addEventListener("scroll", this.handleScroll);
 		/**
-     * 监听window的resize事件．在浏览器窗口变化时显示隐藏导航栏．
-     * 网页可见区域宽：document.body.clientWidth
-     * 网页可见区域高：document.body.clientHeight
-     * 网页可见区域宽：document.body.offsetWidth(包括边线的宽)
-     * 网页可见区域高：document.body.offsetHeight(包括边线的宽)
+		 * 监测窗口大小
+		 */
+    this.windowSize()
+    /**
+     *  数据首次加载完后 → 获取图片（或外层框）宽度，并设置其高度
      */
-    const that = this
-    window.onresize = () => {
-      return (() => {
-        window.screenWidth = document.body.clientWidth
-        that.screenWidth = window.screenWidth
-      })()
-    },
-      /**
-       *  数据首次加载完后 → 获取图片（或外层框）宽度，并设置其高度
-       */
-      this.$nextTick(() => {
-        // 获取图片（或外层框）
-        // let imgBox = this.$refs.imgBox
-        // 获取其宽度
-        // let wImgbox = imgBox[0].getBoundingClientRect().width
-        // 设置其高度（以宽度的60%为例）
-        // this.imgBox.height = 0.6 * wImgbox + 'px'
-      })
+    this.$nextTick(() => {
+      // 获取图片（或外层框）
+      // let imgBox = this.$refs.imgBox
+      // 获取其宽度
+      // let wImgbox = imgBox[0].getBoundingClientRect().width
+      // 设置其高度（以宽度的60%为例）
+      // this.imgBox.height = 0.6 * wImgbox + 'px'
+    })
   },
   methods: {
+    /**
+		 * 监听window的resize事件．在浏览器窗口变化时显示隐藏导航栏．
+		 * 网页可见区域宽：document.body.clientWidth
+		 * 网页可见区域高：document.body.clientHeight
+		 * 网页可见区域宽：document.body.offsetWidth(包括边线的宽)
+		 * 网页可见区域高：document.body.offsetHeight(包括边线的宽)
+		 */
+    windowSize () {
+      const that = this
+      window.onresize = () => {
+        return (() => {
+          window.screenWidth = document.body.clientWidth
+          that.screenWidth = window.screenWidth
+        })()
+      }
+    },
     showSideBar (value) {
       this.$store.dispatch('ShowSide', value)
     },
@@ -189,6 +184,19 @@ export default {
     //     var heightStyle = this.$refs.element.style.height; // 100px
     //     console.log(st);
     //   }, true)    },
+  },
+  /**
+ * 在beforeDestroy()生命周期内清除定时器
+ */
+  beforeDestroy () {
+    clearInterval(this.timer);
+    this.timer = null;
+  },
+  /**
+   * 在destroyed回调中移除监听
+   */
+  destroyed () {
+    window.removeEventListener("scroll", this.handleScroll);
   },
   components: {}
 };
