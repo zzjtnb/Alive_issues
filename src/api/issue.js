@@ -11,6 +11,5 @@ export const editIssue = (params, number) => patch(`${base.github}/repos/${githu
 export const deleteIssue = (params, number, config) => put(`${base.github}/repos/${githubUsername}/zzjtnb/issues/${number}/lock`, params, config)
 export const getIssues = (params) => get(`${base.github}/repos/${githubUsername}/zzjtnb/issues/${params}`)
 export const getIssuesList = (allQuery, params) => get(`${base.github}/repos/${githubUsername}/zzjtnb/issues?page=${allQuery.page}&per_page=${allQuery.pageSize}`, params)
-export const getLabels = (params) => get(`${base.github}/repos/${githubUsername}/zzjtnb/labels`, params)
 export const UploadImageApi = (params, name, config) => put(`${base.github}/repos/${githubUsername}/images/contents/test/${name}`, params, config)
 

@@ -36,7 +36,11 @@ export default {
       // var source2 = { c: 3 };
       // Object.assign(target, source1, source2);
       // target // {a:1, b:2, c:3}
-
+      /**
+       * let para = Object.assign({}, this.editForm);
+       * var ids = this.sels.map(item => item.id).toString();
+       * var ids = this.sels.map(item => item.id).join()//获取所有选中行的id组成的字符串，以逗号分隔
+       */
       console.log(res)
     });
   },

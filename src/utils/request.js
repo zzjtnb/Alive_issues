@@ -183,4 +183,24 @@ export const patch = (url, data, config) => {
     })
   })
 }
+/**
+ * 统一封装DELETE请求
+ * @param {String} url [请求的url地址]
+ * @param {Object} params [请求时携带的参数]
+ * @param {Object} config [请求时配置]
+ */
+export const DELETE = (url, data, config) => {
+  return new Promise((resolve, reject) => {
+    service({
+      method: 'DELETE',
+      url,
+      data,
+      config
+    }).then(response => {
+      resolve(response)
+    }).catch(error => {
+      reject(error)
+    })
+  })
+}
 export default service

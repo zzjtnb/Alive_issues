@@ -1,293 +1,269 @@
-<!--  -->
 <template>
-	<div class="filter_content">
-		<div class="form-box search-properties">
-			<!-- 相关标签 -->
-			<div class="filter-item">
-				<ul class="filter-tag">
-					<span>
-						<svg class="icon">
-							<use xlink:href="#biaoqian1" />
-						</svg>
-						<span>标签</span>
-					</span>
-					<li v-for="(item, index) in labeles">
-						<a @click="getIssues(item.name )" :style="{ background: `#${item.color}` }">{{ item.name }}</a>
-					</li>
-				</ul>
-			</div>
-			<!-- <el-row :gutter="24">
-				<el-col :xs="20" :lg="24">
-				
-				</el-col>
-			</el-row>-->
-
-			<!-- 自定义筛选 -->
-			<div class="filter-tab">
-				<el-row :gutter="24">
-					<el-col :xs="24" :lg="12">
-						<!-- 排序 -->
-						<ul class="filter-tag">
-							<div class="right">
-								<li class="rightss" v-for="(item, index) in list">
-									<svg class="icon icos">
-										<use xlink:href="#xiajiantou" />
-									</svg>
-									<a @click="selected(item.name,item.sort)" :class="{ active: active == item.name }">{{item.name}}</a>
-								</li>
-								<!-- <li class="rightss">
-                  <svg class="icon icos">
-                    <use xlink:href="#xiajiantou" />
-                  </svg>
-                  <a @click="createdTime($event)" class="on">发布日期</a>
-                </li>
-                <li class="rightss">
-                  <svg class="icon icos">
-                    <use xlink:href="#xiajiantou" />
-                  </svg>
-                  <a @click="updatedTime" class>修改时间</a>
-                </li>
-                <li class="rightss">
-                  <svg class="icon icos">
-                    <use xlink:href="#xiajiantou" />
-                  </svg>
-                  <a @click="commentsAmount" class>评论数量</a>
-                </li>
-                <li class="rightss">
-                  <svg class="icon icos">
-                    <use xlink:href="#xiajiantou" />
-                  </svg>
-                  <a href="/code?order=rand" class>随机</a>
-                </li>
-                <li class="rightss">
-                  <svg class="icon icos">
-                    <use xlink:href="#xiajiantou" />
-                  </svg>
-                  <a href="/code?order=hot" class>热度</a>
-								</li>-->
-							</div>
-						</ul>
-					</el-col>
-				</el-row>
-			</div>
-
-			<!-- .row end -->
-		</div>
-		<!-- .form-box end -->
+	<div style="min-height: 600px">
+		<el-card shadow="never" style="margin-bottom: 20px">
+			<!--列表-->
+			<el-table :data="labelsList" ref="tb" highlight-current-row @selection-change="selsChange" style="width: 100%;">
+				<el-table-column type="selection" width="55"></el-table-column>
+				<el-table-column prop="name" label="标签名">
+					<template slot-scope="scope">
+						<el-tag size="medium" :color="`#${scope.row.color}`" effect="dark">{{scope.row.name}}</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column prop="color" label="颜色"></el-table-column>
+				<el-table-column label="操作">
+					<template slot-scope="scope">
+						<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+						<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<!--工具条-->
+			<el-col :span="24" class="toolbar">
+				<el-button type="primary" round size="mini" @click="handleAllSelect">全选</el-button>
+				<el-button type="danger" round size="mini" @click="batDel" :disabled="this.sels.length===0">批量删除</el-button>
+				<el-button type="primary" round size="mini" @click="handleAdd">新增</el-button>
+			</el-col>
+			<!--新增界面-->
+			<el-dialog title="编辑" :visible.sync="addFormVisible" :close-on-click-modal="false" v-if="addFormVisible">
+				<el-form :model="addForm" label-width="80px" ref="addForm" :rules="ruleValidate">
+					<el-form-item label="标签名" prop="name">
+						<el-input v-model="addForm.name"></el-input>
+					</el-form-item>
+					<el-form-item label="颜色" prop="color">
+						<el-input v-model="addForm.color"></el-input>
+						<el-color-picker v-model="chooseColor" :predefine="predefineColors"></el-color-picker>
+					</el-form-item>
+				</el-form>
+				<div slot="footer" class="dialog-footer">
+					<el-button @click.native="addFormVisible = false">取消</el-button>
+					<el-button type="primary" @click="addLabels">提交</el-button>
+				</div>
+			</el-dialog>
+			<!--编辑界面-->
+			<el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false" v-if="editFormVisible">
+				<el-form :model="editForm" label-width="80px" ref="editForm" :rules="ruleValidate">
+					<el-form-item label="标签名" prop="name">
+						<el-input v-model="editForm.name"></el-input>
+					</el-form-item>
+					<el-form-item label="颜色" prop="color">
+						<el-input v-model="editForm.color"></el-input>
+						<el-color-picker v-model="chooseColor" color-format="hex" :predefine="predefineColors"></el-color-picker>
+					</el-form-item>
+				</el-form>
+				<div slot="footer" class="dialog-footer">
+					<el-button @click.native="editFormVisible = false">取消</el-button>
+					<el-button type="primary" @click="editLabels">提交</el-button>
+				</div>
+			</el-dialog>
+		</el-card>
 	</div>
 </template>
-
 <script>
-import { getLabels } from "@/api/issue";
+import { mapGetters } from 'vuex'
+import { createLabels, deleteLabels, editLabels, getLabels, } from '@/api/labels'
 export default {
-  props: {
-    fatherMethod: {
-      type: Function,
-      default: null
-    },
-  },
   data () {
     return {
-      list: [
-        {
-          name: '发布日期',
-          sort: 'created'
-        },
-        {
-          name: '修改时间',
-          sort: 'updated'
-        },
-        {
-          name: '评论数量',
-          sort: 'comments'
-        },
+      //列表选中列
+      sels: [],
+      //新增界面是否显示
+      addFormVisible: false,
+      //新增界面数据
+      addForm: {
+      },
+      //编辑界面是否显示
+      editFormVisible: false,
+      //编辑界面数据
+      editForm: {
+      },
+      chooseColor: '',
+      predefineColors: [
+        '#ff4500',
+        '#ff8c00',
+        '#ffd700',
+        '#90ee90',
+        '#00ced1',
+        '#1e90ff',
+        '#c71585',
       ],
-      active: '发布日期',
-      labeles: []
-    };
+      ruleValidate: {
+        name: [
+          { required: true, message: '请输入博客标签', trigger: 'blur' }
+        ],
+        color: [
+          { required: true, message: '请输入标签颜色', trigger: 'blur' }
+        ],
+      },
+      labelsList: [],
+      labelsIndex: 0,
+      labelsName: '',
+    }
   },
-  created () {
-    this.labelesList();
-  },
-  mounted () { },
-  computed: {},
-  methods: {
-    getIssues (params) {
-      let data = {
-        labels: params
+  watch: {
+    'chooseColor' (newVal, oldVal) {
+      // console.log(`new:${newVal}, old:${oldVal}`);
+      // console.log('new: %s, old: %s', newVal, oldVal)
+      // console.log(newVal.length);
+      if (newVal.length != 0) {
+        this.editForm.color = newVal.replace(/#/, '')
+        this.addForm.color = newVal.replace(/#/, '')
       }
-      this.fatherMethod(data);
     },
-    selected (name, sort) {
-      this.active = name;
-      let data = {
-        sort: sort
-      };
-      this.fatherMethod(data);
+    'addForm.collor' (newVal, oldVal) {
+      // console.log(`new:${newVal}, old:${oldVal}`);
+      // console.log(`new:${newVal}, old:${oldVal}`);
     },
-    labelesList () {
-      getLabels().then(response => {
-        this.labeles = response.data;
+  },
+  computed: {
+    ...mapGetters([
+      'token',
+    ]),
+  },
+  mounted () {
+    this.getgetgetgetLabelsList()
+  },
+  methods: {
+    //选中变化
+    selsChange: function (sels) {
+      this.sels = sels;
+    },
+    //全选
+    handleAllSelect: function () {
+      if (this.labelsList) {
+        this.labelsList.forEach(row => {
+          this.$refs.tb.toggleRowSelection(row);
+        });
+      }
+    },
+    //删除
+    handleDelete: function (index, row) {
+      let msg = "确认删除该记录吗?";
+      let status = 0;
+      this.$confirm(msg, '提示', {
+        type: 'warning'
+      }).then(() => {
+        deleteLabels(row.name).then((res) => {
+          if (res.status == 204) {
+            this.$message({
+              message: '恭喜你，删除成功',
+              type: 'success'
+            });
+            this.labelsList.splice(index, 1);
+          } else {
+            this.$message({
+              message: '删除失败',
+              type: 'error'
+            });
+          }
+        })
+      }).catch(() => {
       });
     },
-    /**
-			createdTime (event) {
-				let data = {
-					sort: "created"
-				};
-				this.$parent.issueList(data);
-				event.target.classList.remove("on");
-				console.log(event.target);
-			},
-			updatedTime () {
-				let data = {
-					sort: "updated"
-				};
-				this.fatherMethod(data);
-			},
-			commentsAmount () {
-				let data = {
-					sort: "comments"
-				};
-				this.$emit("callFather", data);
-			},
-    */
-  },
-  components: {}
-};
+    //批量删除
+    batDel: function () {
+      this.$confirm('确认删除选中记录吗？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.sels.forEach((item) => {
+          this.labelsList.forEach((element, index) => {
+            if (item.name == element.name) {
+              this.labelsList.splice(index, 1);
+            }
+          })
+        })
+      }).catch(() => {
+      });
+    },
+    //显示编辑界面
+    handleEdit: function (index, row) {
+      this.labelsName = this.labelsList[index].name
+      this.labelsIndex = index
+      this.chooseColor = '#' + row.color
+      this.editFormVisible = true;
+      this.editForm = {
+        name: row.name,
+        new_name: row.name,
+        color: (this.chooseColor).replace(/#/, '')
+      }
+      this.labelsList[index] = this.editForm
+    },
+    //提交编辑
+    editLabels: function () {
+      this.$refs.editForm.validate((valid) => {
+        if (valid) {
+          editLabels(this.editForm, this.labelsName).then((res) => {
+            if (res.status == 200) {
+              this.$message({
+                message: '恭喜你，编辑成功',
+                type: 'success'
+              });
+              this.editFormVisible = false;
+            } else {
+              this.$message({
+                message: '编辑失败',
+                type: 'error'
+              });
+              this.$refs['editForm'].resetFields();
+            }
+          })
+        }
+      });
+    },
+    //显示新增界面
+    handleAdd: function () {
+      this.addFormVisible = true;
+    },
+    //提交新增
+    addLabels: function () {
+      this.$refs.addForm.validate((valid) => {
+        if (valid) {
+          createLabels(this.addForm).then((res) => {
+            if (res.status == 201) {
+              this.$message({
+                message: '恭喜你，添加成功',
+                type: 'success'
+              });
+              this.labelsList.push(this.addForm)
+              this.addFormVisible = false;
+            } else {
+              this.$message({
+                message: '添加失败',
+                type: 'error'
+              });
+              this.$refs['addForm'].resetFields();
+            }
+          })
+        }
+      });
+    },
+    getgetgetgetLabelsList () {
+      getLabels().then(response => {
+        this.labelsList = response.data;
+      });
+    },
+  }
+}
 </script>
 
 <style scoped>
-.icos {
-	width: 0.7rem;
-	height: 1rem;
+.el-tag + .el-tag {
+	margin-left: 10px;
 }
-.entry-meta label {
-	float: left;
-	background: #00b1ff;
-	color: #606266;
-	padding: 0px 4px;
-	margin-right: 10px;
-	font-size: 12px;
-	display: inline-block;
-	max-width: 100%;
-}
-
-.filter_content {
-	position: relative;
-	z-index: 1;
-	display: block;
-	/* margin-top: -90px; */
-	margin-bottom: 30px;
-	padding: 20px;
-	border: 1px solid #f3f3f3;
-	border-radius: 4px;
-	background-color: #fff;
-	box-shadow: 0 34px 20px -24px rgba(0, 36, 100, 0.06);
-}
-.filter_content .form-box {
-	padding: 0;
+.button-new-tag {
+	margin-left: 10px;
+	height: 32px;
+	line-height: 30px;
+	padding-top: 0;
 	padding-bottom: 0;
 }
-.form-box {
-	margin-bottom: 30px;
-	padding: 40px;
-	border-radius: 4px;
-	background-color: #fff;
+.input-new-tag {
+	width: 90px;
+	margin-left: 10px;
+	vertical-align: bottom;
 }
-.filter_content .filter-item {
-	margin-top: 10px;
-}
-.filter_content .filter-item span {
-	margin-right: 10px;
-	padding: 2px 6px;
-	border: 1px solid transparent;
-	border-radius: 4px;
-	background-color: #eee;
-	color: #7b8695;
-}
-.filter_content .filter-tag li {
-	display: inline-block;
-	margin: 0;
-	margin-bottom: 5px;
-	padding: 0;
-	list-style: none;
-}
-.filter_content .filter-item a {
-	position: relative;
-	display: inline-block;
-	margin-top: 0;
-	margin-right: 10px;
-	padding: 0 10px;
-	border: 1px solid transparent;
-	border-bottom: 1px solid transparent;
-	border-radius: 0;
-	border-radius: 4px;
-	color: white;
-}
-.filter_content .filter-tab {
-	margin-top: 10px;
-	margin-bottom: -10px;
-	padding-top: 13px;
-	border-top: 1px solid #e9e9e9;
-}
-.navbar .menu-item-mega > .sub-menu,
-.row {
+/* .el-form-item + .lables > .el-form-item__content {
+	margin-left: 80px;
 	display: flex;
-	margin-right: -15px;
-	margin-left: -15px;
-	flex-wrap: wrap;
-}
-.filter_content .filter-tag {
-	position: relative;
-	display: inline-block;
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-.filter_content .filter-tab li {
-	display: inline-block;
-	margin: 0;
-	margin-bottom: 5px;
-	padding: 0;
-	list-style: none;
-}
-.filter_content .filter-tab li.rightss {
-	float: right;
-}
-.filter_content .filter-tab a {
-	position: relative;
-	display: inline-block;
-	margin-top: 0;
-	margin-right: 20px;
-	color: grey;
-}
-.filter_content .filter-tab a.active {
-	color: #ff9800;
-}
-@media (max-width: 767px) {
-	.filter_content {
-		display: block;
-
-		padding: 10px;
-	}
-	.filter_content .filter-item a {
-		margin-right: 5px;
-		padding: 0 5px;
-		font-size: 13px;
-		line-height: 20px;
-	}
-
-	.filter_content .filter-tab a {
-		margin-right: 5px;
-		font-size: 13px;
-	}
-
-	.filter_content .filter-item span,
-	.filter_content .filter-tab span {
-		display: flex;
-		padding: 0;
-		width: 100%;
-	}
-}
+	align-items: center;
+} */
 </style>

@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { getLabels } from "@/api/issue";
+import { getLabels } from "@/api/labels";
 export default {
   props: {
     fatherMethod: {

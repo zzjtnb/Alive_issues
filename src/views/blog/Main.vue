@@ -40,7 +40,7 @@
 									<h2 class="entry-title" @click="goDetails(item.number)">
 										<a>{{item.title}}</a>
 									</h2>
-									<div style="text-align: right;">
+									<div class="tools">
 										<el-button @click="$share('/blog/details/'+item.number)" style="padding: 3px 0" type="text" icon="el-icon-share"></el-button>
 										<el-button @click="editBlog(item.number)" style="padding: 3px 0" type="text" icon="el-icon-edit" v-if="token"></el-button>
 										<el-button @click="deleteIssue(item.number)" style="padding: 3px 0" type="text" icon="el-icon-delete" v-if="token"></el-button>
@@ -363,6 +363,12 @@ export default {
 	margin-bottom: 0.65rem;
 	margin-top: 0.65rem;
 	font-size: 0.975rem;
+	display: inline;
+	padding-right: 50px;
+}
+.tools {
+	text-align: right;
+	display: inline;
 }
 /**
 文章部分
