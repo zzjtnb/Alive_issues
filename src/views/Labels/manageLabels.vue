@@ -1,28 +1,34 @@
 <template>
 	<div style="min-height: 600px">
-		<el-card shadow="never" style="margin-bottom: 20px">
+		<el-card shadow="never" style="margin-bottom: 20px;max-width: 1090pt;margin: auto;">
+			<div slot="header" class="clearfix">
+				<span>管理标签</span>
+				<el-button style="float: right; padding: 3px 0" type="text" size="medium " icon="el-icon-edit" @click="handleAdd">新增</el-button>
+			</div>
+			<!--工具条-->
+			<!-- <el-col :span="24" class="toolbar">
+				<el-button type="primary" round size="mini" @click="handleAllSelect">全选</el-button>
+				<el-button type="danger" round size="mini" @click="batDel" :disabled="this.sels.length===0">批量删除</el-button>
+				<el-button type="primary" round icon="el-icon-edit" @click="handleAdd">新增</el-button>
+			</el-col>-->
 			<!--列表-->
 			<el-table :data="labelsList" ref="tb" highlight-current-row @selection-change="selsChange" style="width: 100%;">
-				<el-table-column type="selection" width="55"></el-table-column>
+				<!-- <el-table-column type="selection" width="55"></el-table-column> -->
 				<el-table-column prop="name" label="标签名">
 					<template slot-scope="scope">
 						<el-tag size="medium" :color="`#${scope.row.color}`" effect="dark">{{scope.row.name}}</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column prop="color" label="颜色"></el-table-column>
-				<el-table-column label="操作">
+				<el-table-column label="操作" width="110">
 					<template slot-scope="scope">
-						<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-						<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+						<!-- <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+						<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>-->
+						<el-button type="primary" icon="el-icon-edit" circle @click="handleEdit(scope.$index, scope.row)"></el-button>
+						<el-button type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.$index, scope.row)"></el-button>
 					</template>
 				</el-table-column>
 			</el-table>
-			<!--工具条-->
-			<el-col :span="24" class="toolbar">
-				<el-button type="primary" round size="mini" @click="handleAllSelect">全选</el-button>
-				<el-button type="danger" round size="mini" @click="batDel" :disabled="this.sels.length===0">批量删除</el-button>
-				<el-button type="primary" round size="mini" @click="handleAdd">新增</el-button>
-			</el-col>
 			<!--新增界面-->
 			<el-dialog title="编辑" :visible.sync="addFormVisible" :close-on-click-modal="false" v-if="addFormVisible">
 				<el-form :model="addForm" label-width="80px" ref="addForm" :rules="ruleValidate">
@@ -246,6 +252,14 @@ export default {
 </script>
 
 <style scoped>
+.clearfix:before,
+.clearfix:after {
+	display: table;
+	content: "";
+}
+.clearfix:after {
+	clear: both;
+}
 .el-tag + .el-tag {
 	margin-left: 10px;
 }
