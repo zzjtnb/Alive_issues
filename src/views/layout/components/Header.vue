@@ -15,11 +15,11 @@
 						<ul id="menu" class="nav-list u-plain-list">
 							<li class="menu-item" v-for="menu in $router.options.routes" v-if="menu.children && menu.path !== '/login'">
 								<router-link :to="menu.path">
-									{{ menu.meta.title }}
-									<i class="material-icons nav-icon" v-if="menu.meta.submenu">keyboard_arrow_down</i>
+									<span>{{ menu.meta.title }}</span>
+									<i class="material-icons nav-icon" v-if="menu.meta.submenu&&token">keyboard_arrow_down</i>
 								</router-link>
-								<ul class="sub-menu" v-if="menu.meta.submenu && menu.path !== '/login'">
-									<li class="menu-item" v-for="(submenu, index) in menu.children" v-if="submenu.meta.LoginRequired==true">
+								<ul class="sub-menu" v-if="menu.meta.submenu && menu.path !== '/login'&&token">
+									<li class="menu-item" v-for="(submenu, index) in menu.children" v-if="submenu.meta.LoginRequired==true&&token">
 										<router-link :to="submenu.path">{{submenu.meta.title }}</router-link>
 									</li>
 								</ul>
@@ -64,9 +64,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["Mobile", "token", "mini"])
+    ...mapGetters(["Mobile", "token", "mini"]),
   },
   created () {
+    // console.log(this.token);
     // console.log(this.$store.getters.Mobile)
   },
   mounted () {
@@ -108,6 +109,11 @@ export default {
         document.body.scrollTop;
       // 判断页面滚动的距离是否大于吸顶元素的位置
       this.headerShow = scrollTop > this.offsetHeight;
+      if (this.headerShow) {
+        document.getElementsByClassName("site_header")[0].style.position = "fixed";
+      } else {
+        document.getElementsByClassName("site_header")[0].style.position = "";
+      }
     }
 
     // getScroll () {      window.addEventListener('scroll', () => {
@@ -129,8 +135,8 @@ export default {
 
 <style scoped>
 .site_header {
-	position: fixed !important;
-	position: absolute;
+	/* position: fixed !important;*/
+	/* position: absolute; */
 	top: 0;
 	right: 0;
 	left: 0;
@@ -138,7 +144,6 @@ export default {
 	background-color: #fff;
 	box-shadow: 0 0 30px rgba(0, 0, 0, 0.07);
 	transition: background-color 0.5s cubic-bezier(0.77, 0, 0.175, 1), box-shadow 0.5s cubic-bezier(0.77, 0, 0.175, 1), transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
-	transition: background-color 0.5s cubic-bezier(0.77, 0, 0.175, 1), box-shadow 0.5s cubic-bezier(0.77, 0, 0.175, 1), transform 0.6s cubic-bezier(0.77, 0, 0.175, 1), -webkit-transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
 	backface-visibility: hidden;
 }
 .slide_now {

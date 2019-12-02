@@ -1,105 +1,103 @@
 <!--  -->
 <template>
 	<div class="bgcolor-fff lazyloaded section">
-		<div class="site-content">
-			<div class="container">
-				<Labels :fatherMethod="issueList" @callFather="issueList" />
-				<main class="site-main">
-					<h3 class="section-title">
-						<span>
-							<i class="fa fa-list-alt"></i>
-							<svg class="icon">
-								<use xlink:href="#zuixinwenzhang_huaban" />
-							</svg>
-							<span>最新文章</span>
-						</span>
-					</h3>
-					<el-row :gutter="24" class="row posts-wrapper" style="width: auto;">
-						<el-col :xs="24" :lg="12" v-for="(item,index) in issuesList" :key="index">
-							<article class="post post-list">
-								<div class="entry-media">
-									<div class="placeholder">
-										<a>
-											<img class="lazyloaded" :src="getMainImage[index]" />
-										</a>
-									</div>
-									<div class="entry-star">
-										<a href="javascript:;" title="收藏文章" class="ripro-star">
-											<svg class="icon">
-												<use xlink:href="#xingxing" />
-											</svg>
-										</a>
-									</div>
-									<div class="entry-format">
-										<svg class="icon">
-											<use xlink:href="#tuku" />
-										</svg>
-									</div>
+		<div class="container">
+			<Labels :fatherMethod="issueList" @callFather="issueList" />
+			<main class="site-main">
+				<h3 class="section-title">
+					<span>
+						<i class="fa fa-list-alt"></i>
+						<svg class="icon">
+							<use xlink:href="#zuixinwenzhang_huaban" />
+						</svg>
+						<span>最新文章</span>
+					</span>
+				</h3>
+				<el-row :gutter="24" class="row posts-wrapper" style="width: auto;">
+					<el-col :xs="24" :lg="12" v-for="(item,index) in issuesList" :key="index">
+						<article class="post post-list">
+							<div class="entry-media">
+								<div class="placeholder">
+									<a>
+										<img class="lazyloaded" :src="getMainImage[index]" />
+									</a>
 								</div>
-								<div class="entry-wrapper">
-									<header class="entry-header">
-										<h2 class="entry-title" @click="goDetails(item.number)">
-											<a>{{item.title}}</a>
-										</h2>
-										<div style="text-align: right;">
-											<el-button @click="$share('/blog/details/'+item.number)" style="padding: 3px 0" type="text" icon="el-icon-share"></el-button>
-											<el-button @click="editBlog(item.number)" style="padding: 3px 0" type="text" icon="el-icon-edit" v-if="token"></el-button>
-											<el-button @click="deleteIssue(item.number)" style="padding: 3px 0" type="text" icon="el-icon-delete" v-if="token"></el-button>
-										</div>
-										<div class="entry-meta">
-											<svg class="icon" v-if="item.labels">
-												<use xlink:href="#biaoqian" />
-											</svg>
-											<label v-for="(items,index) in item.labels" :style="{background:`#${items.color}`}" :key="index">{{items.name}}</label>
-										</div>
-									</header>
-									<div class="entry-excerpt u-text-format">
-										<p v-html="getMainDes[index]"></p>
+								<div class="entry-star">
+									<a href="javascript:;" title="收藏文章" class="ripro-star">
+										<svg class="icon">
+											<use xlink:href="#xingxing" />
+										</svg>
+									</a>
+								</div>
+								<div class="entry-format">
+									<svg class="icon">
+										<use xlink:href="#tuku" />
+									</svg>
+								</div>
+							</div>
+							<div class="entry-wrapper">
+								<header class="entry-header">
+									<h2 class="entry-title" @click="goDetails(item.number)">
+										<a>{{item.title}}</a>
+									</h2>
+									<div style="text-align: right;">
+										<el-button @click="$share('/blog/details/'+item.number)" style="padding: 3px 0" type="text" icon="el-icon-share"></el-button>
+										<el-button @click="editBlog(item.number)" style="padding: 3px 0" type="text" icon="el-icon-edit" v-if="token"></el-button>
+										<el-button @click="deleteIssue(item.number)" style="padding: 3px 0" type="text" icon="el-icon-delete" v-if="token"></el-button>
 									</div>
-									<div class="entry-footer">
-										<a>
+									<div class="entry-meta">
+										<svg class="icon" v-if="item.labels">
+											<use xlink:href="#biaoqian" />
+										</svg>
+										<label v-for="(items,index) in item.labels" :style="{background:`#${items.color}`}" :key="index">{{items.name}}</label>
+									</div>
+								</header>
+								<div class="entry-excerpt u-text-format">
+									<p v-html="getMainDes[index]"></p>
+								</div>
+								<div class="entry-footer">
+									<a>
+										<svg class="icon">
+											<use xlink:href="#shijian" />
+										</svg>
+										{{getTime[index]}}
+									</a>
+									<a>
+										<span>
 											<svg class="icon">
-												<use xlink:href="#shijian" />
+												<use xlink:href="#yanjing" />
 											</svg>
-											{{getTime[index]}}
-										</a>
-										<a>
-											<span>
-												<svg class="icon">
-													<use xlink:href="#yanjing" />
-												</svg>
-												<span>032</span>
-											</span>
-										</a>
-										<a>
-											<span>
-												<svg class="icon">
-													<use xlink:href="#xiaoxi" />
-												</svg>
-												<span>032</span>
-											</span>
-										</a>
-										<!-- <a>
+											<span>032</span>
+										</span>
+									</a>
+									<a>
+										<span>
+											<svg class="icon">
+												<use xlink:href="#xiaoxi" />
+											</svg>
+											<span>032</span>
+										</span>
+									</a>
+									<!-- <a>
 										<span style="color: #fd721f">
 											<svg class="icon" >
 												<use xlink:href="#redu" />
 											</svg>
 											<span>032</span>
 										</span>
-										</a>-->
-									</div>
+									</a>-->
 								</div>
-							</article>
-						</el-col>
-					</el-row>
-					<div style="text-align: center">
-						<el-pagination @size-change="handleSizeChange" @current-change="issueList" :current-page.sync="query.page" :page-sizes="[6, 20, 30, 40]" :page-size="query.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" v-if="query.pageNumber*query.pageSize!=0"></el-pagination>
-					</div>
-					<div class="infinite-scroll-action">
-						<div class="infinite-scroll-button button">加载更多</div>
-					</div>
-				</main>
-			</div>
+							</div>
+						</article>
+					</el-col>
+				</el-row>
+				<div style="text-align: center">
+					<el-pagination @size-change="handleSizeChange" @current-change="issueList" :current-page.sync="query.page" :page-sizes="[6, 20, 30, 40]" :page-size="query.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" v-if="query.pageNumber*query.pageSize!=0"></el-pagination>
+				</div>
+				<div class="infinite-scroll-action">
+					<div class="infinite-scroll-button button">加载更多</div>
+				</div>
+			</main>
 		</div>
 	</div>
 </template>
@@ -107,7 +105,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { deleteIssue, getIssuesList } from '@/api/issue'
-import Labels from './Labels';
+import Labels from '../Labels/Labels';
 export default {
   data () {
     return {
@@ -233,6 +231,8 @@ export default {
           this.query.pageNumber = this.pageNumber
           this.total = this.query.pageNumber * this.query.pageSize
           this.setContextData("total", this.total)
+        } else {
+          this.total = this.issuesList.length
         }
       })
     },
@@ -326,10 +326,6 @@ export default {
 	clear: both;
 }
 
-.site-content {
-	padding-top: 60px;
-	padding-bottom: 60px;
-}
 .container {
 	margin: 0 auto;
 	max-width: 1090pt;
@@ -602,7 +598,6 @@ input[type="submit"] {
 }
 .section {
 	padding-bottom: 40px;
-	padding-top: 40px;
 	background: url("/images/main/bg-2.png");
 }
 .bgcolor-fff {

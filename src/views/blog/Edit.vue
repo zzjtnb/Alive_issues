@@ -19,7 +19,7 @@
 						<el-table-column type="selection" width="55"></el-table-column>
 						<el-table-column prop="name" label="标签名">
 							<template slot-scope="scope">
-								<el-tag size="medium" :color="scope.row.color" effect="dark">{{scope.row.name}}</el-tag>
+								<el-tag size="medium" :color="`#${scope.row.color}`" effect="dark">{{scope.row.name}}{{scope.row.color}}</el-tag>
 							</template>
 						</el-table-column>
 						<el-table-column prop="color" label="颜色"></el-table-column>
@@ -55,7 +55,7 @@
 				</el-form-item>
 				<el-form-item label="颜色" prop="color">
 					<el-input v-model="addForm.color"></el-input>
-					<el-color-picker v-model="addForm.color" show-alpha :predefine="predefineColors"></el-color-picker>
+					<el-color-picker v-model="chooseColor" :predefine="predefineColors"></el-color-picker>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -71,7 +71,7 @@
 				</el-form-item>
 				<el-form-item label="颜色" prop="color">
 					<el-input v-model="editForm.color"></el-input>
-					<el-color-picker v-model="editForm.color" show-alpha :predefine="predefineColors"></el-color-picker>
+					<el-color-picker v-model="chooseColor" color-format="hex" :predefine="predefineColors"></el-color-picker>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -99,21 +99,15 @@ export default {
       //编辑界面数据
       editForm: {
       },
+      chooseColor: '',
       predefineColors: [
-        '#007bff',
-        '#6610f2',
-        '#6f42c1',
+        '#ff4500',
+        '#ff8c00',
+        '#ffd700',
         '#90ee90',
         '#00ced1',
         '#1e90ff',
         '#c71585',
-        'rgba(255, 69, 0, 0.68)',
-        'rgb(255, 120, 0)',
-        'hsv(51, 100, 98)',
-        'hsva(120, 40, 94, 0.5)',
-        'hsl(181, 100%, 37%)',
-        'hsla(209, 100%, 56%, 0.73)',
-        '#c7158577'
       ],
       fileList: [],
       imgsrc: '',
@@ -191,13 +185,12 @@ export default {
       // console.log('new: %s, old: %s', newVal, oldVal)
       // console.log(newVal.length);
     },
-    'imgsrc' (newVal, oldVal) {
-      // if (newVal.length != 0) {
-      //   // console.log(`new:${newVal}, old:${oldVal}`);
-      //   // console.log('new: %s, old: %s', newVal, oldVal)
-      // }
+    'chooseColor' (newVal, oldVal) {
+      if (newVal.length != 0) {
+        this.editForm.color = newVal.replace(/#/, '')
+        this.addForm.color = newVal.replace(/#/, '')
+      }
     },
-
   },
   computed: {
     ...mapGetters([
@@ -256,16 +249,16 @@ export default {
       });
     },
     //显示新增界面
-    handleAdd: function () {
+    handleAdd: function (index, row) {
       this.addFormVisible = true;
       this.addForm = {
         name: '',
-        color: '',
+        color: (this.chooseColor).replace(/#/, ''),
       }
       this.form.labels.push(this.addForm)
     },
     //提交新增
-    editLabels: function () {
+    addLabels: function () {
       this.$refs.addForm.validate((valid) => {
         if (valid) {
           let para = Object.assign({}, this.addForm);
@@ -276,18 +269,20 @@ export default {
     },
     //显示编辑界面
     handleEdit: function (index, row) {
+      this.chooseColor = '#' + row.color
       this.editFormVisible = true;
       this.editForm = {
         name: row.name,
-        color: row.color,
+        color: (this.chooseColor).replace(/#/, ''),
       }
       this.form.labels[index] = this.editForm
+      console.log(this.form.labels[index])
     },
     //提交编辑
     editLabels: function () {
       this.$refs.editForm.validate((valid) => {
         if (valid) {
-          let para = Object.assign({}, this.editForm);
+          // let para = Object.assign({}, this.editForm);
           this.editFormVisible = false;
           this.$refs['editForm'].resetFields();
         }
@@ -364,6 +359,7 @@ export default {
           this.submitButton.loading = true
           this.submitButton.disabled = true
           let number = this.$route.params.id
+          console.log(this.form.labels)
           editIssue(this.form, number).then((res) => {
             let result = res.data
             if (res.status == '201') {

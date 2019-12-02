@@ -15,13 +15,13 @@
 					<li class="menu-item slicknav_parent" v-if="menu.children && menu.path !== '/login'&& !menu.meta.submenu" @click="closeSide(false)">
 						<router-link :to="menu.path">{{ menu.meta.title }}</router-link>
 					</li>
-					<li class="menu-item slicknav_parent" v-if="menu.children && menu.path !== '/login'&&menu.meta.submenu" @click="showSubmenu(true)">
+					<li class="menu-item slicknav_parent" v-if="menu.children && menu.path !== '/login'&&menu.meta.submenu " @click="showSubmenu(true)">
 						<a>
-							{{ menu.meta.title }}
-							<i class="material-icons">keyboard_arrow_down</i>
+							<span>{{ menu.meta.title }}</span>
+							<i class="material-icons nav-icon" v-if="menu.meta.submenu&&token">keyboard_arrow_down</i>
 						</a>
-						<ul class="sub-menu" v-if="isShow&&menu.meta.submenu && menu.path !== '/login'">
-							<li class="menu-item sub-menu-item" v-for="(submenu, index) in menu.children" @click="closeSide(false)">
+						<ul class="sub-menu" v-if="isShow&&menu.meta.submenu && menu.path !== '/login'&&token">
+							<li class="menu-item sub-menu-item" v-for="(submenu, index) in menu.children" v-if="submenu.meta.LoginRequired==true&&token" @click="closeSide(false)">
 								<router-link :to="submenu.path">{{submenu.meta.title }}</router-link>
 							</li>
 						</ul>
@@ -41,7 +41,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["showSide"])
+    ...mapGetters(["showSide", "token"])
   },
   mounted () {
 
@@ -201,5 +201,8 @@ export default {
 	-webkit-transform: translateX(0);
 	transform: translateX(0);
 	visibility: visible;
+}
+.nav-icon {
+	font-size: 9pt;
 }
 </style>

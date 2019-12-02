@@ -36,13 +36,6 @@ export default {
 	padding-bottom: 0;
 	padding-top: 0;
 }
-
-@media (max-width: 767px) {
-	.site-content {
-		padding-bottom: 30px;
-		padding-top: 30px;
-	}
-}
 @media (max-width: 575px) {
 	.container {
 		max-width: 460px;

@@ -34,6 +34,7 @@ export const routes = [
         component: () => import('../views/blog/Main.vue'),
         meta: {
           title: '博客列表',
+          LoginRequired: true,
         }
       },
       {
@@ -48,7 +49,6 @@ export const routes = [
         component: () => import('../views/blog/Edit.vue'),
         meta: {
           title: '编辑博客',
-          LoginRequired: true,
         }
       },
       {
@@ -61,7 +61,6 @@ export const routes = [
       },
     ]
   },
-
   {
     path: '/worshipheroes',
     component: Layout,
@@ -72,6 +71,19 @@ export const routes = [
       {
         path: '/worshipheroes',
         component: () => import('../views/WorshipHeroes.vue'),
+      }
+    ]
+  },
+  {
+    path: '/managelabels',
+    component: Layout,
+    meta: {
+      title: '管理标签',
+    },
+    children: [
+      {
+        path: '/managelabels',
+        component: () => import('../views/Labels/manageLabels.vue'),
       }
     ]
   },

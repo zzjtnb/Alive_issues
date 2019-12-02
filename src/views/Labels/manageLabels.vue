@@ -11,8 +11,8 @@
 						</svg>
 						<span>标签</span>
 					</span>
-					<li v-for="(item,index) in labeles">
-						<a :href="item.url" target="_blank" :style="{background:`#${item.color}`}">{{item.name}}</a>
+					<li v-for="(item, index) in labeles">
+						<a @click="getIssues(item.name )" :style="{ background: `#${item.color}` }">{{ item.name }}</a>
 					</li>
 				</ul>
 			</div>
@@ -29,36 +29,42 @@
 						<!-- 排序 -->
 						<ul class="filter-tag">
 							<div class="right">
-								<li class="rightss">
+								<li class="rightss" v-for="(item, index) in list">
 									<svg class="icon icos">
 										<use xlink:href="#xiajiantou" />
 									</svg>
-									<a @click="createdTime($event)" class="on">发布日期</a>
+									<a @click="selected(item.name,item.sort)" :class="{ active: active == item.name }">{{item.name}}</a>
 								</li>
-								<li class="rightss">
-									<svg class="icon icos">
-										<use xlink:href="#xiajiantou" />
-									</svg>
-									<a @click="updatedTime" class>修改时间</a>
-								</li>
-								<li class="rightss">
-									<svg class="icon icos">
-										<use xlink:href="#xiajiantou" />
-									</svg>
-									<a @click="commentsAmount" class>评论数量</a>
-								</li>
-								<li class="rightss">
-									<svg class="icon icos">
-										<use xlink:href="#xiajiantou" />
-									</svg>
-									<a href="/code?order=rand" class>随机</a>
-								</li>
-								<li class="rightss">
-									<svg class="icon icos">
-										<use xlink:href="#xiajiantou" />
-									</svg>
-									<a href="/code?order=hot" class>热度</a>
-								</li>
+								<!-- <li class="rightss">
+                  <svg class="icon icos">
+                    <use xlink:href="#xiajiantou" />
+                  </svg>
+                  <a @click="createdTime($event)" class="on">发布日期</a>
+                </li>
+                <li class="rightss">
+                  <svg class="icon icos">
+                    <use xlink:href="#xiajiantou" />
+                  </svg>
+                  <a @click="updatedTime" class>修改时间</a>
+                </li>
+                <li class="rightss">
+                  <svg class="icon icos">
+                    <use xlink:href="#xiajiantou" />
+                  </svg>
+                  <a @click="commentsAmount" class>评论数量</a>
+                </li>
+                <li class="rightss">
+                  <svg class="icon icos">
+                    <use xlink:href="#xiajiantou" />
+                  </svg>
+                  <a href="/code?order=rand" class>随机</a>
+                </li>
+                <li class="rightss">
+                  <svg class="icon icos">
+                    <use xlink:href="#xiajiantou" />
+                  </svg>
+                  <a href="/code?order=hot" class>热度</a>
+								</li>-->
 							</div>
 						</ul>
 					</el-col>
@@ -72,60 +78,83 @@
 </template>
 
 <script>
-import { getLabels } from '@/api/issue'
+import { getLabels } from "@/api/issue";
 export default {
   props: {
     fatherMethod: {
       type: Function,
       default: null
-    }
+    },
   },
   data () {
     return {
-      labeles: [],
-    }
+      list: [
+        {
+          name: '发布日期',
+          sort: 'created'
+        },
+        {
+          name: '修改时间',
+          sort: 'updated'
+        },
+        {
+          name: '评论数量',
+          sort: 'comments'
+        },
+      ],
+      active: '发布日期',
+      labeles: []
+    };
   },
   created () {
-    this.labelesList()
+    this.labelesList();
   },
-  mounted () {
-
-  },
-  computed: {
-
-
-  },
+  mounted () { },
+  computed: {},
   methods: {
-    createdTime (event) {
+    getIssues (params) {
       let data = {
-        sort: 'created'
-      }
-      this.$parent.issueList(data)
-      event.target.classList.remove("on");
-      console.log(event.target);
-    },
-    updatedTime () {
-      let data = {
-        sort: 'updated'
+        labels: params
       }
       this.fatherMethod(data);
     },
-    commentsAmount () {
+    selected (name, sort) {
+      this.active = name;
       let data = {
-        sort: 'comments'
-      }
-      this.$emit("callFather", data)
+        sort: sort
+      };
+      this.fatherMethod(data);
     },
     labelesList () {
-      getLabels().then((response) => {
+      getLabels().then(response => {
         this.labeles = response.data;
-      })
+      });
     },
+    /**
+			createdTime (event) {
+				let data = {
+					sort: "created"
+				};
+				this.$parent.issueList(data);
+				event.target.classList.remove("on");
+				console.log(event.target);
+			},
+			updatedTime () {
+				let data = {
+					sort: "updated"
+				};
+				this.fatherMethod(data);
+			},
+			commentsAmount () {
+				let data = {
+					sort: "comments"
+				};
+				this.$emit("callFather", data);
+			},
+    */
   },
-  components: {
-
-  },
-}
+  components: {}
+};
 </script>
 
 <style scoped>
@@ -148,7 +177,7 @@ export default {
 	position: relative;
 	z-index: 1;
 	display: block;
-	margin-top: -90px;
+	/* margin-top: -90px; */
 	margin-bottom: 30px;
 	padding: 20px;
 	border: 1px solid #f3f3f3;
@@ -233,7 +262,7 @@ export default {
 	margin-right: 20px;
 	color: grey;
 }
-.filter_content .filter-tab a.on {
+.filter_content .filter-tab a.active {
 	color: #ff9800;
 }
 @media (max-width: 767px) {
@@ -242,12 +271,6 @@ export default {
 
 		padding: 10px;
 	}
-
-	.site-content {
-		padding-top: 30px;
-		padding-bottom: 30px;
-	}
-
 	.filter_content .filter-item a {
 		margin-right: 5px;
 		padding: 0 5px;

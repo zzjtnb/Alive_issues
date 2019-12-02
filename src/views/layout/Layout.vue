@@ -1,7 +1,7 @@
 <template>
 	<div class="site">
 		<Header msg="Welcome to Your Vue.js App" />
-		<div class="header-gap"></div>
+		<!-- <div class="header-gap"></div> -->
 		<Main />
 		<Sidebar v-if="showSide" />
 	</div>

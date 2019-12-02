@@ -1,7 +1,7 @@
 <!--  -->
 <template>
 	<div class="container">
-		<Breadcrumb></Breadcrumb>
+		<!-- <Breadcrumb></Breadcrumb> -->
 		<article class="article-content">
 			<!-- <div v-html="getMainDes"></div> -->
 			<!-- <mavon-editor :ishljs="true" codeStyle="monokai-sublime" v-html="blog.content"></mavon-editor> -->
