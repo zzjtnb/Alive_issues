@@ -89,4 +89,24 @@ export default {
 .markdown-body pre code {
 	white-space: pre-wrap !important;
 }
+/**
+css 更改鼠标为手状样式
+auto                    ：标准光标  
+default                 ：标准箭头  
+pointer, hand           ：手形光标  
+wait                    ：等待光标  
+text                    ：I形光标  
+vertical-text           ：水平I形光标  
+no-drop                 ：不可拖动光标  
+not-allowed             ：无效光标  
+help                    ：帮助光标  
+all-scroll              ：三角方向标  
+move                    ：移动标  
+crosshair               ：十字标 
+ */
+i,
+span,
+a {
+	cursor: pointer;
+}
 </style>

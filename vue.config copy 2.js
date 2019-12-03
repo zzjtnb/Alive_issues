@@ -4,45 +4,62 @@ const UglifyPlugin = require('uglifyjs-webpack-plugin')
 module.exports = {
 
   configureWebpack: config => {
+    /**
+     * 使用 webpack4 新特性来拆分代码
+     */
+    //公共代码抽离和代码分割，避免单个js文件过大
+    config.optimization.splitChunks({
+      minSize: 10000, // int (in bytes)
+      maxSize: 25000,// int (in bytes)
+      chunks: 'all',
+      cacheGroups: {
+        libs: {
+          name: 'chunk-libs',
+          test: /[\\/]node_modules[\\/]/,
+          priority: 10,
+          chunks: 'initial' // 只打包初始时依赖的第三方
+        },
+        elementUI: {
+          name: 'chunk-elementUI', // 单独将 elementUI 拆包
+          priority: 20, // 权重要大于 libs 和 app 不然会被打包进 libs 或者 app
+          test: /[\\/]node_modules[\\/]element-ui[\\/]/
+        },
+        commons: {
+          name: 'chunk-commons',
+          test: resolve('src/components'), // 可自定义拓展你的规则
+          minChunks: 3, // 最小公用次数
+          priority: 5,
+          reuseExistingChunk: true // 公共模块必开启
+        }
+      },
+    })
+    config.performance({
+      //入口起点的最大体积
+      maxEntrypointSize: 10000,
+      //生成文件的最大体积250000 (bytes)。
+      maxAssetSize: 25000,
+    })
     /**********************分割**************************** */
     if (process.env.NODE_ENV == 'production') {
       // 为生产环境修改配置
       config.mode = 'production'
       // 将每个依赖包打包成单独的js文件
       let optimization = {
-        /**
-         * 代码混淆
-         */
         minimizer: [new UglifyPlugin({
           uglifyOptions: {
             warnings: false,
             compress: {
-              //drop_console  传递true以放弃对控制台的调用。*功能
               drop_console: true,
               drop_debugger: false,
-              // pure_funces 禁用console.log函数
               pure_funcs: ['console.log']
             }
           }
-        })],
-        splitChunks: {
-          //入口起点的最大体积 整数类型(int)（以字节(bytes)为单位 200k）
-          minSize: 204800,
-          //生成文件的最大体积 整数类型(int)（以字节(bytes)为单位 200k）
-          maxSize: 204800,
-        }
-      }
-      let performance = {
-        // 取消打包文件过大的警告
-        hints: false,
-        //入口起点的最大体积 整数类型(int)（以字节(bytes)为单位 200k）
-        maxEntrypointSize: 204800,
-        //生成文件的最大体积 整数类型(int)（以字节(bytes)为单位 200k）
-        maxAssetSize: 204800,
+        })]
+
+
       }
       Object.assign(config, {
-        optimization,
-        performance
+        optimization
       })
     } else {
       // 为开发环境修改配置
@@ -140,7 +157,19 @@ module.exports = {
   productionSourceMap: false,
 
   css: {
-    extract: false,
-    sourceMap: true
+    // loaderOptions: {
+    //   postcss: {
+    //     plugins: [
+    //       require("postcss-pxtorem")({
+    //         // 把px单位换算成rem单位
+    //         rootValue: 75, // 换算的基数(设计图750的根字体为75,如果设计图为640:则rootValue=64) //基准值(计算公式：设计图宽度/10)，设计图尺寸为750X1134(iPhone6)，基准值为750/10=75
+    //         propList: ["*"],
+    //         //不参与转换的样式
+    //         selectorBlackList: ['van']
+    //       })
+    //     ]
+    //   }
+    // },
+    extract: false
   }
 };

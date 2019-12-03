@@ -4,7 +4,7 @@
 		<div class="canvas-close" @click="closeSide(false)">
 			<i class="material-icons">close</i>
 		</div>
-		<div class="logo-wrapper">
+		<div class="logo-wrapper" @click="closeSide(false)">
 			<a>
 				<img class="logo regular" src="/images/header/logo-light.png" alt="争逐" />
 			</a>
@@ -15,10 +15,10 @@
 					<li class="menu-item slicknav_parent" v-if="menu.children && menu.path !== '/login'&& !menu.meta.submenu && !menu.LoginRequired" @click="closeSide(false)">
 						<router-link :to="menu.path">{{ menu.meta.title }}</router-link>
 					</li>
-					<li class="menu-item slicknav_parent" v-if="menu.children && menu.path !== '/login'&&menu.meta.submenu " @click="showSubmenu(true)">
+					<li class="menu-item slicknav_parent" v-if="menu.children && menu.path !== '/login'&&menu.meta.submenu ">
 						<a>
-							<router-link :to="menu.path">{{ menu.meta.title }}</router-link>
-							<i class="material-icons nav-icon" v-if="menu.meta.submenu&&token">keyboard_arrow_down</i>
+							<router-link :to="menu.path" @click.native="closeSide(false)">{{ menu.meta.title }}</router-link>
+							<i class="material-icons nav-icon" :class="{transform:transform}" v-if="menu.meta.submenu&&token" @click="showSubmenu(true)">keyboard_arrow_down</i>
 						</a>
 						<ul class="sub-menu" v-if="isShow&&menu.meta.submenu && menu.path !== '/login'&&token">
 							<li class="menu-item sub-menu-item" v-for="(submenu, index) in menu.children" v-if="submenu.meta.LoginRequired==true&&token" @click="closeSide(false)">
@@ -37,6 +37,7 @@ import { mapGetters } from "vuex";
 export default {
   data () {
     return {
+      transform: false,
       isShow: false
     }
   },
@@ -48,7 +49,10 @@ export default {
   },
   methods: {
     showSubmenu () {
+      this.transform = !this.transform
       this.isShow = !this.isShow
+      // document.querySelector('.nav-icon').classList.add('transform')
+      // console.log(document.querySelector('.nav-icon'))
     },
     closeSide (value) {
       this.$store.dispatch('ShowSide', value)
@@ -203,6 +207,10 @@ export default {
 	visibility: visible;
 }
 .nav-icon {
-	font-size: 9pt;
+	/* font-size: 9pt; */
+	margin-left: 5px;
+}
+.transform {
+	transform: rotateX(180deg);
 }
 </style>

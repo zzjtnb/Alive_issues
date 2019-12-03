@@ -134,7 +134,6 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   let token = store.state.token.token
   Vue.prototype.$setTitle(to.meta.title)
-  next()
   let login = router.options.routes
   if (!token) {
     next()
@@ -148,7 +147,7 @@ router.beforeEach((to, from, next) => {
       if (login.hasOwnProperty(key)) {
         const element = login[key];
         if (element.LoginRequired !== undefined) {
-          element.LoginRequired = !element.LoginRequired
+          element.LoginRequired = false
         }
       }
     }
@@ -159,7 +158,7 @@ router.beforeEach((to, from, next) => {
   //     if (login.hasOwnProperty(key)) {
   //       const element = login[key];
   //       if (element.LoginRequired !== undefined) {
-  //         element.LoginRequired = !element.LoginRequired
+  //         element.LoginRequired = false
   //       }
   //     }
   //   }
