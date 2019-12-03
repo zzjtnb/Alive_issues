@@ -1,6 +1,7 @@
 import Cookie from '../../utils/cookie'
 import UserApi from '@/api/user'
 import store from '../index'
+import router from '../../router/index'//引入路由
 import Vue from 'vue'
 
 const TOKEN_KEY = "TOKEN_KEY"
@@ -39,6 +40,7 @@ const token = {
             message: 'Token绑定成功',
             type: 'success'
           })
+          router.back()
         } else {
           Vue.prototype.$message({
             message: 'Token用户不一致',

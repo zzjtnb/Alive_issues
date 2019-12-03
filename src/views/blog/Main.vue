@@ -78,21 +78,14 @@
 											<span>032</span>
 										</span>
 									</a>
-									<!-- <a>
-										<span style="color: #fd721f">
-											<svg class="icon" >
-												<use xlink:href="#redu" />
-											</svg>
-											<span>032</span>
-										</span>
-									</a>-->
 								</div>
 							</div>
 						</article>
 					</el-col>
 				</el-row>
 				<div style="text-align: center">
-					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="query.page" :page-sizes="[6, 20, 30, 40]" :page-size="query.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" v-if="query.pageNumber*query.pageSize!=0"></el-pagination>
+					<el-pagination @current-change="handleCurrentChange" :current-page.sync="query.page" :page-size="query.pageSize" layout="prev, pager, next" :total="total" v-if="query.pageNumber*query.pageSize!=0&&Mobile"  :hide-on-single-page="value"></el-pagination>
+					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="query.page" :page-sizes="[6, 20, 30, 40]" :page-size="query.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" v-if="query.pageNumber*query.pageSize!=0&&!Mobile"   :hide-on-single-page="value"></el-pagination>
 				</div>
 				<div class="infinite-scroll-action">
 					<div class="infinite-scroll-button button">加载更多</div>
@@ -109,6 +102,7 @@ import Labels from '../Labels/Labels';
 export default {
   data () {
     return {
+			value:true,
       query: {
         page: 1,
         pageSize: 6,
@@ -124,9 +118,7 @@ export default {
     this.query.page = this.getContextData("page") || 1
     this.query.pageSize = this.getContextData("pageSize") || 6
     this.total = this.getContextData("total")
-    if (!this.getContextData("BlogData")) {
-      this.issueList();
-    }
+    this.issueList();
   },
   mounted () {
 
@@ -134,6 +126,7 @@ export default {
   computed: {
     ...mapGetters([
       'token',
+      'Mobile'
     ]),
     getMainImage () {
       let arr = [];
@@ -188,7 +181,6 @@ export default {
           },
         }
         deleteIssue(data, number, config).then((result) => {
-          console.log(result)
           this.$message({
             message: '删除成功',
             type: 'success'
@@ -217,10 +209,10 @@ export default {
       return;
     },
     handleSizeChange (val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       this.issueList()
     },
     issueList (data) {
@@ -228,9 +220,7 @@ export default {
       this.setContextData("pageSize", this.query.pageSize)
       getIssuesList(this.query, data).then((response) => {
         this.issuesList = response.data;
-        console.log(response.headers);
         this.pageNumber = this.$util.parseHeaders(response.headers)
-        console.log(this.pageNumber);
         if (this.pageNumber) {
           this.query.pageNumber = this.pageNumber
           this.total = this.query.pageNumber * this.query.pageSize
@@ -622,4 +612,24 @@ input[type="submit"] {
 		padding-bottom: 100%;
 	}
 }
+</style>
+
+<style >
+/* @media screen and (max-width: 750px) {
+	.el-pagination {
+		white-space: inherit;
+		padding: 2px 5px;
+		color: #303133;
+		font-weight: 700;
+	}
+	.el-pagination .el-pagination__sizes {
+		padding: 0 66px !important;
+	}
+	.el-pagination .btn-prev {
+		padding-right: 0 !important;
+	}
+	.el-pager li {
+		min-width: 30px;
+	}
+} */
 </style>

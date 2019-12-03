@@ -12,7 +12,7 @@
 		<div class="mobile-menu hidden-lg hidden-xl">
 			<div class="slicknav_menu">
 				<ul class="slicknav_nav" v-for="menu in $router.options.routes">
-					<li class="menu-item slicknav_parent" v-if="menu.children && menu.path !== '/login'&& !menu.meta.submenu" @click="closeSide(false)">
+					<li class="menu-item slicknav_parent" v-if="menu.children && menu.path !== '/login'&& !menu.meta.submenu && !menu.LoginRequired" @click="closeSide(false)">
 						<router-link :to="menu.path">{{ menu.meta.title }}</router-link>
 					</li>
 					<li class="menu-item slicknav_parent" v-if="menu.children && menu.path !== '/login'&&menu.meta.submenu " @click="showSubmenu(true)">

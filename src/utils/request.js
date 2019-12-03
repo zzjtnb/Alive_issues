@@ -70,15 +70,13 @@ service.interceptors.response.use(response => {
   // eg:请求超时或断网时，更新state的network状态
   // network状态在app.vue中控制着一个全局的断网提示组件的显示隐藏
   // 关于断网组件中的刷新重新获取数据，会在断网组件中说明
-  console.log(window.navigator.onLine)
+  // console.log(window.navigator.onLine)
   if (!window.navigator.onLine) {
     store.commit('NOT_NETWORK', false);
     router.replace({
       path: '/notnetwork',
       // query: { redirect: router.currentRoute.fullPath }//登录成功后跳入浏览的当前页面
     })
-  } else {
-    return Promise.reject(error);
   }
   if (error.response) {
     // 根据请求失败的http状态码去给用户相应的提示

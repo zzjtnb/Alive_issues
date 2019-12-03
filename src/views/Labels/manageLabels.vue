@@ -20,7 +20,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column prop="color" label="颜色"></el-table-column>
-				<el-table-column label="操作" width="100%">
+				<el-table-column label="操作" width="90%">
 					<template slot-scope="scope">
 						<!-- <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 						<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>-->

@@ -13,13 +13,13 @@
 					<!-- 导航栏 -->
 					<nav v-if="showNav" v-show="!searchShow">
 						<ul id="menu" class="nav-list u-plain-list">
-							<li class="menu-item" v-for="menu in $router.options.routes" v-if="menu.children && menu.path !== '/login'">
+							<li class="menu-item" v-for="menu in $router.options.routes" v-if="menu.children && menu.path !== '/login' &&!menu.LoginRequired">
 								<router-link :to="menu.path">
 									<span>{{ menu.meta.title }}</span>
 									<i class="material-icons nav-icon" v-if="menu.meta.submenu&&token">keyboard_arrow_down</i>
 								</router-link>
 								<ul class="sub-menu" v-if="menu.meta.submenu && menu.path !== '/login'&&token">
-									<li class="menu-item" v-for="(submenu, index) in menu.children" v-if="submenu.meta.LoginRequired==true&&token">
+									<li class="menu-item" v-for="(submenu, index) in menu.children" v-if="submenu.meta.LoginRequired==true">
 										<router-link :to="submenu.path">{{submenu.meta.title }}</router-link>
 									</li>
 								</ul>

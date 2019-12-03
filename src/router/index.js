@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from '../store/index'
 import VueRouter from 'vue-router'
 import Layout from '../views/layout/Layout'
 
@@ -34,7 +35,6 @@ export const routes = [
         component: () => import('../views/blog/Main.vue'),
         meta: {
           title: '博客列表',
-          LoginRequired: true,
         }
       },
       {
@@ -77,6 +77,7 @@ export const routes = [
   {
     path: '/managelabels',
     component: Layout,
+    LoginRequired: true,
     meta: {
       title: '管理标签',
     },
@@ -84,6 +85,9 @@ export const routes = [
       {
         path: '/managelabels',
         component: () => import('../views/Labels/manageLabels.vue'),
+        meta: {
+          LoginRequired: true,
+        }
       }
     ]
   },
@@ -126,9 +130,47 @@ export const routes = [
 const router = new VueRouter({
   routes
 })
+// 拦截登录，token验证
 router.beforeEach((to, from, next) => {
+  let token = store.state.token.token
   Vue.prototype.$setTitle(to.meta.title)
   next()
-})
+  let login = router.options.routes
+  if (!token) {
+    next()
+    if (!to.meta.LoginRequired) {
+      next()
+    } else {
+      next(router.back())
+    }
+  } else {
+    for (const key in login) {
+      if (login.hasOwnProperty(key)) {
+        const element = login[key];
+        if (element.LoginRequired !== undefined) {
+          element.LoginRequired = !element.LoginRequired
+        }
+      }
+    }
+    next()
+  }
+  // if (token) {
+  //   for (const key in login) {
+  //     if (login.hasOwnProperty(key)) {
+  //       const element = login[key];
+  //       if (element.LoginRequired !== undefined) {
+  //         element.LoginRequired = !element.LoginRequired
+  //       }
+  //     }
+  //   }
+  //   next()
+  // } else {
+  //   if (!to.meta.LoginRequired) {
+  //     next()
+  //   } else {
+  //     next(router.back())
+  //   }
+  // }
 
+})
 export default router
