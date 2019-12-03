@@ -20,17 +20,17 @@
 					</template>
 				</el-table-column>
 				<el-table-column prop="color" label="颜色"></el-table-column>
-				<el-table-column label="操作" width="110">
+				<el-table-column label="操作" width="100%">
 					<template slot-scope="scope">
 						<!-- <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 						<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>-->
-						<el-button type="primary" icon="el-icon-edit" circle @click="handleEdit(scope.$index, scope.row)"></el-button>
-						<el-button type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.$index, scope.row)"></el-button>
+						<el-button type="primary" icon="el-icon-edit" circle size="mini" @click="handleEdit(scope.$index, scope.row)"></el-button>
+						<el-button type="danger" icon="el-icon-delete" circle size="mini" @click="handleDelete(scope.$index, scope.row)"></el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 			<!--新增界面-->
-			<el-dialog title="编辑" :visible.sync="addFormVisible" :close-on-click-modal="false" v-if="addFormVisible">
+			<el-dialog title="编辑" width="90%" :visible.sync="addFormVisible" :close-on-click-modal="false" v-if="addFormVisible">
 				<el-form :model="addForm" label-width="80px" ref="addForm" :rules="ruleValidate">
 					<el-form-item label="标签名" prop="name">
 						<el-input v-model="addForm.name"></el-input>
@@ -46,7 +46,7 @@
 				</div>
 			</el-dialog>
 			<!--编辑界面-->
-			<el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false" v-if="editFormVisible">
+			<el-dialog title="编辑" width="90%" :visible.sync="editFormVisible" :close-on-click-modal="false" v-if="editFormVisible">
 				<el-form :model="editForm" label-width="80px" ref="editForm" :rules="ruleValidate">
 					<el-form-item label="标签名" prop="name">
 						<el-input v-model="editForm.name"></el-input>
@@ -146,7 +146,8 @@ export default {
       let msg = "确认删除该记录吗?";
       let status = 0;
       this.$confirm(msg, '提示', {
-        type: 'warning'
+        type: 'warning',
+        center: true,
       }).then(() => {
         deleteLabels(row.name).then((res) => {
           if (res.status == 204) {
@@ -280,4 +281,18 @@ export default {
 	display: flex;
 	align-items: center;
 } */
+.el-dialog {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: 0 !important;
+	transform: translate(-50%, -50%);
+	max-height: calc(100% - 30px);
+	max-width: calc(100% - 30px);
+	display: flex;
+	flex-direction: column;
+}
+.el-dialog > .el-dialog__body {
+	overflow: auto;
+}
 </style>

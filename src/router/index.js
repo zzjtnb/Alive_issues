@@ -25,8 +25,8 @@ export const routes = [
     redirect: '/blog/main',
     component: Layout,
     meta: {
-      submenu: true,
-      title: '个人博客'
+      title: '个人博客',
+      submenu: true
     },
     children: [
       {

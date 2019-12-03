@@ -92,7 +92,7 @@
 					</el-col>
 				</el-row>
 				<div style="text-align: center">
-					<el-pagination @size-change="handleSizeChange" @current-change="issueList" :current-page.sync="query.page" :page-sizes="[6, 20, 30, 40]" :page-size="query.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" v-if="query.pageNumber*query.pageSize!=0"></el-pagination>
+					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="query.page" :page-sizes="[6, 20, 30, 40]" :page-size="query.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" v-if="query.pageNumber*query.pageSize!=0"></el-pagination>
 				</div>
 				<div class="infinite-scroll-action">
 					<div class="infinite-scroll-button button">加载更多</div>
@@ -217,8 +217,10 @@ export default {
       return;
     },
     handleSizeChange (val) {
-      this.query.page = 1
-      this.query.pageSize = val
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`);
       this.issueList()
     },
     issueList (data) {
@@ -226,13 +228,13 @@ export default {
       this.setContextData("pageSize", this.query.pageSize)
       getIssuesList(this.query, data).then((response) => {
         this.issuesList = response.data;
+        console.log(response.headers);
         this.pageNumber = this.$util.parseHeaders(response.headers)
-        if (this.pageNumber && this.pageNumber != 0) {
+        console.log(this.pageNumber);
+        if (this.pageNumber) {
           this.query.pageNumber = this.pageNumber
           this.total = this.query.pageNumber * this.query.pageSize
           this.setContextData("total", this.total)
-        } else {
-          this.total = this.issuesList.length
         }
       })
     },

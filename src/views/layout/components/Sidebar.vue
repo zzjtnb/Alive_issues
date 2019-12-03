@@ -17,7 +17,7 @@
 					</li>
 					<li class="menu-item slicknav_parent" v-if="menu.children && menu.path !== '/login'&&menu.meta.submenu " @click="showSubmenu(true)">
 						<a>
-							<span>{{ menu.meta.title }}</span>
+							<router-link :to="menu.path">{{ menu.meta.title }}</router-link>
 							<i class="material-icons nav-icon" v-if="menu.meta.submenu&&token">keyboard_arrow_down</i>
 						</a>
 						<ul class="sub-menu" v-if="isShow&&menu.meta.submenu && menu.path !== '/login'&&token">
