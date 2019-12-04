@@ -1,8 +1,8 @@
-const common = {
+const issues = {
   // 多个 state 的操作 , 使用 mutations 会来触发会比较好维护 , 那么需要执行多个 mutations 就需要用 action 了
   // 通过 store.state 来获取状态对象，以及通过 store.commit 方法触发状态变更
   state: {
-    networkSuccess: true,
+    issuesList: [],
     Mobile: true,
     ShowSideBar: false,
     xianhua_num: 0,
@@ -13,8 +13,8 @@ const common = {
   },
   // 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
   mutations: {
-    NOT_NETWORK: (state, value) => {//这里的state对应着上面这个state
-      state.networkSuccess = value
+    GET_ISSUESLIST: (state, value) => {//这里的state对应着上面这个state
+      state.issuesList = value
     },
     IS_Mobile: (state, value) => {
       state.Mobile = value
@@ -39,8 +39,8 @@ const common = {
    */
   // dispactch方法调用action,mapAactions方法调用action
   actions: {
-    ChangeNetwork ({ commit }, value) {
-      commit('NOT_NETWORK', value)
+    GetIssuesList ({ commit }, value) {
+      commit('GET_ISSUESLIST', value)
     },
     Mobile ({ commit }, value) {
       commit("IS_Mobile", value)
@@ -54,4 +54,4 @@ const common = {
   }
 }
 
-export default common
+export default issues

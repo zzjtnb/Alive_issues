@@ -1,5 +1,9 @@
 const getters = {
     /**
+     * 博客列表
+     */
+    IssuesList: state => state.common.issuesList,
+    /**
      * 显示隐藏
      */
     networkSuccess: state => state.common.networkSuccess,

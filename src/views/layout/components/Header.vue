@@ -41,7 +41,7 @@
 					</div>
 					<div class="main-search" v-if="searchShow">
 						<form class="search-form inline">
-							<input type="search" class="search-field inline-field" placeholder="输入关键词，回车..." autocomplete="off" value name="s" required="required" />
+							<input type="search" class="search-field inline-field" placeholder="输入关键词，回车..." autocomplete="off" value required="required" clearable @keyup.enter="search($event)" />
 						</form>
 						<div class="search-close navbar-button" @click="showSearch(false)">
 							<i class="icon-scale material-icons">close</i>
@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import { searchIssues } from '@/api/search'
 import { mapGetters } from "vuex";
 export default {
   data () {
@@ -67,7 +68,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["Mobile", "token", "mini"]),
+    ...mapGetters(["Mobile", "token", "mini",]),
   },
   created () {
     // console.log(this.token);
@@ -77,7 +78,6 @@ export default {
     } else {
       this.showNav = true
     }
-    console.log(1)
   },
   watch: {
     screenWidth (val) {
@@ -123,6 +123,20 @@ export default {
     })
   },
   methods: {
+    search (event) {
+      let data = {
+        keyword: event.target.value,
+        repo: 'zzjtnb'
+      }
+      let params = {
+        sort: 'created',
+        order: 'desc'
+      }
+      searchIssues(data, params).then((res) => {
+        console.log(res)
+      })
+
+    },
     /**
 		 * 监听window的resize事件．在浏览器窗口变化时显示隐藏导航栏．
 		 * 网页可见区域宽：document.body.clientWidth
@@ -416,11 +430,14 @@ form.inline {
 }
 form.inline .inline-field {
 	margin-bottom: 0;
-	padding-right: 20px;
-	width: 100%;
+	/* padding-right: 20px; */
+	width: 95%;
 	outline: 0;
 	text-overflow: ellipsis;
 	transition: border-color cubic-bezier(0.77, 0, 0.175, 1);
+}
+input[type="search"]::-webkit-search-cancel-button {
+	display: none;
 }
 .main-search .search-field {
 	margin: 0;

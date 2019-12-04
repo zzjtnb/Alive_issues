@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import token from './modules/token'//引入store(仓库)token(初始state对象)
 import common from './modules/common'//引入store(仓库)token(初始state对象)
+import issues from './modules/issues'//引入store(仓库)token(初始state对象)
 import configuration from './modules/configuration'
 import getters from './getters'
 
@@ -12,6 +13,7 @@ export default new Vuex.Store({
   modules: {
     token,
     common,
+    issues,
     configuration
   },
   getters

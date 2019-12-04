@@ -84,8 +84,8 @@
 					</el-col>
 				</el-row>
 				<div style="text-align: center">
-					<el-pagination @current-change="handleCurrentChange" :current-page.sync="query.page" :page-size="query.pageSize" layout="prev, pager, next" :total="total" v-if="query.pageNumber*query.pageSize!=0&&Mobile"  :hide-on-single-page="value"></el-pagination>
-					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="query.page" :page-sizes="[6, 20, 30, 40]" :page-size="query.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" v-if="query.pageNumber*query.pageSize!=0&&!Mobile"   :hide-on-single-page="value"></el-pagination>
+					<el-pagination @current-change="handleCurrentChange" :current-page.sync="query.page" :page-size="query.pageSize" layout="prev, pager, next" :total="total" v-if="query.pageNumber*query.pageSize!=0&&Mobile" :hide-on-single-page="value"></el-pagination>
+					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="query.page" :page-sizes="[6, 20, 30, 40]" :page-size="query.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" v-if="query.pageNumber*query.pageSize!=0&&!Mobile" :hide-on-single-page="value"></el-pagination>
 				</div>
 				<div class="infinite-scroll-action">
 					<div class="infinite-scroll-button button">加载更多</div>
@@ -102,7 +102,7 @@ import Labels from '../Labels/Labels';
 export default {
   data () {
     return {
-			value:true,
+      value: true,
       query: {
         page: 1,
         pageSize: 6,
