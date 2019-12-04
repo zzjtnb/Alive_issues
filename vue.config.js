@@ -52,12 +52,12 @@ module.exports = {
         new UglifyJsPlugin({
           uglifyOptions: {
             //生产环境自动删除console
-            // compress: {
-            //   // warnings: false, // 若打包错误，则注释这行
-            //   drop_debugger: true,
-            //   drop_console: true,
-            //   pure_funcs: ['console.log']
-            // }
+            compress: {
+              // warnings: false, // 若打包错误，则注释这行
+              drop_debugger: true,
+              drop_console: true,
+              pure_funcs: ['console.log']
+            }
           },
           //记得在使用 UglifyJSPlugin 时，必须使用 sourceMap 选项。
           sourceMap: false,//不输出map文件
