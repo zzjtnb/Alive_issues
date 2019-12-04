@@ -31,7 +31,7 @@ module.exports = {
       /**
        * gzip压缩
        */
-      const productionGzipExtensions = ['html', 'js', 'css']
+      const productionGzipExtensions = ["js", "css", "svg", "woff", "ttf", "json", "html"];
       config.plugins.push(
         new CompressionWebpackPlugin({
           filename: "[path].gz[query]",
@@ -42,8 +42,8 @@ module.exports = {
           ),
           threshold: 10240, // 只有大小大于该值的资源会被处理 10kb
           minRatio: 0.8, // 只有压缩率小于这个值的资源才会被处理
-          deleteOriginalAssets: true // 删除原文件
-        })
+          deleteOriginalAssets: false  // 删除原文件
+        }),
       );
       /**
        * 代码压缩
@@ -59,7 +59,9 @@ module.exports = {
               pure_funcs: ['console.log']
             }
           },
-          sourceMap: false,
+          //记得在使用 UglifyJSPlugin 时，必须使用 sourceMap 选项。
+          sourceMap: false,//不输出map文件
+          //Para️并行化可以显着加快构建速度，因此强烈建议
           parallel: true
         })
       )
