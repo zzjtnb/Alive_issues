@@ -2,7 +2,8 @@ const getters = {
     /**
      * 博客列表
      */
-    IssuesList: state => state.common.issuesList,
+    IssuesList: state => state.issues.issuesList,
+    Query: state => state.issues.query,
     /**
      * 显示隐藏
      */

@@ -68,7 +68,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["Mobile", "token", "mini",]),
+    ...mapGetters(["Mobile", "token", "mini", "IssuesList", 'Query']),
   },
   created () {
     // console.log(this.token);
@@ -133,9 +133,16 @@ export default {
         order: 'desc'
       }
       searchIssues(data, params).then((res) => {
-        console.log(res)
+        let data = res.data.items
+        this.$store.dispatch("GetIssuesList", data);
+        let query = {
+          page: this.Query.page,
+          pageSize: this.Query.pageSize,
+          pageNumber: this.pageNumber,
+          total: this.pageNumber * this.Query.pageSize
+        }
+        this.$store.dispatch("GetQuery", query);
       })
-
     },
     /**
 		 * 监听window的resize事件．在浏览器窗口变化时显示隐藏导航栏．

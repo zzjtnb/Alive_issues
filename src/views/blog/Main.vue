@@ -2,7 +2,7 @@
 <template>
 	<div class="bgcolor-fff lazyloaded section">
 		<div class="container">
-			<Labels :fatherMethod="issueList" @callFather="issueList" />
+			<Labels :fatherMethod="getIssueList" @callFather="getIssueList" />
 			<main class="site-main">
 				<h3 class="section-title">
 					<span>
@@ -14,7 +14,7 @@
 					</span>
 				</h3>
 				<el-row :gutter="24" class="row posts-wrapper" style="width: auto;">
-					<el-col :xs="24" :lg="12" v-for="(item,index) in issuesList" :key="index">
+					<el-col :xs="24" :lg="12" v-for="(item,index) in IssuesList" :key="index">
 						<article class="post post-list">
 							<div class="entry-media">
 								<div class="placeholder">
@@ -84,8 +84,8 @@
 					</el-col>
 				</el-row>
 				<div style="text-align: center">
-					<el-pagination @current-change="handleCurrentChange" :current-page.sync="query.page" :page-size="query.pageSize" layout="prev, pager, next" :total="total" v-if="query.pageNumber*query.pageSize!=0&&Mobile" :hide-on-single-page="value"></el-pagination>
-					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="query.page" :page-sizes="[6, 20, 30, 40]" :page-size="query.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" v-if="query.pageNumber*query.pageSize!=0&&!Mobile" :hide-on-single-page="value"></el-pagination>
+					<el-pagination @current-change="handleCurrentChange" :current-page.sync="Query.page" :page-size="Query.pageSize" layout="prev, pager, next" :total="Query.total" v-if="Query.pageNumber*Query.pageSize!=0&&Mobile" :hide-on-single-page="value"></el-pagination>
+					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="Query.page" :page-sizes="[6, 20, 30, 40]" :page-size="Query.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="Query.total" v-if="Query.pageNumber*Query.pageSize!=0&&!Mobile" :hide-on-single-page="value"></el-pagination>
 				</div>
 				<div class="infinite-scroll-action">
 					<div class="infinite-scroll-button button">加载更多</div>
@@ -103,22 +103,12 @@ export default {
   data () {
     return {
       value: true,
-      query: {
-        page: 1,
-        pageSize: 6,
-        pageNumber: 1
-      },
-      total: 0,
       pageNumber: 0,
-      issuesList: [],
       labeles: [],
     }
   },
   created () {
-    this.query.page = this.getContextData("page") || 1
-    this.query.pageSize = this.getContextData("pageSize") || 6
-    this.total = this.getContextData("total")
-    this.issueList();
+    this.getIssueList();
   },
   mounted () {
 
@@ -126,11 +116,13 @@ export default {
   computed: {
     ...mapGetters([
       'token',
-      'Mobile'
+      'Mobile',
+      'IssuesList',
+      'Query'
     ]),
     getMainImage () {
       let arr = [];
-      for (let item of this.issuesList) {
+      for (let item of this.IssuesList) {
         if (this.$markdown(item.body).match(/\bsrc\b\s*=\s*[\'\"]?([^\'\"]*)[\'\"]?/)) {
           arr.push(this.$markdown(item.body).match(/\bsrc\b\s*=\s*[\'\"]?([^\'\"]*)[\'\"]?/)[1]);
         } else {
@@ -141,14 +133,14 @@ export default {
     },
     getMainDes () {
       let arr = [];
-      for (let item of this.issuesList) {
+      for (let item of this.IssuesList) {
         arr.push(this.$markdown(item.body).replace(/<[^>]+>/g, "").substring(0, 200));
       }
       return arr;
     },
     getTime () {
       let arr = [];
-      for (let item of this.issuesList) {
+      for (let item of this.IssuesList) {
         arr.push(this.$util.utcToLocalTime(item.updated_at));
       }
       return arr;
@@ -188,6 +180,29 @@ export default {
         })
       })
     },
+    handleSizeChange (val) {
+      // console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange (val) {
+      // console.log(`当前页: ${val}`);
+      this.getIssueList()
+    },
+    getIssueList (data) {
+      getIssuesList(this.Query, data).then((response) => {
+        this.$store.dispatch("GetIssuesList", response.data);
+        console.log(this.Query);
+        this.pageNumber = this.$util.parseHeaders(response.headers)
+        if (this.pageNumber) {
+          let data = {
+            page: this.Query.page,
+            pageSize: this.Query.pageSize,
+            pageNumber: this.pageNumber,
+            total: this.pageNumber * this.Query.pageSize
+          }
+          this.$store.dispatch("GetQuery", data);
+        }
+      })
+    },
     //给sessionStorage存值
     setContextData: function (key, value) {
       if (typeof value == "string") {
@@ -207,26 +222,6 @@ export default {
         }
       }
       return;
-    },
-    handleSizeChange (val) {
-      // console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange (val) {
-      // console.log(`当前页: ${val}`);
-      this.issueList()
-    },
-    issueList (data) {
-      this.setContextData("page", this.query.page)
-      this.setContextData("pageSize", this.query.pageSize)
-      getIssuesList(this.query, data).then((response) => {
-        this.issuesList = response.data;
-        this.pageNumber = this.$util.parseHeaders(response.headers)
-        if (this.pageNumber) {
-          this.query.pageNumber = this.pageNumber
-          this.total = this.query.pageNumber * this.query.pageSize
-          this.setContextData("total", this.total)
-        }
-      })
     },
     goDetails (id) {
       this.$router.push("/blog/details/" + id)

@@ -3,33 +3,21 @@ const issues = {
   // 通过 store.state 来获取状态对象，以及通过 store.commit 方法触发状态变更
   state: {
     issuesList: [],
-    Mobile: true,
-    ShowSideBar: false,
-    xianhua_num: 0,
-    dianzhu_num: 0,
-    jingjiu_num: 0,
-    jingli_num: 0,
-    jugong_num: 0
+    query: {
+      page: 1,
+      pageSize: 6,
+      pageNumber: 1,
+      total: 0,
+    },
   },
   // 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
   mutations: {
     GET_ISSUESLIST: (state, value) => {//这里的state对应着上面这个state
       state.issuesList = value
     },
-    IS_Mobile: (state, value) => {
-      state.Mobile = value
-    },
-    SET_HEROESRECORD: (state, heroseRecord) => {
-      state.xianhua_num = heroseRecord.xianhua_num;
-      state.dianzhu_num = heroseRecord.dianzhu_num;
-      state.jingjiu_num = heroseRecord.jingjiu_num;
-      state.jingli_num = heroseRecord.jingli_num;
-      state.jugong_num = heroseRecord.jugong_num;
-    },
-    IsSideBar: (state, value) => {
-      state.ShowSideBar = value
+    GET_QUERY: (state, value) => {
+      state.query = value
     }
-
   },
 
   /**
@@ -42,14 +30,8 @@ const issues = {
     GetIssuesList ({ commit }, value) {
       commit('GET_ISSUESLIST', value)
     },
-    Mobile ({ commit }, value) {
-      commit("IS_Mobile", value)
-    },
-    ShowSide ({ commit }, value) {
-      commit("IsSideBar", value)
-    },
-    LocalReload ({ commit }, heroseRecord) {
-      commit('SET_HEROESRECORD', heroseRecord)
+    GetQuery ({ commit }, value) {
+      commit('GET_QUERY', value)
     },
   }
 }
