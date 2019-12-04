@@ -67,6 +67,7 @@ module.exports = {
       )
       /**
        *  performance就是关闭每次打包之后的文件过大警告
+       * 关闭文件过大提示，利于打包加快速度
        */
       config.performance = {
         hints: false,
@@ -75,6 +76,43 @@ module.exports = {
         //生成文件的最大体积 整数类型(int)（以字节(bytes)为单位 200k）
         maxAssetSize: 204800,
       }
+      /**
+       * 公共代码抽离和代码分割，避免单个js文件过大
+       */
+      config.optimization = {
+        splitChunks: {
+          cacheGroups: {
+            vendor: {
+              chunks: "all",
+              test: /node_modules/,
+              name: "vendor",
+              minChunks: 1,
+              maxInitialRequests: 5,
+              minSize: 30000,
+              priority: 100
+            },
+            common: {
+              chunks: "all",
+              test: /[\\/]src[\\/]js[\\/]/,
+              name: "common",
+              minChunks: 3,
+              maxInitialRequests: 5,
+              minSize: 30000,
+              priority: 60
+            },
+            styles: {
+              name: "styles",
+              test: /\.(sa|sc|c)ss$/,
+              chunks: "all",
+              enforce: true
+            },
+            runtimeChunk: {
+              name: "manifest"
+            }
+          }
+        }
+      }
+
     } else {
       // 为开发环境修改配置
       config.mode = 'development'
