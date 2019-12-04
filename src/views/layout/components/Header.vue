@@ -77,6 +77,7 @@ export default {
     } else {
       this.showNav = true
     }
+    console.log(1)
   },
   watch: {
     screenWidth (val) {

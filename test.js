@@ -42,7 +42,7 @@ module.exports = {
           ),
           threshold: 10240, // 只有大小大于该值的资源会被处理 10kb
           minRatio: 0.8, // 只有压缩率小于这个值的资源才会被处理
-          deleteOriginalAssets: true // 删除原文件
+          deleteOriginalAssets: false // 删除原文件
         })
       );
       /**
@@ -53,7 +53,7 @@ module.exports = {
           uglifyOptions: {
             //生产环境自动删除console
             compress: {
-              // warnings: false, // 若打包错误，则注释这行
+              warnings: false, // 若打包错误，则注释这行
               drop_debugger: true,
               drop_console: true,
               pure_funcs: ['console.log']
@@ -63,22 +63,73 @@ module.exports = {
           parallel: true
         })
       )
-      /**
-       *  performance就是关闭每次打包之后的文件过大警告
-       */
-      config.performance = {
-        hints: false,
-        //入口起点的最大体积 整数类型(int)（以字节(bytes)为单位 200k）
-        maxEntrypointSize: 204800,
-        //生成文件的最大体积 整数类型(int)（以字节(bytes)为单位 200k）
-        maxAssetSize: 204800,
-      }
+      // // 将每个依赖包打包成单独的js文件,避免单个js文件过大
+      // let optimization = {
+      //   /**
+      //    * 代码混淆
+      //    */
+      //   minimizer: [
+      //     // 压缩js代码,生产环境自动删除console
+      //     new UglifyPlugin({
+      //       uglifyOptions: {
+      //         warnings: false,
+      //         compress: {
+      //           //drop_console  传递true以放弃对控制台的调用。*功能
+      //           drop_console: true,
+      //           drop_debugger: false,
+      //           // pure_funces 禁用console.log函数
+      //           pure_funcs: ['console.log']
+      //         }
+      //       },
+      //       //记得在使用 UglifyJSPlugin 时，必须使用 sourceMap 选项。
+      //       sourceMap: true,
+      //       //Para️并行化可以显着加快构建速度，因此强烈建议
+      //       parallel: true
+      //     })
+      //   ],
+      //   splitChunks: {
+      //     //入口起点的最大体积 整数类型(int)（以字节(bytes)为单位 200k）
+      //     minSize: 204800,
+      //     //生成文件的最大体积 整数类型(int)（以字节(bytes)为单位 200k）
+      //     maxSize: 204800,
+      //   }
+      // }
+      // let performance = {
+      //   // 取消打包文件过大的警告
+      //   hints: false,
+      //   //入口起点的最大体积 整数类型(int)（以字节(bytes)为单位 200k）
+      //   maxEntrypointSize: 204800,
+      //   //生成文件的最大体积 整数类型(int)（以字节(bytes)为单位 200k）
+      //   maxAssetSize: 204800,
+      // }
+      // Object.assign(config, {
+      //   optimization,
+      //   performance
+      // })
     } else {
       // 为开发环境修改配置
       config.mode = 'development'
     }
   },
-
+  // configureWebpack: {
+  //   /**
+  //  * build文件大小分块
+  //  */
+  //   //关闭文件过大提示，利于打包加快速度
+  //   performance: {
+  //     //入口起点的最大体积
+  //     maxEntrypointSize: 10000,
+  //     //生成文件的最大体积250000 (bytes)。
+  //     maxAssetSize: 25000,
+  //   },
+  //   //公共代码抽离和代码分割，避免单个js文件过大
+  //   optimization: {
+  //     splitChunks: {
+  //       minSize: 10000, // int (in bytes),
+  //       maxSize: 25000 // int (in bytes),
+  //     }
+  //   }
+  // },
   /** 配置 proxy 代理解决跨域问题
    *  反向代理- 它支持webPack - dev - server的所有选项 
    */
