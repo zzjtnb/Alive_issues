@@ -87,9 +87,6 @@
 					<el-pagination @current-change="handleCurrentChange" :current-page.sync="Query.page" :page-size="Query.pageSize" layout="prev, pager, next" :total="Query.total" v-if="Query.pageNumber*Query.pageSize!=0&&Mobile" :hide-on-single-page="value"></el-pagination>
 					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="Query.page" :page-sizes="[6, 20, 30, 40]" :page-size="Query.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="Query.total" v-if="Query.pageNumber*Query.pageSize!=0&&!Mobile" :hide-on-single-page="value"></el-pagination>
 				</div>
-				<div class="infinite-scroll-action">
-					<div class="infinite-scroll-button button">加载更多</div>
-				</div>
 			</main>
 		</div>
 	</div>
@@ -188,6 +185,10 @@ export default {
     getIssueList () {
       let data = {
         q: `state:open repo:zzjtnb/zzjtnb`,
+        page: this.pageIndex,
+        per_page: this.Query.pageSize,
+        sort: 'created',
+        order: 'desc'
       }
       this.$store.dispatch("SearchIssues", data);
     },
@@ -496,46 +497,6 @@ img {
 	height: auto;
 	max-width: 100%;
 	vertical-align: middle;
-}
-/* button */
-.infinite-scroll-action {
-	display: flex;
-	justify-content: center;
-}
-
-.button,
-.navigation .nav-next a,
-.navigation .nav-previous a,
-button[type="submit"],
-input[type="submit"] {
-	display: inline-block;
-	padding: 9pt 20px;
-	outline: 0;
-	border: none;
-	border-radius: 4px;
-	background-color: #34495e;
-	color: #fff;
-	text-align: center;
-	text-transform: uppercase;
-	letter-spacing: 1px;
-	font-weight: 500;
-	font-size: 11px;
-	font-family: Lato, sans-serif;
-	line-height: 1;
-	cursor: pointer;
-}
-
-.infinite-scroll-button {
-	padding: 1pc;
-	min-width: 200px;
-	background: linear-gradient(-125deg, #2f49fd 0, #0295f9 100%);
-	box-shadow: 0 8px 10px rgba(32, 160, 255, 0.3);
-}
-
-.button:hover {
-	opacity: 0.8;
-	transition: all 0.3s ease-in-out;
-	transform: scale(0.95);
 }
 
 .post-grid {

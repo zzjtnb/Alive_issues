@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import SearchApi from '@/api/search'
 import { mapGetters } from "vuex";
 export default {
   data () {
@@ -156,6 +157,7 @@ export default {
     },
     showSearch (value) {
       this.searchShow = value;
+      //  this.$router.back();
       // this.$store.dispatch("Mobile", value);
     },
     /**

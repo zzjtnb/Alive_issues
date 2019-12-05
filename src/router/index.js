@@ -108,6 +108,7 @@ export const routes = [
   },
   {
     path: '/search',
+    redirect: '/search',
     component: Layout,
     show: true,
     meta: {

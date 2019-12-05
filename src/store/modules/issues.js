@@ -13,11 +13,15 @@ const issues = {
   },
   // 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
   mutations: {
-    GET_ISSUESLIST: (state, value) => {//这里的state对应着上面这个state
+    SET_ISSUESLIST: (state, value) => {//这里的state对应着上面这个state
       state.issuesList = value
     },
-    GET_QUERY: (state, value) => {
+    SET_QUERY: (state, value) => {
       state.query = value
+    },
+    PUSH_ISSUESLIST: (state, value) => {
+      // state.issuesList.push(value)
+      state.issuesList = state.issuesList.concat(value)
     }
   },
 
@@ -28,23 +32,26 @@ const issues = {
    */
   // dispactch方法调用action,mapAactions方法调用action
   actions: {
-    GetIssuesList ({ commit }, value) {
-      commit('GET_ISSUESLIST', value)
+    SetIssuesList ({ commit }, value) {
+      commit('SET_ISSUESLIST', value)
+    },
+    PushIssuesList ({ commit }, value) {
+      commit('PUSH_ISSUESLIST', value)
     },
     GetQuery ({ commit }, value) {
-      commit('GET_QUERY', value)
+      commit('SET_QUERY', value)
     },
     SearchIssues ({ commit }, value) {
       SearchApi.searchIssues(value).then((res) => {
         let data = res.data.items
-        commit('GET_ISSUESLIST', data)
+        commit('SET_ISSUESLIST', data)
         let query = {
           page: this.getters.Query.page,
           pageSize: this.getters.Query.pageSize,
           pageNumber: Math.ceil(res.data.total_count / this.getters.Query.pageSize),//向上取整
           total: res.data.total_count
         }
-        commit('GET_QUERY', query)
+        commit('SET_QUERY', query)
       })
     }
   }

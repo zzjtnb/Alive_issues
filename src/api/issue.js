@@ -3,7 +3,6 @@ import base from './base';
 // 每个模块都应该有自己的接口文件去统一管理api
 import { get, post, put, patch } from '@/utils/request'
 import store from '../store/index'
-console.log(store);
 let githubUsername = store.state.configuration.githubUsername
 
 export const createIssue = (params) => post(`${base.github}/repos/${githubUsername}/zzjtnb/issues`, params);

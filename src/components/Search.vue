@@ -3,7 +3,6 @@
 	<div class="bgcolor-fff lazyloaded section">
 		<div class="container">
 			<main class="site-main">
-				搜索页
 				<el-row :gutter="24" class="row posts-wrapper" style="width: auto;">
 					<el-col :xs="24" :lg="12" v-for="(item,index) in IssuesList" :key="index">
 						<article class="post post-list">
@@ -89,10 +88,12 @@ import { deleteIssue, searchIssues } from '@/api/issue'
 export default {
   data () {
     return {
-      pageIndex: 1
+      pageIndex: 1,
+      flag: true
     }
   },
   created () {
+    this.$store.dispatch("SetIssuesList", []);
     this.getIssueList()
   },
   mounted () {
@@ -173,12 +174,26 @@ export default {
         sort: 'created',
         order: 'desc'
       }
-      console.log(this.SearchValue);
-      searchIssues(data).then((res) => {
-        if (res.status == 200) {
-          this.pageIndex += 1
-        }
-      })
+      if (this.flag) {
+        searchIssues(data).then((res) => {
+          let maxnum = Math.ceil(res.data.total_count / this.Query.pageSize);//向上取整
+          if (res.status == 200) {
+            if (this.pageIndex <= maxnum) {
+              this.pageIndex += 1
+              this.$store.dispatch("PushIssuesList", res.data.items);
+            } else {
+              this.flag = false
+              this.$message({
+                message: '没有更多啦!!!',
+              })
+            }
+          }
+        })
+      } else {
+        this.$message({
+          message: '没有更多啦!!!',
+        })
+      }
     },
     goDetails (id) {
       this.$router.push("/blog/details/" + id)

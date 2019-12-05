@@ -10,7 +10,7 @@ const common = {
     jingjiu_num: 0,
     jingli_num: 0,
     jugong_num: 0,
-    searchValue: "vue",
+    searchValue: '',
   },
   // 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
   mutations: {
