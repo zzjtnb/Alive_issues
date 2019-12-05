@@ -14,6 +14,7 @@ export const deleteIssue = (params, number, config) => put(`${base.github}/repos
 
 export const getIssues = (params) => get(`${base.github}/repos/${githubUsername}/zzjtnb/issues/${params}`);
 
-export const getIssuesList = (allQuery, params) => get(`${base.github}/repos/${githubUsername}/zzjtnb/issues?page=${allQuery.page}&per_page=${allQuery.pageSize}`, params);
+// export const getIssuesList = (params) => get(`${base.github}/repos/${githubUsername}/zzjtnb/issues?page=${params.page}&per_page=${params.pageSize}`);
+export const searchIssues = (params) => get(`${base.github}/search/issues`, params);
 
 export const UploadImageApi = (params, name, config) => put(`${base.github}/repos/${githubUsername}/images/contents/test/${name}`, params, config);

@@ -97,7 +97,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { deleteIssue, getIssuesList } from '@/api/issue'
+import { deleteIssue, searchIssues } from '@/api/issue'
 import Labels from '../Labels/Labels';
 export default {
   data () {
@@ -187,20 +187,24 @@ export default {
       // console.log(`当前页: ${val}`);
       this.getIssueList()
     },
-    getIssueList (data) {
-      getIssuesList(this.Query, data).then((response) => {
-        this.$store.dispatch("GetIssuesList", response.data);
-        console.log(this.Query);
-        this.pageNumber = this.$util.parseHeaders(response.headers)
-        if (this.pageNumber) {
-          let data = {
-            page: this.Query.page,
-            pageSize: this.Query.pageSize,
-            pageNumber: this.pageNumber,
-            total: this.pageNumber * this.Query.pageSize
-          }
-          this.$store.dispatch("GetQuery", data);
+    getIssueList () {
+      let data = {
+        q: `state:open repo:zzjtnb/zzjtnb`,
+        page: this.Query.page,
+        per_page: this.Query.pageSize,
+        sort: 'created',
+        order: 'desc'
+      }
+      searchIssues(data).then((res) => {
+        let data = res.data.items
+        this.$store.dispatch("GetIssuesList", data);
+        let query = {
+          page: this.Query.page,
+          pageSize: this.Query.pageSize,
+          pageNumber: Math.ceil(res.data.total_count / this.Query.pageSize),//向上取整
+          total: res.data.total_count
         }
+        this.$store.dispatch("GetQuery", query);
       })
     },
     //给sessionStorage存值

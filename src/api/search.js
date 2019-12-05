@@ -5,4 +5,4 @@ let githubUsername = store.state.configuration.githubUsername
 // 导入接口域名列表
 import base from './base';
 
-export const searchIssues = (data, params) => get(`${base.github}/search/issues?q=${data.keyword}+state:open+repo:${data.repo}/${data.repo}`, params);
+export const searchIssues = (params) => get(`${base.github}/search/issues`, params);
