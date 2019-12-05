@@ -91,12 +91,41 @@ export const routes = [
       }
     ]
   },
+  {
+    path: '/record',
+    component: Layout,
+    LoginRequired: true,
+    meta: {
+      title: '记录',
+    },
+    children: [
+      {
+        path: '/record',
+        component: () => import('../components/Record.vue'),
 
+      }
+    ]
+  },
+  {
+    path: '/search',
+    component: Layout,
+    show: true,
+    meta: {
+      title: '搜索结果',
+    },
+    children: [
+      {
+        path: '/search',
+        component: () => import('../components/Search.vue'),
 
+      }
+    ]
+  },
   {
     path: '/login',
     redirect: '/user',
     component: Layout,
+    show: true,
     children: [
       {
         path: '/user',
@@ -110,9 +139,9 @@ export const routes = [
     component: () => import('../components/NotNetwork.vue'),
   },
   {
-    path: '/record',
-    name: '记录',
-    component: () => import('../components/Record.vue'),
+    path: '/refresh',
+    name: 'refresh',
+    component: () => import('../components/Refresh.vue')
   },
   {
     path: '/404',

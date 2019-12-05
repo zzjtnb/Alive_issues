@@ -41,7 +41,6 @@ export default {
   computed: {
     getMainDes () {
       let a = this.content.body;
-      console.log(this.content)
       if (typeof a !== 'undefined' && a !== 'null') {//解决marked出现参数为空的问题，实际a有值，但不加这判断就报错
         return this.$markdown(a);
       }

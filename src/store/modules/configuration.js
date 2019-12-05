@@ -48,7 +48,7 @@ const configuration = {
   },
 
   actions: {
-    LocalReload ({ commit }, configuration) {
+    initxxx ({ commit }, configuration) {
       commit('SET_CONFIGURATION', configuration)
     },
     Init ({ commit }) {

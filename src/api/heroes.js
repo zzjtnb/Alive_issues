@@ -1,38 +1,8 @@
-import request from '@/utils/request'
+// 每个模块都应该有自己的接口文件去统一管理api
+import { get, post, put, patch } from '@/utils/request'
 import store from '../store/index'
-export default {
-  //   获取系统设置
-  getBlogConfigure: function () {
-    let githubUsername = store.state.configuration.githubUsername
-    return request({
-      url:
-        '/repos/' +
-        githubUsername +
-        '/' +
-        // 用xxx.github.io为项目地址时的请求地址
-        // githubUsername +
-        // '.github.io/contents/static/configuration.json'
-        'zzjt-pc/contents/static/configuration.json'
-    })
-  },
-  //   更改系统设置
-  editBlogConfigure: function (configure, sha) {
-    let content = JSON.stringify(configure)
-    let githubUsername = store.state.configuration.githubUsername
-    return request({
-      url:
-        '/repos/' +
-        githubUsername +
-        '/' +
-        // githubUsername +
-        // '.github.io/contents/static/configuration.json',
-        'zzjt-pc/contents/static/configuration.json',
-      method: 'PUT',
-      data: {
-        message: 'a',
-        content: require('js-base64').Base64.encode(content),
-        sha: sha
-      }
-    })
-  },
-}
+let githubUsername = store.state.configuration.githubUsername
+// 导入接口域名列表
+import base from './base';
+export const getRecode = (params) => get(`${base.github}/gists/a193f478c74560badd46cb3e0864802f`, params)
+export const editRecode = (data, headers) => patch(`${base.github}/gists/a193f478c74560badd46cb3e0864802f`, data, headers)

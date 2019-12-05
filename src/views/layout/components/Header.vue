@@ -13,7 +13,7 @@
 					<!-- 导航栏 -->
 					<nav v-if="showNav" v-show="!searchShow">
 						<ul id="menu" class="nav-list u-plain-list">
-							<li class="menu-item" v-for="menu in $router.options.routes" v-if="menu.children && menu.path !== '/login' &&!menu.LoginRequired">
+							<li class="menu-item" v-for="menu in $router.options.routes" v-if="menu.children  &&!menu.LoginRequired&&!menu.show">
 								<router-link :to="menu.path">
 									<span>{{ menu.meta.title }}</span>
 									<i class="material-icons nav-icon" v-if="menu.meta.submenu&&token">keyboard_arrow_down</i>
@@ -54,7 +54,6 @@
 </template>
 
 <script>
-import { searchIssues } from '@/api/search'
 import { mapGetters } from "vuex";
 export default {
   data () {
@@ -123,25 +122,18 @@ export default {
     })
   },
   methods: {
+    // 通过跳转一个空页面再返回的方式来实现刷新当前页面数据的目的
+    onRefresh () {
+      this.$router.replace('/refresh')
+    },
     search (event) {
-      let data = {
-        q: `${event.target.value} state:open repo:zzjtnb/zzjtnb`,
-        page: this.Query.page,
-        per_page: this.Query.pageSize,
-        sort: 'created',
-        order: 'desc'
+      let data = event.target.value
+      this.$store.dispatch("SetSearchValue", data)
+      if (this.$route.path == '/search') {
+        this.onRefresh()
+      } else {
+        this.$router.push("/search")
       }
-      searchIssues(data).then((res) => {
-        let data = res.data.items
-        this.$store.dispatch("GetIssuesList", data);
-        let query = {
-          page: this.Query.page,
-          pageSize: this.Query.pageSize,
-          pageNumber: Math.ceil(res.data.total_count / this.Query.pageSize),//向上取整
-          total: res.data.total_count
-        }
-        this.$store.dispatch("GetQuery", query);
-      })
     },
     /**
 		 * 监听window的resize事件．在浏览器窗口变化时显示隐藏导航栏．

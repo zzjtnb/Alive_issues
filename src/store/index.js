@@ -11,10 +11,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
+    configuration,
     token,
     common,
     issues,
-    configuration
   },
   getters
 })

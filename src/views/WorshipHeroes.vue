@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { getRecode, editRecode } from '@/api/common'
+import { getRecode, editRecode } from '@/api/heroes'
 import { mapGetters } from 'vuex'
 export default {
   data () {
