@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { searchIssues } from '@/api/search'
+import { searchIssues } from '@/api/issue'
 import { mapGetters } from "vuex";
 export default {
   data () {
@@ -131,17 +131,7 @@ export default {
         sort: 'created',
         order: 'desc'
       }
-      searchIssues(data).then((res) => {
-        let data = res.data.items
-        this.$store.dispatch("GetIssuesList", data);
-        let query = {
-          page: this.Query.page,
-          pageSize: this.Query.pageSize,
-          pageNumber: Math.ceil(res.data.total_count / this.Query.pageSize),//向上取整
-          total: res.data.total_count
-        }
-        this.$store.dispatch("GetQuery", query);
-      })
+      this.$store.dispatch("SearchIssues", data);
     },
     /**
 		 * 监听window的resize事件．在浏览器窗口变化时显示隐藏导航栏．

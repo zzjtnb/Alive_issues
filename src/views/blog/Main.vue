@@ -195,17 +195,7 @@ export default {
         sort: 'created',
         order: 'desc'
       }
-      searchIssues(data).then((res) => {
-        let data = res.data.items
-        this.$store.dispatch("GetIssuesList", data);
-        let query = {
-          page: this.Query.page,
-          pageSize: this.Query.pageSize,
-          pageNumber: Math.ceil(res.data.total_count / this.Query.pageSize),//向上取整
-          total: res.data.total_count
-        }
-        this.$store.dispatch("GetQuery", query);
-      })
+      this.$store.dispatch("SearchIssues", data);
     },
     //给sessionStorage存值
     setContextData: function (key, value) {
