@@ -13,7 +13,7 @@
 					<!-- 导航栏 -->
 					<nav v-if="showNav" v-show="!searchShow">
 						<ul id="menu" class="nav-list u-plain-list">
-							<li class="menu-item" v-for="menu in $router.options.routes" v-if="menu.children && menu.path !== '/login' &&!menu.LoginRequired">
+							<li class="menu-item" v-for="menu in $router.options.routes" v-if="menu.children  &&!menu.LoginRequired&&!menu.show">
 								<router-link :to="menu.path">
 									<span>{{ menu.meta.title }}</span>
 									<i class="material-icons nav-icon" v-if="menu.meta.submenu&&token">keyboard_arrow_down</i>
@@ -124,14 +124,15 @@ export default {
   },
   methods: {
     search (event) {
-      let data = {
-        q: `${event.target.value} state:open repo:zzjtnb/zzjtnb`,
-        page: this.Query.page,
-        per_page: this.Query.pageSize,
-        sort: 'created',
-        order: 'desc'
-      }
-      this.$store.dispatch("SearchIssues", data);
+      let data = event.target.value
+        this.$store.dispatch("SetSearchValue", data)
+			if(this.$route.path=='/search'){
+				 this.$router.go(-1)
+      this.$router.replace('/search')
+			}else{
+this.$router.push("/search")
+			}
+      
     },
     /**
 		 * 监听window的resize事件．在浏览器窗口变化时显示隐藏导航栏．

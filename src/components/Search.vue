@@ -2,17 +2,8 @@
 <template>
 	<div class="bgcolor-fff lazyloaded section">
 		<div class="container">
-			<Labels :fatherMethod="getIssueList" @callFather="getIssueList" />
 			<main class="site-main">
-				<h3 class="section-title">
-					<span>
-						<i class="fa fa-list-alt"></i>
-						<svg class="icon">
-							<use xlink:href="#zuixinwenzhang_huaban" />
-						</svg>
-						<span>最新文章</span>
-					</span>
-				</h3>
+				搜索页
 				<el-row :gutter="24" class="row posts-wrapper" style="width: auto;">
 					<el-col :xs="24" :lg="12" v-for="(item,index) in IssuesList" :key="index">
 						<article class="post post-list">
@@ -83,11 +74,8 @@
 						</article>
 					</el-col>
 				</el-row>
-				<div style="text-align: center">
-					<el-pagination @current-change="handleCurrentChange" :current-page.sync="Query.page" :page-size="Query.pageSize" layout="prev, pager, next" :total="Query.total" v-if="Query.pageNumber*Query.pageSize!=0&&Mobile" :hide-on-single-page="value"></el-pagination>
-					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="Query.page" :page-sizes="[6, 20, 30, 40]" :page-size="Query.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="Query.total" v-if="Query.pageNumber*Query.pageSize!=0&&!Mobile" :hide-on-single-page="value"></el-pagination>
-				</div>
-				<div class="infinite-scroll-action">
+
+				<div class="infinite-scroll-action" @click="getIssueList">
 					<div class="infinite-scroll-button button">加载更多</div>
 				</div>
 			</main>
@@ -98,15 +86,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import { deleteIssue, searchIssues } from '@/api/issue'
-import Labels from '../Labels/Labels';
 export default {
   data () {
     return {
-      value: true,
+      pageIndex: 1
     }
   },
   created () {
-    this.getIssueList();
+    this.getIssueList()
   },
   mounted () {
 
@@ -114,9 +101,9 @@ export default {
   computed: {
     ...mapGetters([
       'token',
-      'Mobile',
       'IssuesList',
-      'Query'
+      'Query',
+      'SearchValue',
     ]),
     getMainImage () {
       let arr = [];
@@ -178,25 +165,27 @@ export default {
         })
       })
     },
-    handleSizeChange (val) {
-      // console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange (val) {
-      // console.log(`当前页: ${val}`);
-      this.getIssueList()
-    },
     getIssueList () {
       let data = {
-        q: `state:open repo:zzjtnb/zzjtnb`,
+        q: `${this.SearchValue} state:open repo:zzjtnb/zzjtnb`,
+        page: this.pageIndex,
+        per_page: this.Query.pageSize,
+        sort: 'created',
+        order: 'desc'
       }
-      this.$store.dispatch("SearchIssues", data);
+      console.log(this.SearchValue);
+      searchIssues(data).then((res) => {
+        if (res.status == 200) {
+          this.pageIndex += 1
+        }
+      })
     },
     goDetails (id) {
       this.$router.push("/blog/details/" + id)
     },
   },
   components: {
-    Labels
+
   },
 }
 </script>
@@ -285,34 +274,7 @@ export default {
 	margin: 0 auto;
 	max-width: 1090pt;
 }
-.section-title {
-	font-size: 18px;
-	font-weight: 500;
-	letter-spacing: 0.2px;
-	margin-bottom: 40px;
-	position: relative;
-	text-align: left;
-	text-transform: uppercase;
-}
-.section-title:before {
-	background-color: #e6e6e6;
-	content: "";
-	height: 1px;
-	left: 0;
-	margin-top: -1px;
-	position: absolute;
-	top: 50%;
-	width: 100%;
-}
-.section-title span {
-	background-color: #f6f6f6;
-	padding: 4px 15px;
-	position: relative;
-	letter-spacing: 2px;
-	font-weight: 600;
-	background: #fff;
-	border-radius: 4px;
-}
+
 .entry-header .entry-title {
 	/* font-weight: normal; */
 	margin-bottom: 0.65rem;
@@ -575,24 +537,4 @@ input[type="submit"] {
 		padding-bottom: 100%;
 	}
 }
-</style>
-
-<style >
-/* @media screen and (max-width: 750px) {
-	.el-pagination {
-		white-space: inherit;
-		padding: 2px 5px;
-		color: #303133;
-		font-weight: 700;
-	}
-	.el-pagination .el-pagination__sizes {
-		padding: 0 66px !important;
-	}
-	.el-pagination .btn-prev {
-		padding-right: 0 !important;
-	}
-	.el-pager li {
-		min-width: 30px;
-	}
-} */
 </style>
