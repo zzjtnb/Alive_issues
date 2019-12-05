@@ -103,6 +103,8 @@ export default {
   data () {
     return {
       value: true,
+      pageNumber: 0,
+      labeles: [],
     }
   },
   created () {
@@ -188,8 +190,42 @@ export default {
     getIssueList () {
       let data = {
         q: `state:open repo:zzjtnb/zzjtnb`,
+        page: this.Query.page,
+        per_page: this.Query.pageSize,
+        sort: 'created',
+        order: 'desc'
       }
-      this.$store.dispatch("SearchIssues", data);
+      searchIssues(data).then((res) => {
+        let data = res.data.items
+        this.$store.dispatch("GetIssuesList", data);
+        let query = {
+          page: this.Query.page,
+          pageSize: this.Query.pageSize,
+          pageNumber: Math.ceil(res.data.total_count / this.Query.pageSize),//向上取整
+          total: res.data.total_count
+        }
+        this.$store.dispatch("GetQuery", query);
+      })
+    },
+    //给sessionStorage存值
+    setContextData: function (key, value) {
+      if (typeof value == "string") {
+        sessionStorage.setItem(key, value);
+      } else {
+        sessionStorage.setItem(key, JSON.stringify(value));
+      }
+    },
+    // 从sessionStorage取值
+    getContextData: function (key) {
+      const str = sessionStorage.getItem(key);
+      if (typeof str == "string") {
+        try {
+          return JSON.parse(str);
+        } catch (e) {
+          return str;
+        }
+      }
+      return;
     },
     goDetails (id) {
       this.$router.push("/blog/details/" + id)

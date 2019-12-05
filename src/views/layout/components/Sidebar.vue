@@ -12,15 +12,15 @@
 		<div class="mobile-menu hidden-lg hidden-xl">
 			<div class="slicknav_menu">
 				<ul class="slicknav_nav" v-for="menu in $router.options.routes">
-					<li class="menu-item slicknav_parent" v-if="menu.children && !menu.show&& !menu.meta.submenu && !menu.LoginRequired" @click="closeSide(false)">
+					<li class="menu-item slicknav_parent" v-if="menu.children && menu.path !== '/login'&& !menu.meta.submenu && !menu.LoginRequired" @click="closeSide(false)">
 						<router-link :to="menu.path">{{ menu.meta.title }}</router-link>
 					</li>
-					<li class="menu-item slicknav_parent" v-if="menu.children && !menu.show&&menu.meta.submenu ">
+					<li class="menu-item slicknav_parent" v-if="menu.children && menu.path !== '/login'&&menu.meta.submenu ">
 						<a>
 							<router-link :to="menu.path" @click.native="closeSide(false)">{{ menu.meta.title }}</router-link>
 							<i class="material-icons nav-icon" :class="{transform:transform}" v-if="menu.meta.submenu&&token" @click="showSubmenu(true)">keyboard_arrow_down</i>
 						</a>
-						<ul class="sub-menu" v-if="isShow&&menu.meta.submenu &&token">
+						<ul class="sub-menu" v-if="isShow&&menu.meta.submenu && menu.path !== '/login'&&token">
 							<li class="menu-item sub-menu-item" v-for="(submenu, index) in menu.children" v-if="submenu.meta.LoginRequired==true&&token" @click="closeSide(false)">
 								<router-link :to="submenu.path">{{submenu.meta.title }}</router-link>
 							</li>

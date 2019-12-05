@@ -9,8 +9,7 @@ const common = {
     dianzhu_num: 0,
     jingjiu_num: 0,
     jingli_num: 0,
-    jugong_num: 0,
-    searchValue: "vue",
+    jugong_num: 0
   },
   // 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
   mutations: {
@@ -29,9 +28,6 @@ const common = {
     },
     IsSideBar: (state, value) => {
       state.ShowSideBar = value
-    },
-    SET_SEARCHVALUE: (state, value) => {
-      state.searchValue = value
     }
 
   },
@@ -55,9 +51,6 @@ const common = {
     LocalReload ({ commit }, heroseRecord) {
       commit('SET_HEROESRECORD', heroseRecord)
     },
-    SetSearchValue ({ commit }, value) {
-      commit('SET_SEARCHVALUE', value)
-    }
   }
 }
 
