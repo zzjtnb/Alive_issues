@@ -1,4 +1,5 @@
-import SearchApi from '@/api/search'
+import base from '@/api/base';
+import { get, post, put, patch } from '@/utils/request'
 const issues = {
   // 多个 state 的操作 , 使用 mutations 会来触发会比较好维护 , 那么需要执行多个 mutations 就需要用 action 了
   // 通过 store.state 来获取状态对象，以及通过 store.commit 方法触发状态变更
@@ -35,7 +36,7 @@ const issues = {
       commit('GET_QUERY', value)
     },
     SearchIssues ({ commit }, value) {
-      SearchApi.searchIssues(value).then((res) => {
+      get(`${base.github}/search/issues`, value).then((res) => {
         let data = res.data.items
         commit('GET_ISSUESLIST', data)
         let query = {
