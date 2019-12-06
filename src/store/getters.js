@@ -1,5 +1,9 @@
 const getters = {
     /**
+     * search
+     */
+    SearchValue: state => state.common.searchValue,
+    /**
      * Issues
      */
     IssuesList: state => state.issues.issuesList,
