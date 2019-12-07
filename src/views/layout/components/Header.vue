@@ -171,15 +171,12 @@ export default {
         this.offsetTop = siteHeader.offsetTop;
         //和元素自身的高度
         this.offsetHeight = siteHeader.offsetHeight;
-        // console.log("offsetTop:" + this.offsetTop + "," + "offsetHeight:" + this.offsetHeight);
+        console.log("offsetTop:" + this.offsetTop + "," + "offsetHeight:" + this.offsetHeight);
       });
       // 得到页面滚动的距离
-      let scrollTop =
-        window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop;
+      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
       // 判断页面滚动的距离是否大于吸顶元素的位置
-      this.headerShow = scrollTop > this.offsetHeight;
+      this.headerShow = scrollTop > this.offsetHeight * 2;
       if (this.headerShow) {
         document.getElementsByClassName("site_header")[0].style.position = "fixed";
       } else {

@@ -19,6 +19,12 @@ const issues = {
     SET_QUERY: (state, value) => {
       state.query = value
     },
+    SET_QUERYPAGENUMBER: (state, value) => {
+      state.query.pageNumber = value
+    },
+    SET_QUERYPAGESIZE: (state, value) => {
+      state.query.pageSize = value
+    },
     PUSH_ISSUESLIST: (state, value) => {
       // state.issuesList.push(value)
       state.issuesList = state.issuesList.concat(value)
@@ -40,6 +46,12 @@ const issues = {
     },
     GetQuery ({ commit }, value) {
       commit('SET_QUERY', value)
+    },
+    SetQueryPageNumber ({ commit }, value) {
+      commit('SET_QUERYPAGENUMBER', value)
+    },
+    SetQueryPageSize ({ commit }, value) {
+      commit('SET_QUERYPAGESIZE', value)
     },
     SearchIssues ({ commit }, value) {
       SearchApi.searchIssues(value).then((res) => {

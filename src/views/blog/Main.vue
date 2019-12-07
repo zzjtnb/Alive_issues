@@ -177,18 +177,35 @@ export default {
     },
     handleSizeChange (val) {
       // console.log(`每页 ${val} 条`);
+      this.$store.dispatch("SetQueryPageSize", val);
+      this.$store.dispatch("SetQueryPageNumber", 1);
+      this.getIssueList()
     },
     handleCurrentChange (val) {
       // console.log(`当前页: ${val}`);
+      this.$store.dispatch("SetQueryPageNumber", val);
       this.getIssueList()
     },
-    getIssueList () {
-      let data = {
-        q: `state:open repo:zzjtnb/zzjtnb`,
-        page: this.pageIndex,
-        per_page: this.Query.pageSize,
-        sort: 'created',
-        order: 'desc'
+    getIssueList (datas) {
+      if (!datas) {
+        var data = {
+          q: `repo:zzjtnb/zzjtnb is:unlocked`,
+          page: this.Query.pageNumber,
+          per_page: this.Query.pageSize,
+          sort: 'created',
+          order: 'desc',
+          direction: 'asc'
+        }
+        // console.log(datas);
+      } else {
+        var data = {
+          q: `is:unlocked repo:zzjtnb/zzjtnb`,
+          page: this.Query.pageNumber,
+          per_page: this.Query.pageSize,
+          sort: datas.sort,
+          order: 'desc',
+          direction: 'asc'
+        }
       }
       this.$store.dispatch("SearchIssues", data);
     },
