@@ -7,12 +7,12 @@ let githubUsername = store.state.configuration.githubUsername
 
 export const createIssue = (params) => post(`${base.github}/repos/${githubUsername}/zzjtnb/issues`, params);
 
-export const editIssue = (number, params) => patch(`${base.github}/repos/${githubUsername}/zzjtnb/issues/${number}`, params);
+export const editIssue = (params, number) => patch(`${base.github}/repos/${githubUsername}/zzjtnb/issues/${number}`, params);
 
-export const deleteIssue = (number, params, config) => put(`${base.github}/repos/${githubUsername}/zzjtnb/issues/${number}/lock`, params, config);
+export const deleteIssue = (params, number, config) => put(`${base.github}/repos/${githubUsername}/zzjtnb/issues/${number}/lock`, params, config);
 
 export const getIssues = (params) => get(`${base.github}/repos/${githubUsername}/zzjtnb/issues/${params}`);
 
 export const searchIssues = (params) => get(`${base.github}/search/issues`, params);
 
-export const UploadImageApi = (name, params, config) => put(`${base.github}/repos/${githubUsername}/images/contents/test/${name}`, params, config);
+export const UploadImageApi = (params, name, config) => put(`${base.github}/repos/${githubUsername}/images/contents/test/${name}`, params, config);
